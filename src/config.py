@@ -1,7 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import find_dotenv, dotenv_values
-from typing import List
-from datetime import timedelta
+
 
 
 env_path = find_dotenv()
@@ -16,8 +15,7 @@ class Settings:
     DB_NAME: str = config["DB_NAME"]
     DB_USER: str = config["DB_USER"]
     DB_PASSWORD: str = config["DB_PASSWORD"]
-    SECRET_KEY: str = config["SECRET_KEY"]
-    ALGORITHM: str = config["ALGORITHM"]
+
 
 
 settings = Settings()
