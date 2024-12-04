@@ -1,8 +1,8 @@
-from datetime import datetime
 from typing import Annotated
-from sqlalchemy import func
+from sqlalchemy import String
+from sqlalchemy.dialects.postgresql import ARRAY 
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
-from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, declared_attr, mapped_column
 from src.config import get_db_url
 
 
@@ -17,7 +17,9 @@ int_pk = Annotated[int, mapped_column(primary_key=True)]
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]
 str_null_true = Annotated[str, mapped_column(nullable=True)]
 str_nullable = Annotated[str,mapped_column(nullable=False)]
-str_def = Annotated[str,mapped_column(default=None)]
+str_array = Annotated[list[str],mapped_column(ARRAY(String),nullable=False)]
+int_null = Annotated[int, mapped_column(nullable=False)]
+int_null_true = Annotated[int, mapped_column(nullable=True)]
 
 
 class Base(AsyncAttrs, DeclarativeBase):
