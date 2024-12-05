@@ -14,6 +14,7 @@ alembic = "^1.14.0"
 pydantic-settings = "^2.6.1"
 asyncpg = "^0.30.0"
 pyvalid = "^1.0.4"
+aiohttp = {extras = ["speedups"], version = "^3.11.9"}
 
 
 [build-system]
