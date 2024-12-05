@@ -26,7 +26,7 @@ class Recomendate(Base):
     recomendate_id: Mapped[int] = mapped_column(
         ForeignKey("personaldatas.id", ondelete="CASCADE"),
         unique=True,
-        primary_key=True
+        primary_key=True,
     )
     gender: Mapped[str_null]
     hostel: Mapped[str | None]
