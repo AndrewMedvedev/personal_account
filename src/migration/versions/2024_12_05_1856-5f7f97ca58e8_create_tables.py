@@ -1,8 +1,8 @@
 """Create Tables
 
-Revision ID: 8595998608f9
+Revision ID: 5f7f97ca58e8
 Revises: 
-Create Date: 2024-12-05 17:46:36.979092
+Create Date: 2024-12-05 18:56:37.819826
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '8595998608f9'
+revision: str = '5f7f97ca58e8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,9 +25,10 @@ def upgrade() -> None:
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('dad_name', sa.String(), nullable=True),
-    sa.Column('hobby', sa.String(), nullable=True),
+    sa.Column('bio', sa.String(), nullable=True),
     sa.Column('school', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('id')
     )
     op.create_table('recomendates',
     sa.Column('recomendate_id', sa.Integer(), nullable=False),
@@ -41,8 +42,9 @@ def upgrade() -> None:
     sa.Column('study_form', sa.String(), nullable=True),
     sa.Column('reception_form', sa.String(), nullable=False),
     sa.Column('speciality', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['recomendate_id'], ['personaldatas.id'], ),
-    sa.PrimaryKeyConstraint('recomendate_id')
+    sa.ForeignKeyConstraint(['recomendate_id'], ['personaldatas.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('recomendate_id'),
+    sa.UniqueConstraint('recomendate_id')
     )
     # ### end Alembic commands ###
 

@@ -4,11 +4,11 @@ from sqlalchemy import ForeignKey
 
 
 class PersonalData(Base):
-    id: Mapped[int_pk]
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     first_name: Mapped[str_null]
     last_name: Mapped[str_null]
     dad_name: Mapped[str | None]
-    hobby: Mapped[str | None]
+    bio: Mapped[str | None]
     school: Mapped[str | None]
 
     def __str__(self):
@@ -23,9 +23,10 @@ class PersonalData(Base):
 
 
 class Recomendate(Base):
-    recomendate_id: Mapped[int | None] = mapped_column(
-        ForeignKey("personaldatas.id"),
-        primary_key=True,
+    recomendate_id: Mapped[int] = mapped_column(
+        ForeignKey("personaldatas.id", ondelete="CASCADE"),
+        unique=True,
+        primary_key=True
     )
     gender: Mapped[str_null]
     hostel: Mapped[str | None]
