@@ -1,6 +1,8 @@
+from src.database.database import Base, int_pk, int_null, list_null, str_null, str_uniq
+from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
-from src.database.database import Base, int_pk, int_null, str_null, str_uniq
-from sqlalchemy import ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
+
 
 
 class PersonalData(Base):
@@ -28,16 +30,17 @@ class Recomendate(Base):
         unique=True,
         primary_key=True,
     )
+    top_n: Mapped[int_null]
+    age: Mapped[int_null]
     gender: Mapped[str_null]
-    hostel: Mapped[str | None]
+    sport: Mapped[str | None]
+    foreign: Mapped[str_null]
     gpa: Mapped[int_null]
-    priority: Mapped[int_null]
-    exams_points: Mapped[int_null]
-    bonus_points: Mapped[int | None]
+    total_points: Mapped[int_null]
+    bonus_points: Mapped[int_null]
+    exams: Mapped[list[str]] = Column(ARRAY(String))
     education: Mapped[str_null]
-    study_form: Mapped[str | None]
-    reception_form: Mapped[str_null]
-    speciality: Mapped[str_null]
+    study_form: Mapped[str_null]
 
     def __str__(self):
         return (
