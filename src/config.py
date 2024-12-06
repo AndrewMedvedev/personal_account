@@ -13,6 +13,8 @@ class Settings:
     DB_NAME: str = config["DB_NAME"]
     DB_USER: str = config["DB_USER"]
     DB_PASSWORD: str = config["DB_PASSWORD"]
+    SECRET_KEY: str = config["SECRET_KEY"]
+    ALGORITHM: str = config["ALGORITHM"]
 
 
 settings = Settings()

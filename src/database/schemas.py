@@ -3,17 +3,17 @@ from pydantic import BaseModel, Field
 
 
 class PersonalDataModel(BaseModel):
-    first_name: str = Field(gt=1, lt=50)
-    last_name: str = Field(gt=1, lt=50)
-    dad_name: str = Field(gt=1, lt=50)
-    bio: str = Field(lt=5000)
-    school: str = Field(lt=100)
+    first_name: str 
+    last_name: str  
+    dad_name: str  
+    bio: str 
+    school: str 
 
 
 class RecomendateModel(BaseModel):
-    top_n: str = Field(gt=1, lt=10)
+    top_n: str 
     age: int = Field(gt=16)
-    gender: str = Field(gt=1, lt=3)
+    gender: str 
     sport: str
     foreign: str
     gpa: int = Field(gt=3, le=5)

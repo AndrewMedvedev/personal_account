@@ -21,4 +21,4 @@ class CRUD(DatabaseSessionService):
             try:
                 return model.scalars().all()
             except Exception as _ex:
-                print(_ex)
+                return None
