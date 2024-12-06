@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, field_validator
-from fastapi import HTTPException, status
+from typing import List
+from pydantic import BaseModel, Field
 
 
 class PersonalDataModel(BaseModel):
@@ -19,6 +19,6 @@ class RecomendateModel(BaseModel):
     gpa: int = Field(gt=3, le=5)
     total_points: int = Field(gt=130)
     bonus_points: int = Field(gt=1, le=10)
-    exams: list
+    exams: List[str]
     education: str
     study_form: str

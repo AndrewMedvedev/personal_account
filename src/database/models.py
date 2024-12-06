@@ -1,12 +1,12 @@
-from src.database.database import Base, int_pk, int_null, list_null, str_null, str_uniq
+from src.database.database import Base, int_pk, int_null, str_null, str_uniq
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
-
 class PersonalData(Base):
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    email: Mapped[str_uniq]
     first_name: Mapped[str_null]
     last_name: Mapped[str_null]
     dad_name: Mapped[str | None]

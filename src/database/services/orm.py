@@ -50,8 +50,3 @@ class DatabaseSessionService:
 
 
 db_session = DatabaseSessionService()
-
-
-async def get_session():
-    async with db_session.session() as session:
-        yield session

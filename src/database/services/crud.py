@@ -8,18 +8,17 @@ class CRUD(DatabaseSessionService):
         super().__init__()
         self.init()
 
-    async def create_user(self, model):
+    async def create_data(self, model):
         async with self.session() as session:
             session.add(model)
             await session.commit()
             await session.refresh(model)
-        return HTTPException(status_code=status.HTTP_200_OK)
+        return {"status": 200}
 
-
-    async def read_user(self, model):
+    async def read_data(self, model, email: str):
         async with self.session() as session:
-            data = session.execute(
-                select(model).where(model.id == id).all()
-            )
+            data = session.execute(select(model).where(model.email == email))
             try:
-                
+                return model.scalars().all()
+            except Exception as _ex:
+                print(_ex)
