@@ -1,6 +1,6 @@
 from src.database.services.orm import DatabaseSessionService
 from fastapi import HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 
 class CRUD(DatabaseSessionService):
@@ -15,9 +15,9 @@ class CRUD(DatabaseSessionService):
             await session.refresh(model)
         return {"status": 200}
 
-    async def read_data(self, model, email: str):
+    async def read_data(self, model, email) -> list:
         async with self.session() as session:
-            data = session.execute(select(model).where(model.email == email))
+            data = await session.execute(select(model).where(model.email == email))
             try:
                 return model.scalars().all()
             except Exception as _ex:

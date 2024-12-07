@@ -30,7 +30,7 @@ class Recomendate(Base):
         unique=True,
         primary_key=True,
     )
-    top_n: Mapped[int_null]
+    top_n: Mapped[str_null]
     age: Mapped[int_null]
     gender: Mapped[str_null]
     sport: Mapped[str | None]

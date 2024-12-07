@@ -1,32 +1,29 @@
+import json
 from src.database.services.crud import CRUD
-from src.database.models import Recomendate
-from recomendate.schema_recomendate import RecomendateData
 import asyncio
 import aiohttp
 
 
-async def send_data(email):
+async def send_data(data):
     async with aiohttp.ClientSession() as session:
-        stmt = await CRUD().read_data(model=Recomendate, email=email)
-        data = RecomendateData(
-            top_n=stmt.top_n,
-            user=(
-                stmt.gender,
-                stmt.age,
-                stmt.sport,
-                stmt.foreign,
-                stmt.gpa,
-                stmt.total_points,
-                stmt.bonus_points,
-                stmt.exams,
-                stmt.education,
-                stmt.study_form,
-            ),
-        )
+        data = {
+            "top_n": data.top_n,
+            "user": {
+                "gender": data.gender,
+                "age": data.age,
+                "sport": data.sport,
+                "foreign": data.foreign,
+                "gpa": data.gpa,
+                "total_points": data.total_points,
+                "bonus_points": data.bonus_points,
+                "exams": data.exams,
+                "education": data.education,
+                "study_form": data.study_form,
+            },
+        }
+
         async with session.post(
             "https://tyuiu-fastapi-rec-sys.onrender.com/rec_sys/recommend/", json=data
         ) as resp:
-            return await resp.text()
-
-
-print(asyncio.run(send_data()))
+            rec = await resp.text()
+            return json.loads(rec)
