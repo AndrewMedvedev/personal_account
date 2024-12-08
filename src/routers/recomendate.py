@@ -22,6 +22,7 @@ async def recomendate(model: RecomendateModel, request: Request):
         study_form=model.study_form
     )
     recomendate = await send_data(model)
+
     return recomendate["data"]
     
     
