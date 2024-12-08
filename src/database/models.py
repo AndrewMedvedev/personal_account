@@ -1,4 +1,4 @@
-from src.database.database import Base, int_pk, int_null, str_null, str_uniq
+from src.database.database import Base, float_null, int_null, str_null, str_uniq
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -35,7 +35,7 @@ class Recomendate(Base):
     gender: Mapped[str_null]
     sport: Mapped[str | None]
     foreign: Mapped[str_null]
-    gpa: Mapped[int_null]
+    gpa: Mapped[float_null]
     total_points: Mapped[int_null]
     bonus_points: Mapped[int_null]
     exams: Mapped[list[str]] = Column(ARRAY(String))
