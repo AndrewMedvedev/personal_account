@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from src.database.schemas import RecomendateModel
 from src.database.models import Recomendate
 from src.database.services.crud import CRUD
-from src.recomendate.controls_recomendate import send_data
+from src.api.controls import send_data_recomendate
 
 router = APIRouter(prefix="/recomendate", tags=["recomendate"])
 
@@ -22,6 +22,6 @@ async def recomendate(model: RecomendateModel, request: Request):
         education=model.education,
         study_form=model.study_form,
     )
-    recomendate = await send_data(model)
+    recomendate = await send_data_recomendate(model)
 
     return recomendate["data"]

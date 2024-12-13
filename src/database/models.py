@@ -51,3 +51,26 @@ class Recomendate(Base):
 
     def __repr__(self):
         return str(self)
+
+
+class Classifier(Base):
+    gender: Mapped[str_null]
+    hostel: Mapped[str_null]
+    gpa: Mapped[float_null]
+    priority: Mapped[int_null]
+    exams_points: Mapped[int_null]
+    bonus_points: Mapped[int_null]
+    education: Mapped[str_null]
+    study_form: Mapped[str_null]
+    reception_form: Mapped[str_null]
+    speciality: Mapped[str_null]
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}(id={self.id}, "
+            f"first_name={self.first_name!r},"
+            f"last_name={self.last_name!r})"
+        )
+
+    def __repr__(self):
+        return str(self)

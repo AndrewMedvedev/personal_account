@@ -1,6 +1,5 @@
 from src.database.services.orm import DatabaseSessionService
-from fastapi import HTTPException, status
-from sqlalchemy import select, text
+from sqlalchemy import select
 
 
 class CRUD(DatabaseSessionService):

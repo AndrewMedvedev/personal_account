@@ -1,4 +1,4 @@
-from typing import List, Literal
+from typing import List
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -23,7 +23,15 @@ class RecomendateModel(BaseModel):
     education: str
     study_form: str
 
-    
 
-
-
+class ClassifierModel(BaseModel):
+    gender: str
+    hostel: str
+    gpa: int = Field(gt=3, le=5)
+    priority: int
+    exams_points: int
+    bonus_points: int = Field(gt=1, le=10)
+    education: str
+    study_form: str
+    reception_form: str
+    speciality: str
