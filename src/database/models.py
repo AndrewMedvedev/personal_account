@@ -25,7 +25,7 @@ class PersonalData(Base):
 
 
 class Recomendate(Base):
-    id: Mapped[int] = mapped_column(mapped_column(primary_key=True, unique=True))
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     top_n: Mapped[str_null]
     age: Mapped[int_null]
     gender: Mapped[str_null]
@@ -50,7 +50,7 @@ class Recomendate(Base):
 
 
 class Classifier(Base):
-    id: Mapped[int] = mapped_column(mapped_column(primary_key=True, unique=True))
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     gender: Mapped[str_null]
     hostel: Mapped[str_null]
     gpa: Mapped[float_null]
@@ -74,6 +74,12 @@ class Classifier(Base):
 
 
 class TableConnections(Base):
-    personaldata_id = mapped_column(ForeignKey('personaldatas.id'),primary_key=True,ondelete="CASCADE")
-    recomendate_id = mapped_column(ForeignKey('recomendates.id'),primary_key=True,ondelete="CASCADE")
-    classifier_id = mapped_column(ForeignKey('classifiers.id'),primary_key=True,ondelete="CASCADE")
+    personaldata_id = mapped_column(
+        ForeignKey("personaldatas.id"), primary_key=True
+    )
+    recomendate_id = mapped_column(
+        ForeignKey("recomendates.id"), primary_key=True
+    )
+    classifier_id = mapped_column(
+        ForeignKey("classifiers.id"), primary_key=True
+    )

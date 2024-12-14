@@ -16,7 +16,7 @@ class RecomendateModel(BaseModel):
     gender: str
     sport: str
     foreign: str
-    gpa: int = Field(gt=3, le=5)
+    gpa: float = Field(gt=3, le=5)
     total_points: int = Field(gt=130)
     bonus_points: int = Field(gt=1, le=10)
     exams: List[str]
@@ -27,7 +27,7 @@ class RecomendateModel(BaseModel):
 class ClassifierModel(BaseModel):
     gender: str
     hostel: str
-    gpa: int = Field(gt=3, le=5)
+    gpa: float = Field(gt=3, le=5)
     priority: int
     exams_points: int
     bonus_points: int = Field(gt=1, le=10)
