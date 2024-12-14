@@ -1,19 +1,32 @@
-from typing import TYPE_CHECKING
-from src.database.database import Base, float_null, int_null, str_null
+from src.database.database import Base, float_null, int_null, str_null, str_uniq
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ARRAY
 
-if TYPE_CHECKING:
-    from database.personaldata import PersonalData
+
+class PersonalData(Base):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str_uniq]
+    first_name: Mapped[str_null]
+    last_name: Mapped[str_null]
+    dad_name: Mapped[str | None]
+    bio: Mapped[str | None]
+    school: Mapped[str | None]
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}(id={self.id}, "
+            f"first_name={self.first_name!r},"
+            f"last_name={self.last_name!r})"
+        )
+
+    def __repr__(self):
+        return str(self)
 
 
 class Recomendate(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    personaldata_id: Mapped[int] = mapped_column(
-        ForeignKey("personaldatas.id"), nullable=False
-    )
-    personaldata: Mapped["PersonalData"] = relationship(back_populates="personaldatas")
+    email: Mapped[str_null]
     top_n: Mapped[str_null]
     age: Mapped[int_null]
     gender: Mapped[str_null]
@@ -39,10 +52,7 @@ class Recomendate(Base):
 
 class Classifier(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    personaldata_id: Mapped[int] = mapped_column(
-        ForeignKey("personaldatas.id"), nullable=False
-    )
-    personaldata: Mapped["PersonalData"] = relationship(back_populates="personaldatas")
+    email: Mapped[str_null]
     gender: Mapped[str_null]
     hostel: Mapped[str_null]
     gpa: Mapped[float_null]

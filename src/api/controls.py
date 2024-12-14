@@ -56,16 +56,14 @@ async def send_data_classifier(data):
 
 async def token(token):
     if not token:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        return None
     else:
         try:
-            access = jwt.decode(token, setting.SECRET_KEY, algorithms=setting.ALGORITHM)
+            access = jwt.decode(token, setting.SECRET_KEY, setting.ALGORITHM)
             if "user_name" not in access and "mode" not in access:
-                return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+                return None
             if access["mode"] != "access_token":
-                return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+                return None
             return access["user_name"]
         except JWTError:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-            )
+            return None

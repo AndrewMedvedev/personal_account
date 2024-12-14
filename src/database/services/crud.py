@@ -1,5 +1,5 @@
 from src.database.services.orm import DatabaseSessionService
-from sqlalchemy import select
+from sqlalchemy import Result, select
 
 
 class CRUD(DatabaseSessionService):
@@ -14,10 +14,12 @@ class CRUD(DatabaseSessionService):
             await session.refresh(model)
         return {"status": 200}
 
-    async def read_data(self, model, email) -> list:
+    async def read_data(self, model, email):
         async with self.session() as session:
-            data = await session.execute(select(model).where(model.email == email))
+            stmt = select(model).where(model.email == email)
+            result: Result = await session.execute(stmt)
+            data = result.scalars().all()
             try:
-                return model.scalars().all()
+                return data
             except Exception as _ex:
                 return None
