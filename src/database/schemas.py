@@ -7,7 +7,13 @@ class PersonalDataModel(BaseModel):
     last_name: str
     dad_name: str
     bio: str
-    school: str
+
+
+class PersonalDataModelUpdate(PersonalDataModel):
+    first_name: str | None = None
+    last_name: str | None = None
+    dad_name: str | None = None
+    bio: str | None = None
 
 
 class RecomendateModel(BaseModel):

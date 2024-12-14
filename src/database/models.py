@@ -1,6 +1,6 @@
 from src.database.database import Base, float_null, int_null, str_null, str_uniq
-from sqlalchemy import Column, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, String
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import ARRAY
 
 
@@ -11,7 +11,6 @@ class PersonalData(Base):
     last_name: Mapped[str_null]
     dad_name: Mapped[str | None]
     bio: Mapped[str | None]
-    school: Mapped[str | None]
 
     def __str__(self):
         return (

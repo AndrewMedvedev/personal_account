@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Request, Response, HTTPException, status
+from fastapi import APIRouter, Request, HTTPException, status
 from src.database.schemas import PersonalDataModel
 from src.database.services.crud import CRUD
+from src.database.schemas import PersonalDataModelUpdate
 from src.api.controls import token
 from src.database.models import PersonalData
 
@@ -37,6 +38,14 @@ async def get_personal_data(request: Request):
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
-
-# @router.put('/recomendate')
-# async def put_recomendate()
+@router.put("/put_personal")
+async def put_personal_data(model: PersonalDataModelUpdate, request: Request):
+    tkn = request.cookies.get("access")
+    data = await token(tkn)
+    if data != None:
+        await CRUD().update_data(
+            model=PersonalData, new_model=PersonalDataModelUpdate, email=data
+        )
+        return HTTPException(status_code=status.HTTP_200_OK)
+    else:
+        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
