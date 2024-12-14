@@ -1,31 +1,19 @@
-from src.database.database import Base, float_null, int_null, str_null, str_uniq
-from sqlalchemy import Column, ForeignKey, String, Table
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import TYPE_CHECKING
+from src.database.database import Base, float_null, int_null, str_null
+from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ARRAY
 
-
-class PersonalData(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    email: Mapped[str_uniq]
-    first_name: Mapped[str_null]
-    last_name: Mapped[str_null]
-    dad_name: Mapped[str | None]
-    bio: Mapped[str | None]
-    school: Mapped[str | None]
-
-    def __str__(self):
-        return (
-            f"{self.__class__.__name__}(id={self.id}, "
-            f"first_name={self.first_name!r},"
-            f"last_name={self.last_name!r})"
-        )
-
-    def __repr__(self):
-        return str(self)
+if TYPE_CHECKING:
+    from database.personaldata import PersonalData
 
 
 class Recomendate(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    personaldata_id: Mapped[int] = mapped_column(
+        ForeignKey("personaldatas.id"), nullable=False
+    )
+    personaldata: Mapped["PersonalData"] = relationship(back_populates="personaldatas")
     top_n: Mapped[str_null]
     age: Mapped[int_null]
     gender: Mapped[str_null]
@@ -50,7 +38,11 @@ class Recomendate(Base):
 
 
 class Classifier(Base):
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    personaldata_id: Mapped[int] = mapped_column(
+        ForeignKey("personaldatas.id"), nullable=False
+    )
+    personaldata: Mapped["PersonalData"] = relationship(back_populates="personaldatas")
     gender: Mapped[str_null]
     hostel: Mapped[str_null]
     gpa: Mapped[float_null]
@@ -71,15 +63,3 @@ class Classifier(Base):
 
     def __repr__(self):
         return str(self)
-
-
-class TableConnections(Base):
-    personaldata_id = mapped_column(
-        ForeignKey("personaldatas.id"), primary_key=True
-    )
-    recomendate_id = mapped_column(
-        ForeignKey("recomendates.id"), primary_key=True
-    )
-    classifier_id = mapped_column(
-        ForeignKey("classifiers.id"), primary_key=True
-    )
