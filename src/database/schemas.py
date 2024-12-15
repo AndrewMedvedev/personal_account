@@ -10,10 +10,10 @@ class PersonalDataModel(BaseModel):
 
 
 class PersonalDataModelUpdate(PersonalDataModel):
-    first_name: str | None = None
-    last_name: str | None = None
-    dad_name: str | None = None
-    bio: str | None = None
+    first_name: str | None = Field(default=None)
+    last_name: str | None = Field(default=None)
+    dad_name: str | None = Field(default=None)
+    bio: str | None = Field(default=None)
 
 
 class RecomendateModel(BaseModel):

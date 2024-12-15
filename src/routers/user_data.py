@@ -18,8 +18,7 @@ async def post_personal_data(model: PersonalDataModel, request: Request):
             first_name=model.first_name,
             last_name=model.last_name,
             dad_name=model.dad_name,
-            bio=model.bio,
-            school=model.school,
+            bio=model.bio
         )
         await CRUD().create_data(user_model)
         return HTTPException(status_code=status.HTTP_200_OK)
@@ -44,7 +43,7 @@ async def put_personal_data(model: PersonalDataModelUpdate, request: Request):
     data = await token(tkn)
     if data != None:
         await CRUD().update_data(
-            model=PersonalData, new_model=PersonalDataModelUpdate, email=data
+            model=PersonalData, new_model=model, email=data
         )
         return HTTPException(status_code=status.HTTP_200_OK)
     else:
