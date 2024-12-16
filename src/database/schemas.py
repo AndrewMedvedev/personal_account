@@ -23,8 +23,8 @@ class RecomendateModel(BaseModel):
     sport: str
     foreign: str
     gpa: float
-    total_points: int = Field(gt=130)
-    bonus_points: int = Field(gt=1, le=10)
+    total_points: int 
+    bonus_points: int 
     exams: List[str]
     education: str
     study_form: Literal["Очная", "Заочная", "Очно-Заочная"]
@@ -43,9 +43,9 @@ class RecomendateModel(BaseModel):
             raise ValueError("Field gpa must be in range [3;5]")
         return v
 
-    @field_validator("exams_points")
+    @field_validator("total_points")
     @classmethod
-    def validate_exams_points(cls, v: int) -> int:
+    def validate_total_points(cls, v: int) -> int:
         if v < 0 or v > 310:
             raise ValueError("Field exams_points must be in range [0;310]")
         return v
