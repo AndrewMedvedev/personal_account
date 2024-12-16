@@ -1,4 +1,3 @@
-from fastapi import HTTPException, status
 from jose.exceptions import JWTError
 from src.config import Settings as setting
 from jose import jwt
