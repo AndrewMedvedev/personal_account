@@ -13,6 +13,6 @@ async def predict(model: PredictModel, request: Request):
     if data != None:
         recomendate = await send_data_recomendate(model)
         classifier = await send_data_classifier(model, speciality=recomendate["data"])
-        return f"Рекомендованные направления {recomendate["data"]} Процент поступления {classifier["data"]}"
+        return {"recomendate": recomendate["data"], "classifier": classifier["data"]}
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
