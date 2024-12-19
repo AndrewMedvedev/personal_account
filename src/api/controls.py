@@ -30,19 +30,19 @@ async def send_data_recomendate(data):
             return json.loads(rec)
 
 
-async def send_data_classifier(data):
+async def send_data_classifier(data, speciality):
     async with aiohttp.ClientSession() as session:
         data = {
             "gender": data.gender,
             "hostel": data.hostel,
             "gpa": data.gpa,
             "priority": data.priority,
-            "exams_points": data.exams_points,
+            "exams_points": data.total_points,
             "bonus_points": data.bonus_points,
             "education": data.education,
             "study_form": data.study_form,
             "reception_form": data.reception_form,
-            "speciality": data.speciality,
+            "speciality": str(speciality),
         }
 
         async with session.post(

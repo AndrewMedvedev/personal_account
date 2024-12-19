@@ -12,7 +12,7 @@ from os.path import dirname, abspath
 sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
 from src.database.database import DATABASE_URL, Base
-from src.database.models import Recomendate, PersonalData
+from src.database.models import PersonalData
 
 config = context.config
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
