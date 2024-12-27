@@ -20,7 +20,10 @@ async def predict(model: PredictModel, request: Request):
         classifier = await send_data_classifier_applicants(
             model, direction=recomendate["data"]
         )
-        return {"recomendate": recomendate["data"], "classifier": classifier["predictions"]}
+        return {
+            "recomendate": recomendate["data"],
+            "classifier": classifier["predictions"],
+        }
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 

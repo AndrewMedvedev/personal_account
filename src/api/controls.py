@@ -3,6 +3,7 @@ from src.config import Settings as setting
 from jose import jwt
 import json
 import aiohttp
+from src.config import Settings
 
 
 async def send_data_recomendate(data):
@@ -24,7 +25,8 @@ async def send_data_recomendate(data):
         }
 
         async with session.post(
-            "https://tyuiu-fastapi-rec-sys.onrender.com/rec_sys/recommend/", json=data
+            Settings.RECOMENDATE,
+            json=data,
         ) as resp:
             rec = await resp.text()
             return json.loads(rec)
@@ -48,7 +50,7 @@ async def send_data_classifier_applicants(data, direction):
         ]
 
         async with session.post(
-            "https://tyuiu-fastapi-classifier-production.up.railway.app/api/v1/classifier/predict/applicants/",
+            Settings.CLASSIFIER,
             json=correct_data,
         ) as resp:
             rec = await resp.text()

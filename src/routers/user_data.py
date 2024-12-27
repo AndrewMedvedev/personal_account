@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request, HTTPException, status
-from src.database.schemas import PersonalDataModel
 from src.database.services.crud import CRUD
 from src.database.schemas import PersonalDataModelUpdate
 from src.api.controls import token

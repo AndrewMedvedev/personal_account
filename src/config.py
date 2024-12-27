@@ -15,6 +15,8 @@ class Settings:
     DB_PASSWORD: str = config["DB_PASSWORD"]
     SECRET_KEY: str = config["SECRET_KEY"]
     ALGORITHM: str = config["ALGORITHM"]
+    RECOMENDATE: str = config["RECOMENDATE"]
+    CLASSIFIER: str = config["CLASSIFIER"]
 
 
 settings = Settings()
