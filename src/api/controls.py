@@ -68,7 +68,7 @@ async def send_data_classifier_applicant(data):
         }
 
         async with session.post(
-            "https://tyuiu-fastapi-classifier-production.up.railway.app/api/v1/classifier/predict/applicant/",
+            Settings.CLASSIFIER_FREE,
             json=data,
         ) as resp:
             rec = await resp.text()
