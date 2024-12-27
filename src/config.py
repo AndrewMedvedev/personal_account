@@ -17,7 +17,7 @@ class Settings:
     ALGORITHM: str = config["ALGORITHM"]
     RECOMENDATE: str = config["RECOMENDATE"]
     CLASSIFIER: str = config["CLASSIFIER"]
-
+    CLASSIFIER_FREE: str = config["CLASSIFIER_FREE"]
 
 settings = Settings()
 
