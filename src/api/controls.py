@@ -83,8 +83,8 @@ async def token(token):
             access = jwt.decode(token, setting.SECRET_KEY, setting.ALGORITHM)
             if "user_name" not in access and "mode" not in access:
                 return None
-            if access["mode"] != "access_token":
+            if access.get("mode") != "access_token":
                 return None
-            return access["user_name"]
+            return access.get("user_name")
         except JWTError:
             return None

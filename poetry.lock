@@ -1423,6 +1423,17 @@ build-docs = ["cloud-sptheme (>=1.10.1)", "sphinx (>=1.6)", "sphinxcontrib-fullt
 totp = ["cryptography"]
 
 [[package]]
+name = "phonenumbers"
+version = "8.13.52"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+files = [
+    {file = "phonenumbers-8.13.52-py2.py3-none-any.whl", hash = "sha256:e803210038ece9d208b129e3023dc20e656a820d6bf6f1cb0471d4164f54bada"},
+    {file = "phonenumbers-8.13.52.tar.gz", hash = "sha256:fdc371ea6a4da052beb1225de63963d5a2fddbbff2bb53e3a957f360e0185f80"},
+]
+
+[[package]]
 name = "propcache"
 version = "0.2.1"
 description = "Accelerated property cache"
@@ -2655,4 +2666,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "2647bd012e80b996923d5218e9eb50b861faf5dbe20e406f6c5199cd7331c6a8"
+content-hash = "80096d10b3e8b46e2c671f16a0bb2a0e71661266ee4bedc264d848ca4d82a0df"

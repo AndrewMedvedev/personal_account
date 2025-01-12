@@ -1,12 +1,28 @@
 from typing import List, Literal
+from fastapi import HTTPException, status
+import phonenumbers
 from pydantic import BaseModel, Field, field_validator
 
 
 class PersonalDataModel(BaseModel):
+    phone_number: str
     first_name: str
     last_name: str
     dad_name: str
     bio: str
+
+    @field_validator("phone_number")
+    @classmethod
+    def validate_phone_number(cls, values: str) -> str:
+        parsed_number = phonenumbers.parse(values)
+        if phonenumbers.is_valid_number(parsed_number):
+            return values
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Номер телефона должен начинаться с "
+                + " и содержать от 1 до 15 цифр",
+            )
 
 
 class PersonalDataModelUpdate(PersonalDataModel):
