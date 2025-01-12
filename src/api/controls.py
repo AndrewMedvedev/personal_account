@@ -32,7 +32,7 @@ async def send_data_recomendate(data):
             return json.loads(rec)
 
 
-async def send_data_classifier_applicants(data, direction):
+async def send_data_classifier_applicants(data, directions):
     async with aiohttp.ClientSession() as session:
 
         correct_data = {"applicants": []}
@@ -46,7 +46,7 @@ async def send_data_classifier_applicants(data, direction):
                     "direction": i[23::],
                 }
             )
-            for i in direction
+            for i in directions
         ]
 
         async with session.post(

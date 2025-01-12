@@ -34,8 +34,8 @@ async def post_personal_data(model: PersonalDataModel, request: Request):
                 bio=model.bio,
                 registration_type="VK"
             )
-        await CRUD().create_data(user_model)
-        return HTTPException(status_code=status.HTTP_200_OK)
+            await CRUD().create_data(user_model)
+            return HTTPException(status_code=status.HTTP_200_OK)
 
     else:
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)

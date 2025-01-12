@@ -18,7 +18,7 @@ async def predict(model: PredictModel, request: Request):
     if data != None:
         recomendate = await send_data_recomendate(model)
         classifier = await send_data_classifier_applicants(
-            model, direction=recomendate["data"]
+            model, directions=recomendate["data"]
         )
         return {
             "recomendate": recomendate["data"],
