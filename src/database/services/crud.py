@@ -1,5 +1,5 @@
 from src.database.services.orm import DatabaseSessionService
-from sqlalchemy import Result, delete, select
+from sqlalchemy import Result, select
 
 
 class CRUD(DatabaseSessionService):
@@ -7,14 +7,14 @@ class CRUD(DatabaseSessionService):
         super().__init__()
         self.init()
 
-    async def create_data(self, model):
+    async def create_data(self, model) -> dict:
         async with self.session() as session:
             session.add(model)
             await session.commit()
             await session.refresh(model)
         return {"status": 200}
 
-    async def read_data(self, model, email: str):
+    async def read_data(self, model, email: str) -> dict | None:
         async with self.session() as session:
             stmt = select(model).where(model.email == email)
             result: Result = await session.execute(stmt)
@@ -24,7 +24,7 @@ class CRUD(DatabaseSessionService):
             except Exception as _ex:
                 return None
 
-    async def update_data_email(self, model, new_model, email: str):
+    async def update_data_email(self, model, new_model, email: str) -> dict:
         async with self.session() as session:
             stmt = await session.execute(select(model).where(model.email == email))
             stmt = stmt.scalar()
@@ -35,8 +35,8 @@ class CRUD(DatabaseSessionService):
                     continue
             await session.commit()
             return model
-        
-    async def update_data_id_vk(self, model, new_model, id_vk: int):
+
+    async def update_data_id_vk(self, model, new_model, id_vk: int) -> dict:
         async with self.session() as session:
             stmt = await session.execute(select(model).where(model.id_vk == id_vk))
             stmt = stmt.scalar()
@@ -47,10 +47,3 @@ class CRUD(DatabaseSessionService):
                     continue
             await session.commit()
             return model
-
-    async def delete_data(self, model, email: str):
-        async with self.session() as session:
-            query = delete(model).where(model.email == email)
-            cursor = await session.execute(query)
-            await session.flush()
-            return cursor.rowcount > 0

@@ -18,6 +18,9 @@ class Settings:
     RECOMENDATE: str = config["RECOMENDATE"]
     CLASSIFIER: str = config["CLASSIFIER"]
     CLASSIFIER_FREE: str = config["CLASSIFIER_FREE"]
+    VALIDATE_ACCESS: str = config["VALIDATE_ACCESS"]
+    VALIDATE_REFRESH: str = config["VALIDATE_REFRESH"]
+
 
 settings = Settings()
 

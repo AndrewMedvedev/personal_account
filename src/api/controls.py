@@ -1,5 +1,5 @@
 from jose.exceptions import JWTError
-from src.config import Settings as setting
+
 from jose import jwt
 import json
 import aiohttp
@@ -80,7 +80,7 @@ async def token(token):
         return None
     else:
         try:
-            access = jwt.decode(token, setting.SECRET_KEY, setting.ALGORITHM)
+            access = jwt.decode(token, Settings.SECRET_KEY, Settings.ALGORITHM)
             if "user_name" not in access and "mode" not in access:
                 return None
             if access.get("mode") != "access_token":
