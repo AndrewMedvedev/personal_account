@@ -8,14 +8,15 @@ class SendTokens:
     def __init__(self, token: str) -> None:
         self.token = token
 
-    async def send_refresh_token(self) -> dict | bool:
+    async def send_refresh_token(self) -> dict:
         async with aiohttp.ClientSession() as session:
             data = {"refresh": self.token}
             async with session.post(
                 Settings.VALIDATE_REFRESH,
                 json=data,
             ) as resp:
-                tkn = await resp.text()
+                tkn = resp.text()
+                print(tkn)
                 return json.loads(tkn)
 
 
@@ -26,4 +27,5 @@ class SendTokens:
                 Settings.VALIDATE_ACCESS,
                 json=data,
             ) as resp:
-                return await resp.text()
+                print(resp.text())
+                return resp.text()

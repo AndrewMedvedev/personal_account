@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.routers.user_data import router as router_user_data
+# from src.routers.user_data import router as router_user_data
+from src.routers.get_token import router as router_tokens
 from src.routers.predict import router as router_predict
 from src.routers.logout import router as router_logout
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -12,11 +13,13 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["10/second"])
 
 app = FastAPI(title="Личный Кабинет")
 
-app.include_router(router_user_data)
-
-app.include_router(router_logout)
+# app.include_router(router_user_data)
 
 app.include_router(router_predict)
+
+app.include_router(router_tokens)
+
+app.include_router(router_logout)
 
 app.state.limiter = limiter
 

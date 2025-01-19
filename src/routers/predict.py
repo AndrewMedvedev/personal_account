@@ -1,26 +1,27 @@
 from fastapi import APIRouter, Request, HTTPException, status
 from src.database.schemas import PredictModel, PredictFree
 from src.classes.send_data_class import SendData
+from src.classes.predict_classes import Predict
 
 
 router = APIRouter(prefix="/predict", tags=["predict"])
 
 
-@router.post("/")
-async def predict(model: PredictModel, request: Request):
-    tkn = request.cookies.get("access")
-    data = await token(tkn)
-    if data != None:
-        recomendate = await SendData.send_data_recomendate(model)
-        classifier = await SendData.send_data_classifier_applicants(
-            model, directions=recomendate.get("data")
-        )
-        return {
-            "recomendate": recomendate.get("data"),
-            "classifier": classifier.get("predictions"),
-        }
-    else:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+@router.post(
+    "/",
+    response_model=None,
+)
+async def predict(
+    model: PredictModel,
+    request: Request,
+):
+    access = request.cookies.get("access")
+    refresh = request.cookies.get("refresh")
+    return await Predict(
+        token_access=access,
+        token_refresh=refresh,
+        model=model,
+    ).predict()
 
 
 @router.post("/free")
