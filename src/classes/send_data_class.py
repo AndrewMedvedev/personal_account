@@ -75,10 +75,10 @@ class SendData:
 
     async def send_refresh_token(self) -> dict | bool:
         async with aiohttp.ClientSession() as session:
-            data = self.data
+            data = {"refresh": self.data}
             async with session.post(
                 Settings.VALIDATE_REFRESH,
-                data=data,
+                json=data,
             ) as resp:
                 tkn = await resp.text()
                 try:
@@ -89,9 +89,9 @@ class SendData:
 
     async def send_access_token(self) -> str:
         async with aiohttp.ClientSession() as session:
-            data = self.data
+            data = {"access": self.data}
             async with session.post(
                 Settings.VALIDATE_ACCESS,
-                data=data,
+                json=data,
             ) as resp:
                 return await resp.text()
