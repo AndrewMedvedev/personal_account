@@ -1,17 +1,14 @@
-from src.database.database import Base, str_null, int_null_true, int_null, str_null_true
+from src.database.database import Base, str_null, str_uniq, str_null_true
 from sqlalchemy.orm import Mapped, mapped_column
 
 
 class PersonalData(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
-    id_vk: Mapped[int_null_true | None]
-    phone_number: Mapped[str_null_true | None]
-    email: Mapped[str_null_true | None]
+    email: Mapped[str_uniq]
     first_name: Mapped[str_null]
     last_name: Mapped[str_null]
     dad_name: Mapped[str | None]
     bio: Mapped[str | None]
-    registration_type: Mapped[str]
 
     def __str__(self):
         return (

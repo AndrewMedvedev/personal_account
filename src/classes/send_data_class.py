@@ -1,28 +1,26 @@
 import json
 import aiohttp
 from src.config import Settings
+from src.database.schemas import PredictModel, PredictFree
 
 
 class SendData:
 
-    def __init__(self, data) -> None:
-        self.data = data
-
-    async def send_data_recomendate(self) -> dict:
+    async def send_data_recomendate(data: PredictModel) -> dict:
         async with aiohttp.ClientSession() as session:
             data = {
-                "top_n": self.data.top_n,
+                "top_n": data.top_n,
                 "user": {
-                    "gender": self.data.gender,
-                    "age": self.data.age,
-                    "sport": self.data.sport,
-                    "foreign": self.data.foreign,
-                    "gpa": self.data.gpa,
-                    "total_points": self.data.points,
-                    "bonus_points": self.data.bonus_points,
-                    "exams": self.data.exams,
-                    "education": self.data.education,
-                    "study_form": self.data.study_form,
+                    "gender": data.gender,
+                    "age": data.age,
+                    "sport": data.sport,
+                    "foreign": data.foreign,
+                    "gpa": data.gpa,
+                    "total_points": data.points,
+                    "bonus_points": data.bonus_points,
+                    "exams": data.exams,
+                    "education": data.education,
+                    "study_form": data.study_form,
                 },
             }
 
@@ -33,16 +31,18 @@ class SendData:
                 rec = await resp.text()
                 return json.loads(rec)
 
-    async def send_data_classifier_applicants(self, directions: list) -> dict:
+    async def send_data_classifier_applicants(
+        data: PredictModel, directions: list
+    ) -> dict:
         async with aiohttp.ClientSession() as session:
             correct_data = {"applicants": []}
             array = [
                 correct_data["applicants"].append(
                     {
-                        "gender": self.data.gender,
-                        "gpa": self.data.gpa,
-                        "priority": self.data.priority,
-                        "points": self.data.points,
+                        "gender": data.gender,
+                        "gpa": data.gpa,
+                        "priority": data.priority,
+                        "points": data.points,
                         "direction": i[23::],
                     }
                 )
@@ -56,14 +56,14 @@ class SendData:
                 rec = await resp.text()
                 return json.loads(rec)
 
-    async def send_data_classifier_applicant(self) -> dict:
+    async def send_data_classifier_applicant(data: PredictFree) -> dict:
         async with aiohttp.ClientSession() as session:
             data = {
-                "gender": self.data.gender,
-                "gpa": self.data.gpa,
-                "priority": self.data.priority,
-                "points": self.data.points,
-                "direction": self.data.direction,
+                "gender": data.gender,
+                "gpa": data.gpa,
+                "priority": data.priority,
+                "points": data.points,
+                "direction": data.direction,
             }
 
             async with session.post(
@@ -72,26 +72,3 @@ class SendData:
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
-
-    async def send_refresh_token(self) -> dict | bool:
-        async with aiohttp.ClientSession() as session:
-            data = {"refresh": self.data}
-            async with session.post(
-                Settings.VALIDATE_REFRESH,
-                json=data,
-            ) as resp:
-                tkn = await resp.text()
-                try:
-                    tkn = await resp.text()
-                    return json.loads(tkn)
-                except:
-                    return False
-
-    async def send_access_token(self) -> str:
-        async with aiohttp.ClientSession() as session:
-            data = {"access": self.data}
-            async with session.post(
-                Settings.VALIDATE_ACCESS,
-                json=data,
-            ) as resp:
-                return await resp.text()

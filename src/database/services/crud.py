@@ -35,15 +35,3 @@ class CRUD(DatabaseSessionService):
                     continue
             await session.commit()
             return model
-
-    async def update_data_id_vk(self, model, new_model, id_vk: int) -> dict:
-        async with self.session() as session:
-            stmt = await session.execute(select(model).where(model.id_vk == id_vk))
-            stmt = stmt.scalar()
-            for data, value in new_model.model_dump().items():
-                if value != "string":
-                    setattr(stmt, data, value)
-                else:
-                    continue
-            await session.commit()
-            return model
