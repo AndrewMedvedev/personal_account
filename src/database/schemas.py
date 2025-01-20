@@ -1,6 +1,4 @@
 from typing import List, Literal
-from fastapi import HTTPException, status
-import phonenumbers
 from pydantic import BaseModel, Field, field_validator
 
 

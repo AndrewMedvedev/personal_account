@@ -1,4 +1,4 @@
-from src.database.database import Base, str_null, str_uniq, str_null_true
+from src.database.database import Base, str_null, str_uniq
 from sqlalchemy.orm import Mapped, mapped_column
 
 
