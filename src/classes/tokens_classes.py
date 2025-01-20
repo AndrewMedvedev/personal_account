@@ -1,4 +1,3 @@
-import json
 import aiohttp
 from src.config import Settings
 
@@ -10,22 +9,15 @@ class SendTokens:
 
     async def send_refresh_token(self) -> dict:
         async with aiohttp.ClientSession() as session:
-            data = {"refresh": self.token}
-            async with session.post(
-                Settings.VALIDATE_REFRESH,
-                json=data,
-            ) as resp:
-                tkn = resp.text()
-                print(tkn)
-                return json.loads(tkn)
-
+            async with session.get(
+                url=Settings.VALIDATE_REFRESH, params={"refresh": self.token}
+            ) as response:
+                return await response.text()
 
     async def send_access_token(self) -> str:
         async with aiohttp.ClientSession() as session:
-            data = {"access": self.token}
-            async with session.post(
-                Settings.VALIDATE_ACCESS,
-                json=data,
-            ) as resp:
-                print(resp.text())
-                return resp.text()
+            async with session.get(
+                url=Settings.VALIDATE_ACCESS,
+                params={"access": self.token},
+            ) as response:
+                return await response.text()

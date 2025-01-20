@@ -2,7 +2,6 @@ from fastapi import HTTPException, status
 from src.classes.send_data_class import SendData
 from src.classes.tokens_classes import SendTokens
 from src.database.schemas import PredictModel
-from email_validator import validate_email
 
 
 class Predict:
@@ -17,14 +16,14 @@ class Predict:
         self.token_refresh = token_refresh
         self.model = model
 
-    async def predict(self):
+    async def predict(self) -> dict | HTTPException:
         tkn_access = await SendTokens(self.token_access).send_access_token()
         tkn_refresh = await SendTokens(self.token_refresh).send_refresh_token()
-        print(tkn_access, tkn_refresh.get("email"))
-        if validate_email(tkn_access) or validate_email(tkn_refresh.get("email")):
+        if tkn_access != False and tkn_refresh != False:
             recomendate = await SendData.send_data_recomendate(self.model)
             classifier = await SendData.send_data_classifier_applicants(
-                self.model, directions=recomendate.get("data")
+                self.model,
+                directions=recomendate.get("data"),
             )
             return {
                 "recomendate": recomendate.get("data"),
