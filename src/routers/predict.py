@@ -14,7 +14,7 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
-):
+) -> dict | HTTPException:
     access = request.cookies.get("access")
     refresh = request.cookies.get("refresh")
     return await Predict(
@@ -24,8 +24,11 @@ async def predict(
     ).predict()
 
 
-@router.post("/free")
-async def predict_free(model: PredictFree):
+@router.post(
+    "/free",
+    response_model=None,
+)
+async def predict_free(model: PredictFree) -> str | HTTPException:
     try:
         classifier = await SendData.send_data_classifier_applicant(model)
         return classifier.get("data")
