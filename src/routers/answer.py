@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, Request, HTTPException, status
+from fastapi import APIRouter, Response, Request, HTTPException
 from src.classes.answer_class import Answer
 
 router = APIRouter(prefix="/answer", tags=["answer"])
