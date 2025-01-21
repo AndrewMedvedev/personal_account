@@ -19,10 +19,10 @@ class Predict:
         self.response = response
 
     async def predict(self) -> dict | HTTPException:
-        check = await ValidateTokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-        ).check()
+        check = check(
+            access=self.token_access,
+            refresh=self.token_refresh,
+        )
         if type(check) == dict:
             recomendate = await SendData.send_data_recomendate(self.model)
             classifier = await SendData.send_data_classifier_applicants(

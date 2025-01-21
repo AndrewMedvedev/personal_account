@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Response, status
-from src.classes.tokens_classes import ValidateTokens
+from src.classes.tokens_classes import check
 from src.database.models import PersonalData
 from src.database.services.crud import CRUD
 
@@ -19,10 +19,10 @@ class UserData:
         self.model = model
 
     async def post_personal_data(self) -> HTTPException:
-        check = await ValidateTokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-        ).check()
+        check = check(
+            access=self.token_access,
+            refresh=self.token_refresh,
+        )
         if type(check) == dict:
             user_model = PersonalData(
                 email=check.get("email"),
@@ -51,10 +51,10 @@ class UserData:
             return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     async def put_personal_data(self) -> HTTPException:
-        check = await ValidateTokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-        ).check()
+        check = check(
+            access=self.token_access,
+            refresh=self.token_refresh,
+        )
         if type(check) == dict:
             await CRUD().update_data_email(
                 model=PersonalData,
@@ -77,10 +77,10 @@ class UserData:
             return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     async def get_personal_data(self) -> dict | HTTPException:
-        check = await ValidateTokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-        ).check()
+        check = check(
+            access=self.token_access,
+            refresh=self.token_refresh,
+        )
         if type(check) == dict:
             self.response.set_cookie(
                 key="access",
