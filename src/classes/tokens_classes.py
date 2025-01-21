@@ -35,7 +35,7 @@ class ValidateTokens:
         self.token_access = token_access
         self.token_refresh = token_refresh
 
-    async def check(self) -> dict | str | bool:
+    async def check(self) -> dict | str:
         try:
             match self.token_access:
                 case None:
@@ -49,4 +49,4 @@ class ValidateTokens:
                 case _:
                     return await SendTokens(self.token_access).send_access_token()
         except:
-            return False
+            return None
