@@ -19,11 +19,11 @@ class Predict:
         self.response = response
 
     async def predict(self) -> dict | HTTPException:
-        check = check(
+        check_tokens = check(
             access=self.token_access,
             refresh=self.token_refresh,
         )
-        if type(check) == dict:
+        if type(check_tokens) == dict:
             recomendate = await SendData.send_data_recomendate(self.model)
             classifier = await SendData.send_data_classifier_applicants(
                 self.model,
@@ -31,13 +31,13 @@ class Predict:
             )
             self.response.set_cookie(
                 key="access",
-                value=check.get("access"),
+                value=check_tokens.get("access"),
             )
             return {
                 "recomendate": recomendate.get("data"),
                 "classifier": classifier.get("predictions"),
             }
-        elif type(check) == str:
+        elif type(check_tokens) == str:
             recomendate = await SendData.send_data_recomendate(self.model)
             classifier = await SendData.send_data_classifier_applicants(
                 self.model,

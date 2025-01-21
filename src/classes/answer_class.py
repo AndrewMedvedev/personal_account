@@ -2,6 +2,7 @@ from fastapi import HTTPException, Response, status
 from src.classes.tokens_classes import check
 from src.classes.send_data_class import SendData
 
+
 class Answer:
 
     def __init__(
@@ -16,23 +17,20 @@ class Answer:
         self.token_refresh = token_refresh
         self.response = response
 
-
     async def answer(self) -> str | HTTPException:
-        check = check(
+        check_tokens = await check(
             access=self.token_access,
             refresh=self.token_refresh,
         )
-        if type(check) == dict:
+        if type(check_tokens) == dict:
             self.response.set_cookie(
                 key="access",
-                value=check.get("access"),
+                value=check_tokens.get("access"),
             )
-            return await SendData.send_message_bot(self.message)
-        elif type(check) == str:
-            self.response.set_cookie(
-                key="access",
-                value=check.get("access"),
-            )
-            return await SendData.send_message_bot(self.message)
+            data = await SendData.send_message_bot(self.message)
+            return (data.get("data")).get("answer")
+        elif type(check_tokens) == str:
+            data = await SendData.send_message_bot(self.message)
+            return (data.get("data")).get("answer")
         else:
             return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
