@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Response, status
 from src.classes.send_data_class import SendData
-from src.classes.tokens_classes import ValidateTokens
+from src.classes.tokens_classes import check
 from src.database.schemas import PredictModel
 
 
