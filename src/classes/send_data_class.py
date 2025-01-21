@@ -72,3 +72,13 @@ class SendData:
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
+
+    async def send_message_bot(message: str):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                Settings.RAG_GigaChat_API,
+                params=message,
+                ssl=False,
+            ) as data:
+                answer_data = await data.text()
+                return answer_data
