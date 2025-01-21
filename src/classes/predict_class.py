@@ -1,0 +1,51 @@
+from fastapi import HTTPException, Response, status
+from src.classes.send_data_class import SendData
+from src.classes.tokens_classes import ValidateTokens
+from src.database.schemas import PredictModel
+
+
+class Predict:
+
+    def __init__(
+        self,
+        token_access: str,
+        token_refresh: str,
+        model: PredictModel,
+        response: Response,
+    ) -> None:
+        self.token_access = token_access
+        self.token_refresh = token_refresh
+        self.model = model
+        self.response = response
+
+    async def predict(self) -> dict | HTTPException:
+        check = await ValidateTokens(
+            token_access=self.token_access,
+            token_refresh=self.token_refresh,
+        ).check()
+        if type(check) == dict:
+            recomendate = await SendData.send_data_recomendate(self.model)
+            classifier = await SendData.send_data_classifier_applicants(
+                self.model,
+                directions=recomendate.get("data"),
+            )
+            self.response.set_cookie(
+                key="access",
+                value=check.get("access"),
+            )
+            return {
+                "recomendate": recomendate.get("data"),
+                "classifier": classifier.get("predictions"),
+            }
+        elif type(check) == str:
+            recomendate = await SendData.send_data_recomendate(self.model)
+            classifier = await SendData.send_data_classifier_applicants(
+                self.model,
+                directions=recomendate.get("data"),
+            )
+            return {
+                "recomendate": recomendate.get("data"),
+                "classifier": classifier.get("predictions"),
+            }
+        else:
+            return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)

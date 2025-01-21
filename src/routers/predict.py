@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, HTTPException, status
+from fastapi import APIRouter, Request, HTTPException, Response, status
 from src.database.schemas import PredictModel, PredictFree
 from src.classes.send_data_class import SendData
-from src.classes.predict_classes import Predict
+from src.classes.predict_class import Predict
 
 
 router = APIRouter(prefix="/predict", tags=["predict"])
@@ -14,6 +14,7 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     access = request.cookies.get("access")
     refresh = request.cookies.get("refresh")
@@ -21,6 +22,7 @@ async def predict(
         token_access=access,
         token_refresh=refresh,
         model=model,
+        response=response,
     ).predict()
 
 
