@@ -18,19 +18,20 @@ class Answer:
         self.response = response
 
     async def answer(self) -> str | HTTPException:
-        check_tokens = await check(
-            access=self.token_access,
-            refresh=self.token_refresh,
-        )
-        if type(check_tokens) == dict:
-            self.response.set_cookie(
-                key="access",
-                value=check_tokens.get("access"),
+        try:
+            check_tokens = await check(
+                access=self.token_access,
+                refresh=self.token_refresh,
             )
-            data = await SendData.send_message_bot(self.message)
-            return (data.get("data")).get("answer")
-        elif type(check_tokens) == str:
-            data = await SendData.send_message_bot(self.message)
-            return (data.get("data")).get("answer")
-        else:
+            if type(check_tokens) == dict:
+                self.response.set_cookie(
+                    key="access",
+                    value=check_tokens.get("access"),
+                )
+                data = await SendData.send_message_bot(self.message)
+                return (data.get("data")).get("answer")
+            elif type(check_tokens) == str:
+                data = await SendData.send_message_bot(self.message)
+                return (data.get("data")).get("answer")
+        except: 
             return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
