@@ -1,6 +1,12 @@
-from fastapi import APIRouter, Request, HTTPException, Response
+from fastapi import (
+    APIRouter,
+    HTTPException,
+)
 from src.classes.user_data_class import UserData
-from src.database.schemas import PersonalDataModel, PersonalDataModelUpdate
+from src.database.schemas.personal_data_schemas import (
+    PersonalDataModel,
+    PersonalDataModelUpdate,
+)
 
 
 router = APIRouter(prefix="/user_data", tags=["user_data"])
@@ -12,15 +18,12 @@ router = APIRouter(prefix="/user_data", tags=["user_data"])
 )
 async def post_personal_data(
     model: PersonalDataModel,
-    request: Request,
-    response: Response,
+    access: str,
+    refresh: str,
 ) -> HTTPException:
-    access = request.cookies.get("access")
-    refresh = request.cookies.get("refresh")
     return await UserData(
         token_access=access,
         token_refresh=refresh,
-        response=response,
         model=model,
     ).post_personal_data()
 
@@ -31,15 +34,12 @@ async def post_personal_data(
 )
 async def put_personal_data(
     model: PersonalDataModelUpdate,
-    request: Request,
-    response: Response,
+    access: str,
+    refresh: str,
 ) -> HTTPException:
-    access = request.cookies.get("access")
-    refresh = request.cookies.get("refresh")
     return await UserData(
         token_access=access,
         token_refresh=refresh,
-        response=response,
         model=model,
     ).put_personal_data()
 
@@ -49,13 +49,10 @@ async def put_personal_data(
     response_model=None,
 )
 async def get_personal_data(
-    request: Request,
-    response: Response,
+    access: str,
+    refresh: str,
 ) -> dict | HTTPException:
-    access = request.cookies.get("access")
-    refresh = request.cookies.get("refresh")
     return await UserData(
         token_access=access,
         token_refresh=refresh,
-        response=response,
     ).get_personal_data()

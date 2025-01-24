@@ -1,7 +1,7 @@
 import json
 import aiohttp
 from src.config import Settings
-from src.database.schemas import PredictModel, PredictFree
+from src.database.schemas.predict_schemas import PredictModel, PredictFree
 
 
 class SendData:

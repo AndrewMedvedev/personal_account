@@ -1,19 +1,11 @@
-from typing import List, Literal
-from pydantic import BaseModel, Field, field_validator
-
-
-class PersonalDataModel(BaseModel):
-    first_name: str
-    last_name: str
-    dad_name: str
-    bio: str
-
-
-class PersonalDataModelUpdate(PersonalDataModel):
-    first_name: str | None = Field(default=None)
-    last_name: str | None = Field(default=None)
-    dad_name: str | None = Field(default=None)
-    bio: str | None = Field(default=None)
+from typing import (
+    List,
+    Literal,
+)
+from pydantic import (
+    BaseModel,
+    field_validator,
+)
 
 
 class PredictModel(BaseModel):

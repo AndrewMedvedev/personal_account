@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Response, Request, HTTPException
+from fastapi import (
+    APIRouter,
+    HTTPException,
+)
 from src.classes.answer_class import Answer
 
 router = APIRouter(prefix="/answer", tags=["answer"])
@@ -10,14 +13,11 @@ router = APIRouter(prefix="/answer", tags=["answer"])
 )
 async def answer(
     message: str,
-    request: Request,
-    response: Response,
+    access: str,
+    refresh: str,
 ) -> str | HTTPException:
-    access = request.cookies.get("access")
-    refresh = request.cookies.get("refresh")
     return await Answer(
         message=message,
         token_access=access,
         token_refresh=refresh,
-        response=response,
     ).answer()
