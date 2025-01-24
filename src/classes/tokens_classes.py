@@ -27,7 +27,7 @@ class SendTokens:
 
 async def check(access: str, refresh: str) -> dict | str:
     match access:
-        case None:
+        case "None":
             new_access = await SendTokens(refresh).send_refresh_token()
             return {
                 "access": new_access.get("access"),
