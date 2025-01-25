@@ -22,7 +22,8 @@ class SendTokens:
                 url=Settings.VALIDATE_ACCESS,
                 params={"access": self.token},
             ) as response:
-                return await response.text()
+                token = await response.text()
+                return json.loads(token)
 
 
 async def check(access: str, refresh: str) -> dict | str:

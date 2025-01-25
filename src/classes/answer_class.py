@@ -1,4 +1,3 @@
-from fastapi import HTTPException, status
 from src.classes.tokens_classes import check
 from src.classes.send_data_class import SendData
 
@@ -15,20 +14,13 @@ class Answer:
         self.token_access = token_access
         self.token_refresh = token_refresh
 
-    async def answer(self) -> str | HTTPException:
-        try:
-            check_tokens = await check(
-                access=self.token_access,
-                refresh=self.token_refresh,
-            )
-            if type(check_tokens) == dict:
-                data = await SendData.send_message_bot(self.message)
-                return (
-                    (data.get("data")).get("answer"),
-                    {"access": check_tokens.get("access")},
-                )
-            elif type(check_tokens) == str:
-                data = await SendData.send_message_bot(self.message)
-                return (data.get("data")).get("answer")
-        except:
-            return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    async def answer(self) -> dict:
+        check_tokens = await check(
+            access=self.token_access,
+            refresh=self.token_refresh,
+        )
+        data = await SendData.send_message_bot(self.message)
+        result = {"answer": data["data"]["answer"]}
+        if "access" in check_tokens:
+            result["access"] = check_tokens.get("access")
+        return result

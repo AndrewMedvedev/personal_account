@@ -1,6 +1,7 @@
 from fastapi import (
     APIRouter,
     HTTPException,
+    status,
 )
 from src.classes.answer_class import Answer
 
@@ -15,9 +16,12 @@ async def answer(
     message: str,
     access: str,
     refresh: str,
-) -> str | HTTPException:
-    return await Answer(
-        message=message,
-        token_access=access,
-        token_refresh=refresh,
-    ).answer()
+) -> dict | HTTPException:
+    try:
+        return await Answer(
+            message=message,
+            token_access=access,
+            token_refresh=refresh,
+        ).answer()
+    except:
+        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)

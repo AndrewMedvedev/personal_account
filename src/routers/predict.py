@@ -23,11 +23,14 @@ async def predict(
     access: str,
     refresh: str,
 ) -> dict | HTTPException:
-    return await Predict(
-        token_access=access,
-        token_refresh=refresh,
-        model=model,
-    ).predict()
+    try:
+        return await Predict(
+            token_access=access,
+            token_refresh=refresh,
+            model=model,
+        ).predict()
+    except:
+        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @router.post(
