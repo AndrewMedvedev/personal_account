@@ -1,5 +1,6 @@
 from fastapi import (
     APIRouter,
+    Request,
     HTTPException,
     status,
 )
@@ -20,10 +21,11 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 )
 async def predict(
     model: PredictModel,
-    access: str,
-    refresh: str,
+    request: Request,
 ) -> dict | HTTPException:
     try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await Predict(
             token_access=access,
             token_refresh=refresh,

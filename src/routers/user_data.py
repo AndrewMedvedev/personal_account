@@ -1,5 +1,6 @@
 from fastapi import (
     APIRouter,
+    Request,
     HTTPException,
     status,
 )
@@ -19,10 +20,11 @@ router = APIRouter(prefix="/user_data", tags=["user_data"])
 )
 async def post_personal_data(
     model: PersonalDataModel,
-    access: str,
-    refresh: str,
+    request: Request,
 ) -> dict | HTTPException:
     try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await UserData(
             token_access=access,
             token_refresh=refresh,
@@ -38,10 +40,11 @@ async def post_personal_data(
 )
 async def put_personal_data(
     model: PersonalDataModelUpdate,
-    access: str,
-    refresh: str,
+    request: Request,
 ) -> dict | HTTPException:
     try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await UserData(
             token_access=access,
             token_refresh=refresh,
@@ -56,10 +59,11 @@ async def put_personal_data(
     response_model=None,
 )
 async def get_personal_data(
-    access: str,
-    refresh: str,
+    request: Request,
 ) -> dict | HTTPException:
     try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await UserData(
             token_access=access,
             token_refresh=refresh,

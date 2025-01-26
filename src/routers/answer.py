@@ -1,5 +1,6 @@
 from fastapi import (
     APIRouter,
+    Request,
     HTTPException,
     status,
 )
@@ -14,10 +15,11 @@ router = APIRouter(prefix="/answer", tags=["answer"])
 )
 async def answer(
     message: str,
-    access: str,
-    refresh: str,
+    request: Request,
 ) -> dict | HTTPException:
     try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await Answer(
             message=message,
             token_access=access,
