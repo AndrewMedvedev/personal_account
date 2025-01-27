@@ -26,7 +26,7 @@ class SendTokens:
                 return json.loads(token)
 
 
-async def check(access: str, refresh: str) -> dict | str:
+async def check(access: str, refresh: str) -> dict:
     match access:
         case "None":
             new_access = await SendTokens(refresh).send_refresh_token()
