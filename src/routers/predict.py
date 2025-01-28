@@ -1,9 +1,11 @@
+import json
 from fastapi import (
     APIRouter,
     Request,
     HTTPException,
     status,
 )
+from fastapi.responses import JSONResponse
 from src.database.schemas.predict_schemas import (
     PredictModel,
     PredictFree,
@@ -24,6 +26,11 @@ async def predict(
     request: Request,
 ) -> dict | HTTPException:
     try:
+        request_body = await request.body()
+        request_body_str = request_body.decode("utf-8")
+        print(f"Request Body: {request_body_str}")
+        request_json = json.loads(request_body_str)
+        print(request_json)
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")
         print(access, refresh)
@@ -32,12 +39,10 @@ async def predict(
             token_refresh=refresh,
             model=model,
         ).predict()
-    except:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        print(access, refresh)
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+    except Exception as e:
+        print(f"Error: {e}")
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)})
 
 @router.post(
     "/free",
