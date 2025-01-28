@@ -24,16 +24,14 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
-    access: str = Cookie(None),
-    refresh: str = Cookie(None),
 ) -> dict | HTTPException:
     try:
         all_cookies = request.cookies
         print(access, refresh)
         # for key, value in all_cookies.items():
         #     print(f"Cookie: {key} = {value}")
-        # access = request.cookies.get("access")
-        # refresh = request.cookies.get("refresh")
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
         return await Predict(
             token_access=access,
             token_refresh=refresh,
