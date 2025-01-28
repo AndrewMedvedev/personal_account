@@ -1,6 +1,5 @@
 from fastapi import (
     APIRouter,
-    Cookie,
     Request,
     HTTPException,
     status,
@@ -26,10 +25,6 @@ async def predict(
     request: Request,
 ) -> dict | HTTPException:
     try:
-        all_cookies = request.cookies
-        print(access, refresh)
-        # for key, value in all_cookies.items():
-        #     print(f"Cookie: {key} = {value}")
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")
         return await Predict(
@@ -37,14 +32,11 @@ async def predict(
             token_refresh=refresh,
             model=model,
         ).predict()
-
     except Exception as e:
-        all_cookies = request.cookies
-        print(access, refresh)
-        # for key, value in all_cookies.items():
-        #     print(f"Cookie: {key} = {value}")
-        # print(f"Error: {e}")
-        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)})
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+        )
+
 
 @router.post(
     "/free",
