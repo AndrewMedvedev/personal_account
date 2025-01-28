@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Request,
     HTTPException,
+    Response,
     status,
 )
 from fastapi.responses import JSONResponse
@@ -17,6 +18,7 @@ router = APIRouter(prefix="/answer", tags=["answer"])
 async def answer(
     message: str,
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -25,6 +27,7 @@ async def answer(
             message=message,
             token_access=access,
             token_refresh=refresh,
+            response=response,
         ).answer()
     except Exception as e:
         return JSONResponse(

@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Request,
     HTTPException,
+    Response,
     status,
 )
 from fastapi.responses import JSONResponse
@@ -22,6 +23,7 @@ router = APIRouter(prefix="/user_data", tags=["user_data"])
 async def post_personal_data(
     model: PersonalDataModel,
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -30,6 +32,7 @@ async def post_personal_data(
             token_access=access,
             token_refresh=refresh,
             model=model,
+            response=response,
         ).post_personal_data()
     except Exception as e:
         return JSONResponse(
@@ -45,6 +48,7 @@ async def post_personal_data(
 async def put_personal_data(
     model: PersonalDataModelUpdate,
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -53,6 +57,7 @@ async def put_personal_data(
             token_access=access,
             token_refresh=refresh,
             model=model,
+            response=response,
         ).put_personal_data()
     except Exception as e:
         return JSONResponse(
@@ -67,6 +72,7 @@ async def put_personal_data(
 )
 async def get_personal_data(
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -74,6 +80,7 @@ async def get_personal_data(
         return await UserData(
             token_access=access,
             token_refresh=refresh,
+            response=response,
         ).get_personal_data()
     except Exception as e:
         return JSONResponse(

@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Response
 from src.classes.tokens_classes import check
 from src.database.models import PersonalData
 from src.database.services.crud import CRUD
@@ -10,11 +10,14 @@ class UserData:
         self,
         token_access: str,
         token_refresh: str,
+        response: Response,
         model=None,
     ) -> None:
         self.token_access = token_access
         self.token_refresh = token_refresh
+        self.response = response
         self.model = model
+        
 
     async def post_personal_data(self) -> dict:
         check_tokens = await check(
@@ -33,7 +36,13 @@ class UserData:
             "status": HTTPException(status_code=status.HTTP_200_OK),
         }
         if "access" in check_tokens:
-            result["access"] = check_tokens.get("access")
+            self.response.set_cookie(
+                key="access",
+                value=check_tokens.get("access"),
+                samesite="none",
+                httponly=True,
+                secure=True,
+            )
         return result
 
     async def put_personal_data(self) -> dict:
@@ -50,7 +59,13 @@ class UserData:
             "status": HTTPException(status_code=status.HTTP_200_OK),
         }
         if "access" in check_tokens:
-            result["access"] = check_tokens.get("access")
+            self.response.set_cookie(
+                key="access",
+                value=check_tokens.get("access"),
+                samesite="none",
+                httponly=True,
+                secure=True,
+            )
         return result
 
     async def get_personal_data(self) -> dict:
@@ -66,5 +81,11 @@ class UserData:
             "status": HTTPException(status_code=status.HTTP_200_OK),
         }
         if "access" in check_tokens:
-            result["access"] = check_tokens.get("access")
+            self.response.set_cookie(
+                key="access",
+                value=check_tokens.get("access"),
+                samesite="none",
+                httponly=True,
+                secure=True,
+            )
         return result

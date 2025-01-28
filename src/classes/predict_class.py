@@ -1,3 +1,4 @@
+from fastapi import Response
 from src.classes.send_data_class import SendData
 from src.classes.tokens_classes import check
 from src.database.schemas.predict_schemas import PredictModel
@@ -10,10 +11,12 @@ class Predict:
         token_access: str,
         token_refresh: str,
         model: PredictModel,
+        response: Response,
     ) -> None:
         self.token_access = token_access
         self.token_refresh = token_refresh
         self.model = model
+        self.response = response
 
     async def predict(self) -> dict:
         check_tokens = await check(
@@ -30,6 +33,12 @@ class Predict:
             "classifier": classifier.get("predictions"),
         }
         if "access" in check_tokens:
-            result["access"] = check_tokens.get("access")
+            self.response.set_cookie(
+                key="access",
+                value=check_tokens.get("access"),
+                samesite="none",
+                httponly=True,
+                secure=True,
+            )
 
         return result

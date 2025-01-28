@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Request,
     HTTPException,
+    Response,
     status,
 )
 from fastapi.responses import JSONResponse
@@ -23,6 +24,7 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
+    response: Response,
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -31,6 +33,7 @@ async def predict(
             token_access=access,
             token_refresh=refresh,
             model=model,
+            response=response,
         ).predict()
     except Exception as e:
         return JSONResponse(
