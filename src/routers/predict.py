@@ -2,6 +2,7 @@ from fastapi import (
     APIRouter,
     Request,
     HTTPException,
+    Response,
     status,
 )
 from fastapi.responses import JSONResponse
@@ -23,6 +24,7 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
+    
 ) -> dict | HTTPException:
     try:
         access = request.cookies.get("access")
@@ -48,3 +50,7 @@ async def predict_free(model: PredictFree) -> str | HTTPException:
         return classifier.get("data")
     except:
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
+
+
+
