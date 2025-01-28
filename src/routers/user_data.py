@@ -4,6 +4,7 @@ from fastapi import (
     HTTPException,
     status,
 )
+from fastapi.responses import JSONResponse
 from src.database.schemas.personal_data_schemas import (
     PersonalDataModel,
     PersonalDataModelUpdate,
@@ -30,8 +31,11 @@ async def post_personal_data(
             token_refresh=refresh,
             model=model,
         ).post_personal_data()
-    except:
-        HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": str(e)},
+        )
 
 
 @router.put(
@@ -50,8 +54,11 @@ async def put_personal_data(
             token_refresh=refresh,
             model=model,
         ).put_personal_data()
-    except:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": str(e)},
+        )
 
 
 @router.get(
@@ -68,5 +75,8 @@ async def get_personal_data(
             token_access=access,
             token_refresh=refresh,
         ).get_personal_data()
-    except:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": str(e)},
+        )

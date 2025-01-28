@@ -6,24 +6,22 @@ from fastapi import (
 )
 
 
-router = APIRouter(prefix="/get_token", tags=["get_token"])
+router = APIRouter(prefix="/logout", tags=["logout"])
 
 
 @router.get(
     "/",
     response_model=None,
 )
-async def get_token(access: str, refresh: str, response: Response) -> HTTPException:
-    response.set_cookie(
+async def logout(response: Response) -> HTTPException:
+    response.delete_cookie(
         key="access",
-        value=access,
         samesite="none",
         httponly=True,
         secure=True,
     )
-    response.set_cookie(
+    response.delete_cookie(
         key="refresh",
-        value=refresh,
         samesite="none",
         httponly=True,
         secure=True,

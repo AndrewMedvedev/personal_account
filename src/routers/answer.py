@@ -4,6 +4,7 @@ from fastapi import (
     HTTPException,
     status,
 )
+from fastapi.responses import JSONResponse
 from src.classes.answer_class import Answer
 
 router = APIRouter(prefix="/answer", tags=["answer"])
@@ -25,5 +26,8 @@ async def answer(
             token_access=access,
             token_refresh=refresh,
         ).answer()
-    except:
-        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"detail": str(e)},
+        )
