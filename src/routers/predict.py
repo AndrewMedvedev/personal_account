@@ -1,6 +1,6 @@
-import json
 from fastapi import (
     APIRouter,
+    Cookie,
     Request,
     HTTPException,
     status,
@@ -24,13 +24,16 @@ router = APIRouter(prefix="/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
+    access: str = Cookie(None),
+    refresh: str = Cookie(None),
 ) -> dict | HTTPException:
     try:
         all_cookies = request.cookies
-        for key, value in all_cookies.items():
-            print(f"Cookie: {key} = {value}")
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
+        print(access, refresh)
+        # for key, value in all_cookies.items():
+        #     print(f"Cookie: {key} = {value}")
+        # access = request.cookies.get("access")
+        # refresh = request.cookies.get("refresh")
         return await Predict(
             token_access=access,
             token_refresh=refresh,
@@ -39,9 +42,10 @@ async def predict(
 
     except Exception as e:
         all_cookies = request.cookies
-        for key, value in all_cookies.items():
-            print(f"Cookie: {key} = {value}")
-        print(f"Error: {e}")
+        print(access, refresh)
+        # for key, value in all_cookies.items():
+        #     print(f"Cookie: {key} = {value}")
+        # print(f"Error: {e}")
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)})
 
 @router.post(
