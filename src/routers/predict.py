@@ -26,14 +26,11 @@ async def predict(
     request: Request,
 ) -> dict | HTTPException:
     try:
-        request_body = await request.body()
-        request_body_str = request_body.decode("utf-8")
-        print(f"Request Body: {request_body_str}")
-        request_json = json.loads(request_body_str)
-        print(request_json)
+        all_cookies = request.cookies
+        for key, value in all_cookies.items():
+            print(f"Cookie: {key} = {value}")
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")
-        print(access, refresh)
         return await Predict(
             token_access=access,
             token_refresh=refresh,
