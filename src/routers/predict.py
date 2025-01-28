@@ -38,6 +38,9 @@ async def predict(
         ).predict()
 
     except Exception as e:
+        all_cookies = request.cookies
+        for key, value in all_cookies.items():
+            print(f"Cookie: {key} = {value}")
         print(f"Error: {e}")
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)})
 
