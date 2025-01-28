@@ -26,12 +26,16 @@ async def predict(
     try:
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")
+        print(access, refresh)
         return await Predict(
             token_access=access,
             token_refresh=refresh,
             model=model,
         ).predict()
     except:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
+        print(access, refresh)
         return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
