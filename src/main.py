@@ -41,7 +41,7 @@ app.add_middleware(
     ],  # include additional methods as per the application demand
     allow_headers=[
         "Content-Type",
-        "Set-Cookie",
+        "Cookie",
     ],
     expose_headers=["*"],
 )
