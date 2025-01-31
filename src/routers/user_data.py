@@ -12,11 +12,11 @@ from fastapi.responses import JSONResponse
 from src.classes.user_data_class import UserData
 
 
-router = APIRouter(prefix="/user_data", tags=["user_data"])
+router = APIRouter(prefix="/user/data", tags=["user_data"])
 
 
 @router.post(
-    "/add/or/update/personal",
+    "/add/or/update",
     response_model=None,
 )
 async def add_or_update_data_email(
@@ -41,7 +41,7 @@ async def add_or_update_data_email(
 
 
 @router.get(
-    "/get/personal",
+    "/get",
     response_model=None,
 )
 async def get_personal_data(
