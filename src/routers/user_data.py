@@ -16,10 +16,10 @@ router = APIRouter(prefix="/user_data", tags=["user_data"])
 
 
 @router.post(
-    "/add/personal",
+    "/add/or/update/personal",
     response_model=None,
 )
-async def add_personal_data(
+async def add_or_update_data_email(
     model: PersonalDataModelUpdate,
     request: Request,
     response: Response,
