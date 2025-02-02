@@ -24,7 +24,8 @@ class UserData:
             refresh=self.token_refresh,
         )
         await CRUD().add_or_update_data_email(
-            user=self.model,
+            model=PersonalData,
+            new_model=self.model,
             email=check_tokens.get("email"),
         )
         result = {

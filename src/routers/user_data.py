@@ -6,7 +6,7 @@ from fastapi import (
     status,
 )
 from src.database.schemas.personal_data_schemas import (
-    PersonalDataModel,
+    PersonalDataModelUpdate,
 )
 from fastapi.responses import JSONResponse
 from src.classes.user_data_class import UserData
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/user/data", tags=["user_data"])
     response_model=None,
 )
 async def add_or_update_data_email(
-    model: PersonalDataModel,
+    model: PersonalDataModelUpdate,
     request: Request,
     response: Response,
 ) -> dict | HTTPException:
