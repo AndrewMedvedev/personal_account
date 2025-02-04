@@ -1,4 +1,3 @@
-from src.database.schemas.personal_data_schemas import PersonalDataModel
 from src.database.services.orm import DatabaseSessionService
 from sqlalchemy import Result, select
 from src.database.models import PersonalData
