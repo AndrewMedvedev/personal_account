@@ -27,6 +27,7 @@ class SendData:
             async with session.post(
                 Settings.RECOMENDATE,
                 json=data,
+                ssl=False,
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
@@ -52,6 +53,7 @@ class SendData:
             async with session.post(
                 Settings.CLASSIFIER,
                 json=correct_data,
+                ssl=False,
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
@@ -69,6 +71,7 @@ class SendData:
             async with session.post(
                 Settings.CLASSIFIER_FREE,
                 json=data,
+                ssl=False,
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
@@ -77,6 +80,7 @@ class SendData:
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 url=f"{Settings.RAG_GigaChat_API}?query={message}",
+                ssl=False,
             ) as data:
                 answer_data = await data.text()
                 return json.loads(answer_data)
