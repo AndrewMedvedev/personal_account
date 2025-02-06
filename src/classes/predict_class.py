@@ -40,5 +40,4 @@ class Predict:
                 httponly=True,
                 secure=True,
             )
-
         return result
