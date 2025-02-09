@@ -32,7 +32,7 @@ jobs:
         
         - name: Set environment variables
           run: |
-            echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
+             echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
             
         - name: Build images
           run: |
