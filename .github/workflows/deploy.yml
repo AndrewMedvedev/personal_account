@@ -1,0 +1,39 @@
+name: personal_account
+
+on:
+    push:
+      branches: ["main"]
+    pull_request:
+      branches: ["main"]
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+        ALL: >
+            ALGORITHM = ${{ secrets.ALGORITHM }}
+            SECRET_KEY = ${{ secrets.SECRET_KEY }}
+            RECOMENDATE = ${{ secrets.RECOMENDATE }}
+            CLASSIFIER = ${{ secrets.CLASSIFIER }}
+            CLASSIFIER_FREE = ${{ secrets.CLASSIFIER_FREE }}
+            VALIDATE_ACCESS = ${{ secrets.VALIDATE_ACCESS }}
+            VALIDATE_REFRESH = ${{ secrets.VALIDATE_REFRESH }}
+            RAG_GigaChat_API = ${{ secrets.RAG_GigaChat_API }}
+
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Create .env file
+          run: |
+            echo "$ALL" >> .env
+        
+        - name: Set environment variables
+          run: |
+            echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
+            
+        - name: Build images
+          run: |
+            docker build -t personal_account .
