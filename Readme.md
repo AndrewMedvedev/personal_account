@@ -86,7 +86,7 @@
 
 
 Разработчик api рекомендательной системы и классификатора.
-GitHub: [text](https://github.com/Andr171p)
+GitHub: https://github.com/Andr171p
 
 
 ## Free:
@@ -113,7 +113,7 @@ GitHub: [text](https://github.com/Andr171p)
 
 
 Разработчик api упрощенной рекомендации.
-GitHub: [text](https://github.com/Andr171p)
+GitHub: https://github.com/Andr171p
 
 
 ## Базовый ендпоинт: `/answer/`
@@ -140,7 +140,7 @@ GitHub: [text](https://github.com/Andr171p)
 
 
 Разработчик api упрощенной рекомендации.
-GitHub: [text](https://github.com/Andr171p)
+GitHub: https://github.com/Andr171p
 
 
 
