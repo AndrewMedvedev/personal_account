@@ -21,6 +21,7 @@ class Answer:
         check_tokens = await check(
             access=self.token_access,
             refresh=self.token_refresh,
+            responce=self.response,
         )
         data = await SendData.send_message_bot(self.message)
         result = {"answer": data["data"]["answer"]}

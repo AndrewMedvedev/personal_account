@@ -22,6 +22,7 @@ class Predict:
         check_tokens = await check(
             access=self.token_access,
             refresh=self.token_refresh,
+            responce=self.response,
         )
         recomendate = await SendData.send_data_recomendate(self.model)
         classifier = await SendData.send_data_classifier_applicants(

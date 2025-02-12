@@ -1,7 +1,7 @@
 import json
 import aiohttp
 from src.config import Settings
-
+from fastapi import Response
 
 class SendTokens:
 
@@ -26,9 +26,10 @@ class SendTokens:
                 return json.loads(token)
 
 
-async def check(access: str, refresh: str) -> dict:
-    if access is None:
+async def check(access: str, refresh: str, responce: Response) -> dict:
+    if access is None or '@' not in access:
         new_access = await SendTokens(refresh).send_refresh_token()
+        responce.delete_cookie("access")
         return {
             "access": new_access.get("access"),
             "email": new_access.get("email"),
