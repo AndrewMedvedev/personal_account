@@ -26,12 +26,12 @@ class SendTokens:
                 return json.loads(token)
 
 
-async def check(access: str, refresh: str, responce: Response) -> dict:
-    if access is None or '@' not in access:
+async def check(access: str, refresh: str) -> dict:
+    if access is None:
         new_access = await SendTokens(refresh).send_refresh_token()
-        responce.delete_cookie("access")
-        return {
-            "access": new_access.get("access"),
-            "email": new_access.get("email"),
-        }
+        if type(new_access) == dict:
+            return {
+                "access": new_access.get("access"),
+                "email": new_access.get("email"),
+            }
     return await SendTokens(access).send_access_token()
