@@ -8,8 +8,6 @@ config = dotenv_values(env_path)
 
 
 class Settings:
-    SECRET_KEY: str = config["SECRET_KEY"]
-    ALGORITHM: str = config["ALGORITHM"]
     RECOMENDATE: str = config["RECOMENDATE"]
     CLASSIFIER: str = config["CLASSIFIER"]
     CLASSIFIER_FREE: str = config["CLASSIFIER_FREE"]

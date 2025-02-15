@@ -6,10 +6,10 @@ from fastapi import (
 )
 
 
-router = APIRouter(prefix="/logout", tags=["logout"])
+router_logout = APIRouter(prefix="/logout", tags=["logout"])
 
 
-@router.get(
+@router_logout.get(
     "/",
     response_model=None,
 )

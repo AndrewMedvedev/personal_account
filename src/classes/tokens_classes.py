@@ -1,7 +1,6 @@
 import json
 import aiohttp
 from src.config import Settings
-from fastapi import Response
 
 class SendTokens:
 

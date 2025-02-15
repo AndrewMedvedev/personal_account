@@ -6,12 +6,12 @@ from fastapi import (
     status,
 )
 from fastapi.responses import JSONResponse
-from src.classes.answer_class import Answer
+from src.classes import Answer
 
-router = APIRouter(prefix="/answer", tags=["answer"])
+router_answer = APIRouter(prefix="/answer", tags=["answer"])
 
 
-@router.get(
+@router_answer.get(
     "/",
     response_model=None,
 )

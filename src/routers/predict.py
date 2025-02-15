@@ -6,18 +6,14 @@ from fastapi import (
     status,
 )
 from fastapi.responses import JSONResponse
-from src.database.schemas.predict_schemas import (
-    PredictModel,
-    PredictFree,
-)
-from src.classes.send_data_class import SendData
-from src.classes.predict_class import Predict
+from src.database import PredictModel, PredictFree
+from src.classes import Predict, SendData
 
 
-router = APIRouter(prefix="/predict", tags=["predict"])
+router_predict = APIRouter(prefix="/predict", tags=["predict"])
 
 
-@router.post(
+@router_predict.post(
     "/",
     response_model=None,
 )
@@ -41,7 +37,7 @@ async def predict(
         )
 
 
-@router.post(
+@router_predict.post(
     "/free",
     response_model=None,
 )

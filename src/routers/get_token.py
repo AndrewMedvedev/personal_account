@@ -6,10 +6,10 @@ from fastapi import (
 )
 
 
-router = APIRouter(prefix="/get/token", tags=["get_token"])
+router_get_token = APIRouter(prefix="/get/token", tags=["get_token"])
 
 
-@router.get(
+@router_get_token.get(
     "/",
     response_model=None,
 )

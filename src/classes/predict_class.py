@@ -1,7 +1,6 @@
 from fastapi import Response
-from src.classes.send_data_class import SendData
-from src.classes.tokens_classes import check
-from src.database.schemas.predict_schemas import PredictModel
+from src.classes import SendData, check
+from src.database import PredictModel
 
 
 class Predict:
