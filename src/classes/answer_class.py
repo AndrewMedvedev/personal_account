@@ -1,6 +1,6 @@
 from fastapi import Response
 from src.classes.tokens_classes import check
-from src.classes import SendData, check
+from src.classes.send_data_class import SendData, check
 
 
 class Answer:
