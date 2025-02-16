@@ -19,7 +19,7 @@ async def answer(
     message: str,
     request: Request,
     response: Response,
-) -> dict | HTTPException:
+) -> JSONResponse:
     try:
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")

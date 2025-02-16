@@ -1,5 +1,6 @@
-from fastapi import Response
-from src.classes.tokens_classes import check
+from fastapi import Response, status
+from fastapi.responses import JSONResponse
+from src.classes.tokens_classes import ValidTokens
 from src.classes.send_data_class import SendData
 
 
@@ -18,19 +19,26 @@ class Answer:
         self.response = response
 
     async def answer(self) -> dict:
-        check_tokens = await check(
+        check_tokens = await ValidTokens(
             access=self.token_access,
             refresh=self.token_refresh,
-            responce=self.response,
-        )
-        data = await SendData.send_message_bot(self.message)
-        result = {"answer": data["data"]["answer"]}
-        if "access" in check_tokens:
-            self.response.set_cookie(
-                key="access",
-                value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
-                secure=True,
-            )
-        return result
+            response=self.response,
+        ).valid()
+        match check_tokens:
+            case True:
+                data = await SendData.send_message_bot(self.message)
+                return JSONResponse(content={"answer": data["data"]["answer"]})
+            case False:
+                return JSONResponse(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                )
+            case _:
+                data = await SendData.send_message_bot(self.message)
+                self.response.set_cookie(
+                    key="access",
+                    value=check_tokens.get("access"),
+                    samesite="none",
+                    httponly=True,
+                    secure=True,
+                )
+                return JSONResponse(content={"answer": data["data"]["answer"]})

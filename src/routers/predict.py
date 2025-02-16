@@ -21,7 +21,7 @@ async def predict(
     model: PredictModel,
     request: Request,
     response: Response,
-) -> dict | HTTPException:
+) -> JSONResponse:
     try:
         access = request.cookies.get("access")
         refresh = request.cookies.get("refresh")
@@ -41,7 +41,7 @@ async def predict(
     "/free",
     response_model=None,
 )
-async def predict_free(model: PredictFree) -> str | HTTPException:
+async def predict_free(model: PredictFree) -> str | JSONResponse:
     try:
         classifier = await SendData.send_data_classifier_applicant(model)
         return classifier.get("data")
