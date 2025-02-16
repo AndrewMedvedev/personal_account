@@ -40,9 +40,9 @@ class SendData:
             array = [
                 correct_data["applicants"].append(
                     {
+                        "year": data.year,
                         "gender": data.gender,
                         "gpa": data.gpa,
-                        "priority": data.priority,
                         "points": data.points,
                         "direction": i[23::],
                     }
@@ -61,9 +61,9 @@ class SendData:
     async def send_data_classifier_applicant(data: PredictFree) -> dict:
         async with aiohttp.ClientSession() as session:
             data = {
+                "year": data.year,
                 "gender": data.gender,
                 "gpa": data.gpa,
-                "priority": data.priority,
                 "points": data.points,
                 "direction": data.direction,
             }

@@ -11,6 +11,7 @@ from pydantic import (
 class PredictModel(BaseModel):
     top_n: str
     age: int
+    year: int
     gender: Literal["М", "Ж"]
     sport: str
     foreign: str
@@ -19,9 +20,15 @@ class PredictModel(BaseModel):
     bonus_points: int
     exams: List[str]
     reception_form: str
-    priority: int
     education: str
     study_form: Literal["Очная", "Заочная", "Очно-Заочная"]
+
+    @field_validator("top_n")
+    @classmethod
+    def validate_top_n(cls, v: str) -> float:
+        if int(v) <= 5 or int(v) > 1:
+            raise ValueError("Field top_n, incorrect number of directions")
+        return v
 
     @field_validator("age")
     @classmethod
@@ -30,18 +37,18 @@ class PredictModel(BaseModel):
             raise ValueError("Field age must be over 16")
         return v
 
+    @field_validator("year")
+    @classmethod
+    def validate_year(cls, v: int) -> float:
+        if v < 2100 or v > 2023:
+            raise ValueError("Field year ,wrong year")
+        return v
+
     @field_validator("gpa")
     @classmethod
     def validate_gpa(cls, v: float) -> float:
         if v < 3 or v > 5:
             raise ValueError("Field gpa must be in range [3;5]")
-        return v
-
-    @field_validator("priority")
-    @classmethod
-    def validate_priority(cls, v: int) -> int:
-        if v < 1 or v > 5:
-            raise ValueError("Field priority must be in range [1;5]")
         return v
 
     @field_validator("points")
@@ -60,24 +67,24 @@ class PredictModel(BaseModel):
 
 
 class PredictFree(BaseModel):
+    year: int
     gender: Literal["М", "Ж"]
     gpa: float
-    priority: int
     points: int
     direction: str
+
+    @field_validator("year")
+    @classmethod
+    def validate_year(cls, v: int) -> float:
+        if v < 2100 or v > 2023:
+            raise ValueError("Field year ,wrong year")
+        return v
 
     @field_validator("gpa")
     @classmethod
     def validate_gpa(cls, v: float) -> float:
         if v < 3 or v > 5:
             raise ValueError("Field gpa must be in range [3;5]")
-        return v
-
-    @field_validator("priority")
-    @classmethod
-    def validate_priority(cls, v: int) -> int:
-        if v < 1 or v > 5:
-            raise ValueError("Field priority must be in range [1;5]")
         return v
 
     @field_validator("points")
