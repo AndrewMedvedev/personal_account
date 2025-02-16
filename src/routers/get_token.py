@@ -1,10 +1,4 @@
-from fastapi import (
-    APIRouter,
-    HTTPException,
-    Response,
-    status,
-)
-
+from fastapi import APIRouter, HTTPException, Response, status
 
 router_get_token = APIRouter(prefix="/get/token", tags=["get_token"])
 

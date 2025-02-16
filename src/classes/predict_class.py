@@ -1,5 +1,6 @@
 from fastapi import Response, status
 from fastapi.responses import JSONResponse
+
 from src.classes.send_data_class import SendData
 from src.classes.tokens_classes import ValidTokens
 from src.database import PredictModel

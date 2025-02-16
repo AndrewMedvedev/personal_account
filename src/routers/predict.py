@@ -1,14 +1,8 @@
-from fastapi import (
-    APIRouter,
-    Request,
-    HTTPException,
-    Response,
-    status,
-)
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
-from src.database import PredictModel, PredictFree
-from src.classes import Predict, SendData
 
+from src.classes import Predict, SendData
+from src.database import PredictFree, PredictModel
 
 router_predict = APIRouter(prefix="/predict", tags=["predict"])
 

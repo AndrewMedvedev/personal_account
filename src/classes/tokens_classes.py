@@ -1,6 +1,8 @@
 import json
+
 import aiohttp
 from fastapi import Response
+
 from src.config import Settings
 
 

@@ -1,11 +1,6 @@
-from fastapi import (
-    APIRouter,
-    Request,
-    HTTPException,
-    Response,
-    status,
-)
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.responses import JSONResponse
+
 from src.classes import Answer
 
 router_answer = APIRouter(prefix="/answer", tags=["answer"])

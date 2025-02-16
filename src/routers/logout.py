@@ -1,10 +1,4 @@
-from fastapi import (
-    APIRouter,
-    HTTPException,
-    Response,
-    status,
-)
-
+from fastapi import APIRouter, HTTPException, Response, status
 
 router_logout = APIRouter(prefix="/logout", tags=["logout"])
 
