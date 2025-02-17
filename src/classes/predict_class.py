@@ -22,8 +22,8 @@ class Predict:
 
     async def predict(self) -> dict | JSONResponse:
         check_tokens = await ValidTokens(
-            access=self.token_access,
-            refresh=self.token_refresh,
+            token_access=self.token_access,
+            token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
         match check_tokens:

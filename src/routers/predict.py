@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, Request, Response, status
 from fastapi.responses import JSONResponse
 
 from src.classes import Predict, SendData

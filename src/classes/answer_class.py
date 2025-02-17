@@ -21,14 +21,14 @@ class Answer:
 
     async def answer(self) -> dict:
         check_tokens = await ValidTokens(
-            access=self.token_access,
-            refresh=self.token_refresh,
+            token_access=self.token_access,
+            token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
         match check_tokens:
             case True:
                 data = await SendData.send_message_bot(self.message)
-                return JSONResponse(content={"answer": data["data"]["answer"]})
+                return JSONResponse(content=data)
             case False:
                 return JSONResponse(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -42,4 +42,4 @@ class Answer:
                     httponly=True,
                     secure=True,
                 )
-                return JSONResponse(content={"answer": data["data"]["answer"]})
+                return JSONResponse(content={"answer": data})

@@ -80,8 +80,12 @@ class SendData:
 
     async def send_message_bot(message: str) -> dict:
         async with aiohttp.ClientSession() as session:
-            async with session.get(
-                url=f"{Settings.RAG_GigaChat_API}?query={message}",
+            data = {
+                "question": message,
+            }
+            async with session.post(
+                url=Settings.RAG_GigaChat_API,
+                json=data,
                 ssl=False,
             ) as data:
                 answer_data = await data.text()
