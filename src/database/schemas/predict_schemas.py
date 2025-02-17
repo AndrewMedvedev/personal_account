@@ -35,7 +35,7 @@ class PredictModel(BaseModel):
     @field_validator("year")
     @classmethod
     def validate_year(cls, v: int) -> float:
-        if v < 2100 or v > 2023:
+        if v < 2100 or v >= 2019:
             raise ValueError("Field year ,wrong year")
         return v
 
