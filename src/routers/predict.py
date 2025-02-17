@@ -35,10 +35,10 @@ async def predict(
     "/free",
     response_model=None,
 )
-async def predict_free(model: PredictFree) -> str | JSONResponse:
+async def predict_free(model: PredictFree) -> float | JSONResponse:
     try:
         classifier = await SendData.send_data_classifier_applicant(model)
-        return classifier.get("data")
+        return classifier.get("probability")
     except Exception as e:
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,

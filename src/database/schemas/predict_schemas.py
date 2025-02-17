@@ -32,13 +32,6 @@ class PredictModel(BaseModel):
             raise ValueError("Field age must be over 16")
         return v
 
-    @field_validator("year")
-    @classmethod
-    def validate_year(cls, v: int) -> float:
-        if v < 2100 or v >= 2019:
-            raise ValueError("Field year ,wrong year")
-        return v
-
     @field_validator("gpa")
     @classmethod
     def validate_gpa(cls, v: float) -> float:
@@ -67,13 +60,6 @@ class PredictFree(BaseModel):
     gpa: float
     points: int
     direction: str
-
-    @field_validator("year")
-    @classmethod
-    def validate_year(cls, v: int) -> float:
-        if v < 2100 or v > 2023:
-            raise ValueError("Field year ,wrong year")
-        return v
 
     @field_validator("gpa")
     @classmethod
