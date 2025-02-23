@@ -42,7 +42,7 @@ class Predict:
         ).valid()
         match check_tokens:
             case True:
-                self.send(self.model)
+                return self.send(self.model)
             case False:
                 return JSONResponse(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,4 +55,4 @@ class Predict:
                     httponly=True,
                     secure=True,
                 )
-                self.send(self.model)
+                return self.send(self.model)
