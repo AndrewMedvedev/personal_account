@@ -3,7 +3,7 @@ __all__ = (
     "Predict",
     "SendData",
     "SendTokens",
-    "check",
+    "ValidTokens",
 )
 
 from src.classes.answer_class import Answer

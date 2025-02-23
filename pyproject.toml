@@ -20,6 +20,7 @@ python-jose = "^3.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 phonenumbers = "^8.13.52"
 isort = "^6.0.0"
+ruff = "^0.9.7"
 
 
 [build-system]

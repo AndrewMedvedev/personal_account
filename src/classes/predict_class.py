@@ -20,6 +20,20 @@ class Predict:
         self.model = model
         self.response = response
 
+    @staticmethod
+    async def send(model: PredictModel) -> JSONResponse:
+        recomendate = await SendData.send_data_recomendate(model)
+        classifier = await SendData.send_data_classifier_applicants(
+            model,
+            directions=recomendate.get("data"),
+        )
+        return JSONResponse(
+            content={
+                "recomendate": recomendate.get("data"),
+                "classifier": classifier.get("predictions"),
+            }
+        )
+
     async def predict(self) -> dict | JSONResponse:
         check_tokens = await ValidTokens(
             token_access=self.token_access,
@@ -28,25 +42,12 @@ class Predict:
         ).valid()
         match check_tokens:
             case True:
-                recomendate = await SendData.send_data_recomendate(self.model)
-                classifier = await SendData.send_data_classifier_applicants(
-                    self.model,
-                    directions=recomendate.get("data"),
-                )
-                return JSONResponse(content={
-                    "recomendate": recomendate.get("data"),
-                    "classifier": classifier.get("predictions"),
-                })
+                self.send(self.model)
             case False:
                 return JSONResponse(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                 )
             case _:
-                recomendate = await SendData.send_data_recomendate(self.model)
-                classifier = await SendData.send_data_classifier_applicants(
-                    self.model,
-                    directions=recomendate.get("data"),
-                )
                 self.response.set_cookie(
                     key="access",
                     value=check_tokens.get("access"),
@@ -54,7 +55,4 @@ class Predict:
                     httponly=True,
                     secure=True,
                 )
-                return JSONResponse(content={
-                    "recomendate": recomendate.get("data"),
-                    "classifier": classifier.get("predictions"),
-                })
+                self.send(self.model)
