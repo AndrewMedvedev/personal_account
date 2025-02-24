@@ -25,21 +25,13 @@ class Answer:
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        match check_tokens:
-            case True:
-                data = await SendData.send_message_bot(self.message)
-                return JSONResponse(content=data)
-            case False:
-                return JSONResponse(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
-            case _:
-                data = await SendData.send_message_bot(self.message)
-                self.response.set_cookie(
+        data = await SendData.send_message_bot(self.message)
+        if "access" in check_tokens:
+            self.response.set_cookie(
                     key="access",
                     value=check_tokens.get("access"),
                     samesite="none",
                     httponly=True,
                     secure=True,
                 )
-                return JSONResponse(content={"answer": data})
+        return JSONResponse(content=data)

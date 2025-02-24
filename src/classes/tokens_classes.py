@@ -22,8 +22,8 @@ class ValidTokens:
         send_access = await self.send_access_token(self.token_access)
         send_refresh = await self.send_refresh_token(self.token_refresh)
         match send_access:
-            case "true":
-                return True
+            case dict():
+                return send_access
             case _:
                 if isinstance(send_refresh, dict):
                     self.response.delete_cookie(

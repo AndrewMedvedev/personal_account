@@ -34,25 +34,19 @@ class Predict:
             }
         )
 
-    async def predict(self) -> dict | JSONResponse:
+    async def predict(self) -> JSONResponse:
         check_tokens = await ValidTokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        match check_tokens:
-            case True:
-                return self.send(self.model)
-            case False:
-                return JSONResponse(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                )
-            case _:
-                self.response.set_cookie(
+        data = await SendData.send_message_bot(self.message)
+        if "access" in check_tokens:
+            self.response.set_cookie(
                     key="access",
                     value=check_tokens.get("access"),
                     samesite="none",
                     httponly=True,
                     secure=True,
                 )
-                return self.send(self.model)
+        return JSONResponse(content=self.send(self.model))
