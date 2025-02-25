@@ -7,7 +7,7 @@ router_answer = APIRouter(prefix="/answer/v1", tags=["answer"])
 
 
 @router_answer.get(
-    "/",
+    "/{message}",
     response_model=None,
 )
 async def answer(

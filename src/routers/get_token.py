@@ -4,7 +4,7 @@ router_get_token = APIRouter(prefix="/get/token", tags=["get_token"])
 
 
 @router_get_token.get(
-    "/",
+    "/{access}/{refresh}",
     response_model=None,
 )
 async def get_token(access: str, refresh: str, response: Response) -> HTTPException:
