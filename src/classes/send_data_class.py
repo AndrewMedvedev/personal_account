@@ -11,19 +11,13 @@ class SendData:
     async def send_data_recomendate(data: PredictModel) -> dict:
         async with aiohttp.ClientSession() as session:
             data = {
-                "top_n": data.top_n,
-                "user": {
-                    "gender": data.gender,
-                    "age": data.age,
-                    "sport": data.sport,
-                    "foreign": data.foreign,
-                    "gpa": data.gpa,
-                    "total_points": data.points,
-                    "bonus_points": data.bonus_points,
-                    "exams": data.exams,
-                    "education": data.education,
-                    "study_form": data.study_form,
-                },
+                "gender": data.gender,
+                "foreign_citizenship": data.foreign_citizenship,
+                "military_service": data.military_service,
+                "gpa": data.gpa,
+                "points": data.points,
+                "bonus_points": data.bonus_points,
+                "exams": data.exams,
             }
 
             async with session.post(
@@ -32,7 +26,8 @@ class SendData:
                 ssl=False,
             ) as resp:
                 rec = await resp.text()
-                return json.loads(rec)
+                directions = json.loads(rec)
+                return directions.get("directions")
 
     async def send_data_classifier_applicants(
         data: PredictModel, directions: list
@@ -46,19 +41,20 @@ class SendData:
                         "gender": data.gender,
                         "gpa": data.gpa,
                         "points": data.points,
-                        "direction": i[23::],
+                        "direction": str(i.get("name")),
                     }
                 )
                 for i in directions
             ]
 
             async with session.post(
-                Settings.CLASSIFIER,
+                url=Settings.CLASSIFIER,
                 json=correct_data,
                 ssl=False,
             ) as resp:
                 rec = await resp.text()
-                return json.loads(rec)
+                data = json.loads(rec)
+                return data.get("probabilities")
 
     async def send_data_classifier_applicant(data: PredictFree) -> dict:
         async with aiohttp.ClientSession() as session:
@@ -71,12 +67,32 @@ class SendData:
             }
 
             async with session.post(
-                Settings.CLASSIFIER_FREE,
+                url=f"{Settings.CLASSIFIER_FREE}",
                 json=data,
                 ssl=False,
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
+
+    async def send_data_directions(direction_id: int) -> dict:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url=f"{Settings.DIRECTION}{direction_id}",
+                ssl=False,
+            ) as data:
+                direction_data = await data.text()
+                direction = json.loads(direction_data)
+                return direction.get("description")
+
+    async def send_data_points(direction_id: int) -> dict:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url=f"{Settings.DIRECTION_POINTS}{direction_id}",
+                ssl=False,
+            ) as data:
+                direction_points_data = await data.text()
+                cl = json.loads(direction_points_data)
+                return cl.get("history")
 
     async def send_message_bot(message: str) -> dict:
         async with aiohttp.ClientSession() as session:

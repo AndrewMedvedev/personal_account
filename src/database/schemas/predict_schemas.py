@@ -1,36 +1,20 @@
-from typing import List, Literal
+from typing import Literal
 
 from pydantic import BaseModel, field_validator
 
 
 class PredictModel(BaseModel):
-    top_n: str
-    age: int
-    year: int
-    gender: Literal["М", "Ж"]
-    sport: str
-    foreign: str
+    gender: Literal["male", "female"]
+    foreign_citizenship: str
+    military_service: Literal["yes", "no"]
     gpa: float
     points: int
     bonus_points: int
-    exams: List[str]
-    reception_form: str
-    education: str
-    study_form: Literal["Очная", "Заочная", "Очно-Заочная"]
+    exams: list[dict]
+    year: int
 
-    @field_validator("top_n")
-    @classmethod
-    def validate_top_n(cls, v: str) -> float:
-        if int(v) <= 5 or int(v) > 1:
-            raise ValueError("Field top_n, incorrect number of directions")
-        return v
 
-    @field_validator("age")
-    @classmethod
-    def validate_age(cls, v: int) -> int:
-        if v < 16:
-            raise ValueError("Field age must be over 16")
-        return v
+
 
     @field_validator("gpa")
     @classmethod
@@ -56,7 +40,7 @@ class PredictModel(BaseModel):
 
 class PredictFree(BaseModel):
     year: int
-    gender: Literal["М", "Ж"]
+    gender: Literal["male", "female"]
     gpa: float
     points: int
     direction: str

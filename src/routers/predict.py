@@ -31,6 +31,52 @@ async def predict(
         )
 
 
+@router_predict.get(
+    "/direction/{direction_id}",
+    response_model=None,
+)
+async def predict(
+    direction_id: int,
+    request: Request,
+    response: Response,
+) -> JSONResponse:
+    try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
+        return await Predict(
+            token_access=access,
+            token_refresh=refresh,
+            response=response,
+        ).get_direction(direction_id=direction_id)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+        )
+    
+
+@router_predict.get(
+    "/points/{direction_id}",
+    response_model=None,
+)
+async def predict(
+    direction_id: int,
+    request: Request,
+    response: Response,
+) -> JSONResponse:
+    try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
+        return await Predict(
+            token_access=access,
+            token_refresh=refresh,
+            response=response,
+        ).get_points(direction_id=direction_id)
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+        )
+
+
 @router_predict.post(
     "/free",
     response_model=None,

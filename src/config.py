@@ -8,6 +8,8 @@ config = dotenv_values(env_path)
 
 class Settings:
     RECOMENDATE: str = config["RECOMENDATE"]
+    DIRECTION: str = config["DIRECTION"]
+    DIRECTION_POINTS: str = config["DIRECTION_POINTS"]
     CLASSIFIER: str = config["CLASSIFIER"]
     CLASSIFIER_FREE: str = config["CLASSIFIER_FREE"]
     VALIDATE_ACCESS: str = config["VALIDATE_ACCESS"]

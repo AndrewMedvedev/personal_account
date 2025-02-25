@@ -1,4 +1,4 @@
-from fastapi import Response, status
+from fastapi import Response
 from fastapi.responses import JSONResponse
 
 from src.classes.send_data_class import SendData
