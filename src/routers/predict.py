@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from src.classes import Predict, SendData
 from src.database import PredictFree, PredictModel
 
-router_predict = APIRouter(prefix="/api/v1/predict/", tags=["predict"])
+router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
 
 
 @router_predict.post(

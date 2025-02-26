@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from src.classes import Answer
 
-router_answer = APIRouter(prefix="/api/v1/answer/", tags=["answer"])
+router_answer = APIRouter(prefix="/api/v1/answer", tags=["answer"])
 
 
 @router_answer.get(
