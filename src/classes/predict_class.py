@@ -36,7 +36,7 @@ class Predict:
                 key="access",
                 value=check_tokens.get("access"),
                 samesite=None,
-                httponly=False,
+                httponly=True,
                 secure=True,
             )
         return JSONResponse(
