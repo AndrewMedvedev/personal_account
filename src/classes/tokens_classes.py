@@ -20,20 +20,18 @@ class ValidTokens:
 
     async def valid(self) -> dict | str:
         send_access = await self.send_access_token(self.token_access)
-        send_refresh = await self.send_refresh_token(self.token_refresh)
         try:
-            match send_access:
-                case dict():
-                    return send_access
-                case _:
-                    if isinstance(send_refresh, dict):
-                        response.delete_cookie(
-                            key="access",
-                            samesite=None,
-                            httponly=True,
-                            secure=True,
-                        )
-                        return send_refresh
+            if isinstance(send_access, dict):
+                return send_access
+            else:
+                send_refresh = await self.send_refresh_token(self.token_refresh)
+                self.response.delete_cookie(
+                    key="access",
+                    samesite="none",
+                    httponly=True,
+                    secure=True,
+                )
+                return send_refresh
         except Exception as e:
             return e
 
@@ -57,4 +55,4 @@ class ValidTokens:
                 url=f"{Settings.VALIDATE_ACCESS}{token_access}",
             ) as response:
                 token = await response.text()
-                return token
+                return json.loads(token)

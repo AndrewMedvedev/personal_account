@@ -11,14 +11,14 @@ async def get_token(access: str, refresh: str, response: Response) -> HTTPExcept
     response.set_cookie(
         key="access",
         value=access,
-        samesite=None,
+        samesite="none",
         httponly=True,
         secure=True,
     )
     response.set_cookie(
         key="refresh",
         value=refresh,
-        samesite=None,
+        samesite="none",
         httponly=True,
         secure=True,
     )

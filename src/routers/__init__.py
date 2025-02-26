@@ -3,9 +3,11 @@ __all__ = (
     "router_get_token",
     "router_logout",
     "router_predict",
+    "router_visitors",
 )
 
 from src.routers.answer import router_answer
 from src.routers.get_token import router_get_token
 from src.routers.logout import router_logout
 from src.routers.predict import router_predict
+from src.routers.visitors import router_visitors

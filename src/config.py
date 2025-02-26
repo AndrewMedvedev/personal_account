@@ -16,6 +16,9 @@ class Settings:
     VALIDATE_REFRESH: str = config["VALIDATE_REFRESH"]
     RAG_GigaChat_API: str = config["RAG_GigaChat_API"]
 
+    VISITORS_ADD: str = config["VISITORS_ADD"]
+    VISITORS_DELETE: str = config["VISITORS_DELETE"]
+    VISITORS_GET: str = config["VISITORS_GET"]
+
+
 settings = Settings()
-
-

@@ -5,7 +5,13 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from src.routers import router_answer, router_get_token, router_logout, router_predict
+from src.routers import (
+    router_answer,
+    router_get_token,
+    router_logout,
+    router_predict,
+    router_visitors,
+)
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["10/second"])
 
@@ -18,6 +24,8 @@ app.include_router(router_get_token)
 app.include_router(router_logout)
 
 app.include_router(router_predict)
+
+app.include_router(router_visitors)
 
 app.state.limiter = limiter
 

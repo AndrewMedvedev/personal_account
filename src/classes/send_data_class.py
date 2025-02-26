@@ -2,6 +2,7 @@ import json
 
 import aiohttp
 
+
 from src.config import Settings
 from src.database import PredictFree, PredictModel
 
@@ -106,3 +107,38 @@ class SendData:
             ) as data:
                 answer_data = await data.text()
                 return json.loads(answer_data)
+
+    async def visitor_add(
+        event_id: int,
+        user_id: int,
+    ) -> dict:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                url=f"{Settings.VISITORS_ADD}{event_id}/{user_id}",
+                ssl=False,
+            ) as data:
+                add_data = await data.text()
+                return add_data
+
+    async def visitor_get(
+        user_id: int,
+    ) -> dict:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url=f"{Settings.VISITORS_GET}{user_id}",
+                ssl=False,
+            ) as data:
+                get_data = await data.text()
+                return json.loads(get_data)
+
+    async def visitor_delete(
+        event_id: int,
+        user_id: int,
+    ) -> dict:
+        async with aiohttp.ClientSession() as session:
+            async with session.delete(
+                url=f"{Settings.VISITORS_DELETE}{event_id}/{user_id}",
+                ssl=False,
+            ) as data:
+                delete_data = await data.text()
+                return delete_data

@@ -30,7 +30,7 @@ class Answer:
             self.response.set_cookie(
                 key="access",
                 value=check_tokens.get("access"),
-                samesite=None,
+                samesite="none",
                 httponly=True,
                 secure=True,
             )
