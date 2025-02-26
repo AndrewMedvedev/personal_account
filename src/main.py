@@ -5,8 +5,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
-from src.routers import (router_answer, router_get_token, router_logout,
-                         router_predict)
+from src.routers import router_answer, router_get_token, router_logout, router_predict
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["10/second"])
 
@@ -29,6 +28,7 @@ app.add_middleware(SlowAPIMiddleware)
 origins = [
     "http://localhost:3000",
     "https://register-666-ramzer.onrender.com",
+    " frontend-project-production-6352.up.railway.app",
 ]
 
 app.add_middleware(
