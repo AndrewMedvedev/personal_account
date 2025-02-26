@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from src.classes import Predict, SendData
 from src.database import PredictFree, PredictModel
 
-router_predict = APIRouter(prefix="/predict/v1", tags=["predict"])
+router_predict = APIRouter(prefix="/api/v1/predict/", tags=["predict"])
 
 
 @router_predict.post(
@@ -52,7 +52,7 @@ async def predict(
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
         )
-    
+
 
 @router_predict.get(
     "/points/{direction_id}",

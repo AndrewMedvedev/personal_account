@@ -10,14 +10,14 @@ router_logout = APIRouter(prefix="/logout", tags=["logout"])
 async def logout(response: Response) -> HTTPException:
     response.delete_cookie(
         key="access",
-        samesite="none",
-        httponly=True,
+        samesite=None,
+        httponly=False,
         secure=True,
     )
     response.delete_cookie(
         key="refresh",
-        samesite="none",
-        httponly=True,
+        samesite=None,
+        httponly=False,
         secure=True,
     )
     return HTTPException(status_code=status.HTTP_200_OK)

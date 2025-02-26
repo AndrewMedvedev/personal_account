@@ -35,8 +35,8 @@ class Predict:
             self.response.set_cookie(
                 key="access",
                 value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
+                samesite=None,
+                httponly=False,
                 secure=True,
             )
         return JSONResponse(
@@ -57,8 +57,8 @@ class Predict:
             self.response.set_cookie(
                 key="access",
                 value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
+                samesite=None,
+                httponly=False,
                 secure=True,
             )
         return JSONResponse(content=direction)
@@ -74,8 +74,8 @@ class Predict:
             self.response.set_cookie(
                 key="access",
                 value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
+                samesite=None,
+                httponly=False,
                 secure=True,
             )
         return JSONResponse(content=points)

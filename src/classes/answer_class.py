@@ -28,10 +28,10 @@ class Answer:
         data = await SendData.send_message_bot(self.message)
         if "access" in check_tokens:
             self.response.set_cookie(
-                    key="access",
-                    value=check_tokens.get("access"),
-                    samesite="none",
-                    httponly=True,
-                    secure=True,
-                )
+                key="access",
+                value=check_tokens.get("access"),
+                samesite=None,
+                httponly=False,
+                secure=True,
+            )
         return JSONResponse(content=data)
