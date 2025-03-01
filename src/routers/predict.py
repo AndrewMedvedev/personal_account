@@ -27,7 +27,8 @@ async def predict(
         ).predict()
     except Exception as e:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+            content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
 
@@ -35,7 +36,7 @@ async def predict(
     "/direction/{direction_id}",
     response_model=None,
 )
-async def predict(
+async def direction(
     direction_id: int,
     request: Request,
     response: Response,
@@ -50,7 +51,8 @@ async def predict(
         ).get_direction(direction_id=direction_id)
     except Exception as e:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+            content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
 
@@ -58,7 +60,7 @@ async def predict(
     "/points/{direction_id}",
     response_model=None,
 )
-async def predict(
+async def points(
     direction_id: int,
     request: Request,
     response: Response,
@@ -73,7 +75,8 @@ async def predict(
         ).get_points(direction_id=direction_id)
     except Exception as e:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED, content={"detail": str(e)}
+            content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
 
@@ -87,6 +90,6 @@ async def predict_free(model: PredictFree) -> float | JSONResponse:
         return classifier.get("probability")
     except Exception as e:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
             content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )

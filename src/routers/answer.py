@@ -26,6 +26,6 @@ async def answer(
         ).answer()
     except Exception as e:
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
             content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )

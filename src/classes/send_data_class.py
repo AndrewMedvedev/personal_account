@@ -2,7 +2,6 @@ import json
 
 import aiohttp
 
-
 from src.config import Settings
 from src.database import PredictFree, PredictModel
 

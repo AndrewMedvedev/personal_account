@@ -23,15 +23,14 @@ class ValidTokens:
         try:
             if isinstance(send_access, dict):
                 return send_access
-            else:
-                send_refresh = await self.send_refresh_token(self.token_refresh)
-                self.response.delete_cookie(
-                    key="access",
-                    samesite="none",
-                    httponly=True,
-                    secure=True,
-                )
-                return send_refresh
+            send_refresh = await self.send_refresh_token(self.token_refresh)
+            self.response.delete_cookie(
+                key="access",
+                samesite="none",
+                httponly=True,
+                secure=True,
+            )
+            return send_refresh
         except Exception as e:
             return e
 

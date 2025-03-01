@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, Response
-from fastapi.responses import JSONResponse
-from src.classes import Visitors
+from fastapi import APIRouter, Request, Response, status
+from fastapi.responses import JSONResponse, StreamingResponse
 
+from src.classes import Visitors
 
 router_visitors = APIRouter(prefix="/api/v1/visitors", tags=["visitors"])
 
@@ -24,6 +24,7 @@ async def add(
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
 
@@ -43,6 +44,33 @@ async def get(
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
+        )
+
+
+@router_visitors.get(
+    "/make/qr/{unique_string}",
+    response_model=None,
+)
+async def make_qr(
+    unique_string: str,
+    request: Request,
+    response: Response,
+) -> StreamingResponse | JSONResponse:
+    try:
+        access = request.cookies.get("access")
+        refresh = request.cookies.get("refresh")
+        return await Visitors(
+            token_access=access,
+            token_refresh=refresh,
+            response=response,
+        ).make_qr(
+            unique_string=unique_string,
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
 
@@ -64,4 +92,5 @@ async def delete(
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
