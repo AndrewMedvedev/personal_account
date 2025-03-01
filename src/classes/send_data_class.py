@@ -117,7 +117,7 @@ class SendData:
                 ssl=False,
             ) as data:
                 add_data = await data.text()
-                return add_data
+                return json.loads(add_data)
 
     async def visitor_get(
         user_id: int,
@@ -140,4 +140,4 @@ class SendData:
                 ssl=False,
             ) as data:
                 delete_data = await data.text()
-                return delete_data
+                return json.loads(delete_data)
