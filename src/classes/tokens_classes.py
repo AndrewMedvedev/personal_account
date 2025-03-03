@@ -17,6 +17,8 @@ class ValidTokens:
         self.token_access = token_access
         self.token_refresh = token_refresh
         self.response = response
+        self.client_session = aiohttp.ClientSession()
+        self.settings = Settings
 
     async def valid(self) -> dict | str:
         send_access = await self.send_access_token(self.token_access)
@@ -34,24 +36,24 @@ class ValidTokens:
         except Exception as e:
             return e
 
-    @staticmethod
     async def send_refresh_token(
+        self,
         token_refresh: str,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             async with session.get(
-                url=f"{Settings.VALIDATE_REFRESH}{token_refresh}",
+                url=f"{self.settings.VALIDATE_REFRESH}{token_refresh}",
             ) as response:
                 token = await response.text()
                 return json.loads(token)
 
-    @staticmethod
     async def send_access_token(
+        self,
         token_access: str,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             async with session.get(
-                url=f"{Settings.VALIDATE_ACCESS}{token_access}",
+                url=f"{self.settings.VALIDATE_ACCESS}{token_access}",
             ) as response:
                 token = await response.text()
                 return json.loads(token)

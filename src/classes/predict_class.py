@@ -19,15 +19,17 @@ class Predict:
         self.token_refresh = token_refresh
         self.model = model
         self.response = response
+        self.valid_tokens = ValidTokens
+        self.send_data = SendData()
 
     async def predict(self) -> JSONResponse:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        recomendate = await SendData.send_data_recomendate(self.model)
-        classifier = await SendData.send_data_classifier_applicants(
+        recomendate = await self.send_data.send_data_recomendate(self.model)
+        classifier = await self.send_data.send_data_classifier_applicants(
             data=self.model,
             directions=recomendate,
         )
@@ -47,12 +49,12 @@ class Predict:
         )
 
     async def get_direction(self, direction_id: int):
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        direction = await SendData.send_data_directions(direction_id)
+        direction = await self.send_data.send_data_directions(direction_id)
         if "access" in check_tokens:
             self.response.set_cookie(
                 key="access",
@@ -64,12 +66,12 @@ class Predict:
         return JSONResponse(content=direction)
 
     async def get_points(self, direction_id: int):
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        points = await SendData.send_data_points(direction_id)
+        points = await self.send_data.send_data_points(direction_id)
         if "access" in check_tokens:
             self.response.set_cookie(
                 key="access",

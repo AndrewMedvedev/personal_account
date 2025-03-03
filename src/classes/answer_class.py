@@ -18,14 +18,16 @@ class Answer:
         self.token_access = token_access
         self.token_refresh = token_refresh
         self.response = response
+        self.valid_tokens = ValidTokens
+        self.send_data = SendData()
 
     async def answer(self) -> dict:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        data = await SendData.send_message_bot(self.message)
+        data = await self.send_data.send_message_bot(self.message)
         if "access" in check_tokens:
             self.response.set_cookie(
                 key="access",

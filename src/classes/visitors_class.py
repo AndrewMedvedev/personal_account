@@ -21,14 +21,16 @@ class Visitors:
         self.token_refresh = token_refresh
         self.event_id = event_id
         self.response = response
+        self.valid_tokens = ValidTokens
+        self.send_data = SendData()
 
     async def add_user(self) -> JSONResponse:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        add = await SendData.visitor_add(
+        add = await self.send_data.visitor_add(
             event_id=self.event_id,
             user_id=check_tokens.get("user_id"),
         )
@@ -45,12 +47,12 @@ class Visitors:
         )
 
     async def get_user_events(self) -> JSONResponse:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        get = await SendData.visitor_get(
+        get = await self.send_data.visitor_get(
             user_id=check_tokens.get("user_id"),
         )
         if "access" in check_tokens:
@@ -66,12 +68,12 @@ class Visitors:
         )
 
     async def delete_user(self) -> JSONResponse:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,
         ).valid()
-        delete = await SendData.visitor_delete(
+        delete = await self.send_data.visitor_delete(
             event_id=self.event_id,
             user_id=check_tokens.get("user_id"),
         )
@@ -91,7 +93,7 @@ class Visitors:
         self,
         unique_string: str,
     ) -> StreamingResponse:
-        check_tokens = await ValidTokens(
+        check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
             response=self.response,

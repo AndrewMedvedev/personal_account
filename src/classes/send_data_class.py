@@ -8,8 +8,15 @@ from src.database import PredictFree, PredictModel
 
 class SendData:
 
-    async def send_data_recomendate(data: PredictModel) -> dict:
-        async with aiohttp.ClientSession() as session:
+    def __init__(self):
+        self.client_session = aiohttp.ClientSession()
+        self.settings = Settings
+
+    async def send_data_recomendate(
+        self,
+        data: PredictModel,
+    ) -> dict:
+        async with self.client_session as session:
             data = {
                 "gender": data.gender,
                 "foreign_citizenship": data.foreign_citizenship,
@@ -21,7 +28,7 @@ class SendData:
             }
 
             async with session.post(
-                Settings.RECOMENDATE,
+                self.settings.RECOMENDATE,
                 json=data,
                 ssl=False,
             ) as resp:
@@ -30,9 +37,11 @@ class SendData:
                 return directions.get("directions")
 
     async def send_data_classifier_applicants(
-        data: PredictModel, directions: list
+        self,
+        data: PredictModel,
+        directions: list,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             correct_data = {"applicants": []}
             array = [
                 correct_data["applicants"].append(
@@ -48,7 +57,7 @@ class SendData:
             ]
 
             async with session.post(
-                url=Settings.CLASSIFIER,
+                url=self.settings.CLASSIFIER,
                 json=correct_data,
                 ssl=False,
             ) as resp:
@@ -56,8 +65,11 @@ class SendData:
                 data = json.loads(rec)
                 return data.get("probabilities")
 
-    async def send_data_classifier_applicant(data: PredictFree) -> dict:
-        async with aiohttp.ClientSession() as session:
+    async def send_data_classifier_applicant(
+        self,
+        data: PredictFree,
+    ) -> dict:
+        async with self.client_session as session:
             data = {
                 "year": data.year,
                 "gender": data.gender,
@@ -67,40 +79,49 @@ class SendData:
             }
 
             async with session.post(
-                url=f"{Settings.CLASSIFIER_FREE}",
+                url=f"{self.settings.CLASSIFIER_FREE}",
                 json=data,
                 ssl=False,
             ) as resp:
                 rec = await resp.text()
                 return json.loads(rec)
 
-    async def send_data_directions(direction_id: int) -> dict:
-        async with aiohttp.ClientSession() as session:
+    async def send_data_directions(
+        self,
+        direction_id: int,
+    ) -> dict:
+        async with self.client_session as session:
             async with session.get(
-                url=f"{Settings.DIRECTION}{direction_id}",
+                url=f"{self.settings.DIRECTION}{direction_id}",
                 ssl=False,
             ) as data:
                 direction_data = await data.text()
                 direction = json.loads(direction_data)
                 return direction.get("description")
 
-    async def send_data_points(direction_id: int) -> dict:
-        async with aiohttp.ClientSession() as session:
+    async def send_data_points(
+        self,
+        direction_id: int,
+    ) -> dict:
+        async with self.client_session as session:
             async with session.get(
-                url=f"{Settings.DIRECTION_POINTS}{direction_id}",
+                url=f"{self.settings.DIRECTION_POINTS}{direction_id}",
                 ssl=False,
             ) as data:
                 direction_points_data = await data.text()
                 cl = json.loads(direction_points_data)
                 return cl.get("history")
 
-    async def send_message_bot(message: str) -> dict:
-        async with aiohttp.ClientSession() as session:
+    async def send_message_bot(
+        self,
+        message: str,
+    ) -> dict:
+        async with self.client_session as session:
             data = {
                 "question": message,
             }
             async with session.post(
-                url=Settings.RAG_GigaChat_API,
+                url=self.settings.RAG_GigaChat_API,
                 json=data,
                 ssl=False,
             ) as data:
@@ -108,35 +129,38 @@ class SendData:
                 return json.loads(answer_data)
 
     async def visitor_add(
+        self,
         event_id: int,
         user_id: int,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             async with session.post(
-                url=f"{Settings.VISITORS_ADD}{event_id}/{user_id}",
+                url=f"{self.settings.VISITORS_ADD}{event_id}/{user_id}",
                 ssl=False,
             ) as data:
                 add_data = await data.text()
                 return json.loads(add_data)
 
     async def visitor_get(
+        self,
         user_id: int,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             async with session.get(
-                url=f"{Settings.VISITORS_GET}{user_id}",
+                url=f"{self.settings.VISITORS_GET}{user_id}",
                 ssl=False,
             ) as data:
                 get_data = await data.text()
                 return json.loads(get_data)
 
     async def visitor_delete(
+        self,
         event_id: int,
         user_id: int,
     ) -> dict:
-        async with aiohttp.ClientSession() as session:
+        async with self.client_session as session:
             async with session.delete(
-                url=f"{Settings.VISITORS_DELETE}{event_id}/{user_id}",
+                url=f"{self.settings.VISITORS_DELETE}{event_id}/{user_id}",
                 ssl=False,
             ) as data:
                 delete_data = await data.text()
