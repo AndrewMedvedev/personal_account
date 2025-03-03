@@ -86,7 +86,7 @@ async def points(
 )
 async def predict_free(model: PredictFree) -> float | JSONResponse:
     try:
-        classifier = await SendData.send_data_classifier_applicant(model)
+        classifier = await SendData().send_data_classifier_applicant(model)
         return classifier.get("probability")
     except Exception as e:
         return JSONResponse(
