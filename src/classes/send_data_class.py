@@ -1,6 +1,6 @@
 import json
 
-import aiohttp
+from aiohttp import ClientSession
 
 from src.config import Settings
 from src.database import PredictFree, PredictModel
@@ -9,14 +9,14 @@ from src.database import PredictFree, PredictModel
 class SendData:
 
     def __init__(self):
-        self.client_session = aiohttp.ClientSession()
         self.settings = Settings
+        self.clientsession = ClientSession
 
     async def send_data_recomendate(
         self,
         data: PredictModel,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             data = {
                 "gender": data.gender,
                 "foreign_citizenship": data.foreign_citizenship,
@@ -41,7 +41,7 @@ class SendData:
         data: PredictModel,
         directions: list,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             correct_data = {"applicants": []}
             array = [
                 correct_data["applicants"].append(
@@ -69,7 +69,7 @@ class SendData:
         self,
         data: PredictFree,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             data = {
                 "year": data.year,
                 "gender": data.gender,
@@ -90,7 +90,7 @@ class SendData:
         self,
         direction_id: int,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             async with session.get(
                 url=f"{self.settings.DIRECTION}{direction_id}",
                 ssl=False,
@@ -103,7 +103,7 @@ class SendData:
         self,
         direction_id: int,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             async with session.get(
                 url=f"{self.settings.DIRECTION_POINTS}{direction_id}",
                 ssl=False,
@@ -116,7 +116,7 @@ class SendData:
         self,
         message: str,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             data = {
                 "question": message,
             }
@@ -133,7 +133,7 @@ class SendData:
         event_id: int,
         user_id: int,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             async with session.post(
                 url=f"{self.settings.VISITORS_ADD}{event_id}/{user_id}",
                 ssl=False,
@@ -145,7 +145,7 @@ class SendData:
         self,
         user_id: int,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             async with session.get(
                 url=f"{self.settings.VISITORS_GET}{user_id}",
                 ssl=False,
@@ -158,7 +158,7 @@ class SendData:
         event_id: int,
         user_id: int,
     ) -> dict:
-        async with self.client_session as session:
+        async with self.clientsession() as session:
             async with session.delete(
                 url=f"{self.settings.VISITORS_DELETE}{event_id}/{user_id}",
                 ssl=False,
