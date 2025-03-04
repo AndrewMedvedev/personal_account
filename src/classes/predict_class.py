@@ -11,9 +11,9 @@ class Predict(PredictBase):
 
     def __init__(
         self,
-        token_access: str,
-        token_refresh: str,
-        response: Response,
+        token_access: str = None,
+        token_refresh: str = None,
+        response: Response = None,
         model: PredictModel = None,
     ) -> None:
         self.token_access = token_access
