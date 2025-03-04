@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Response, status
 from fastapi.responses import JSONResponse
 
-from src.classes import Predict, SendData
+from src.classes import Predict
 from src.database import PredictFree, PredictModel
 
 router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
@@ -86,8 +86,7 @@ async def points(
 )
 async def predict_free(model: PredictFree) -> float | JSONResponse:
     try:
-        classifier = await SendData().send_data_classifier_applicant(model)
-        return classifier.get("probability")
+        return await Predict().predict_free(model=model)
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},

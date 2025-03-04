@@ -23,7 +23,7 @@ async def answer(
             token_access=access,
             token_refresh=refresh,
             response=response,
-        ).answer()
+        ).get_answer()
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},

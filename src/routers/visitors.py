@@ -20,7 +20,7 @@ async def add(
             token_refresh=refresh,
             event_id=event_id,
             response=response,
-        ).add_user()
+        ).add()
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},
@@ -40,7 +40,7 @@ async def get(
             token_access=access,
             token_refresh=refresh,
             response=response,
-        ).get_user_events()
+        ).get()
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},
@@ -88,7 +88,7 @@ async def delete(
             token_refresh=refresh,
             event_id=event_id,
             response=response,
-        ).delete_user()
+        ).delete()
     except Exception as e:
         return JSONResponse(
             content={"detail": str(e)},

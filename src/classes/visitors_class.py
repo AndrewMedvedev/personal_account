@@ -6,9 +6,10 @@ from fastapi.responses import JSONResponse, StreamingResponse
 
 from src.classes.send_data_class import SendData
 from src.classes.tokens_classes import ValidTokens
+from src.interfaces import VisitorBase
 
 
-class Visitors:
+class Visitors(VisitorBase):
 
     def __init__(
         self,
@@ -24,7 +25,7 @@ class Visitors:
         self.valid_tokens = ValidTokens
         self.send_data = SendData()
 
-    async def add_user(self) -> JSONResponse:
+    async def add(self) -> JSONResponse:
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
@@ -46,7 +47,7 @@ class Visitors:
             content=add,
         )
 
-    async def get_user_events(self) -> JSONResponse:
+    async def get(self) -> JSONResponse:
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
@@ -67,7 +68,7 @@ class Visitors:
             content=get,
         )
 
-    async def delete_user(self) -> JSONResponse:
+    async def delete(self) -> JSONResponse:
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,

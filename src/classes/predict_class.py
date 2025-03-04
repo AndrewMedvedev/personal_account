@@ -3,10 +3,11 @@ from fastapi.responses import JSONResponse
 
 from src.classes.send_data_class import SendData
 from src.classes.tokens_classes import ValidTokens
-from src.database import PredictModel
+from src.database import PredictFree, PredictModel
+from src.interfaces import PredictBase
 
 
-class Predict:
+class Predict(PredictBase):
 
     def __init__(
         self,
@@ -48,7 +49,14 @@ class Predict:
             }
         )
 
-    async def get_direction(self, direction_id: int):
+    async def predict_free(
+        self,
+        model: PredictFree,
+    ) -> float:
+        classifier = await self.send_data.send_data_classifier_applicant(model)
+        return classifier.get("probability")
+
+    async def get_direction(self, direction_id: int) -> JSONResponse:
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
@@ -65,7 +73,7 @@ class Predict:
             )
         return JSONResponse(content=direction)
 
-    async def get_points(self, direction_id: int):
+    async def get_points(self, direction_id: int) -> JSONResponse:
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
