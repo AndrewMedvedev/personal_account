@@ -13,9 +13,6 @@ class PredictModel(BaseModel):
     exams: list[dict]
     year: int
 
-
-
-
     @field_validator("gpa")
     @classmethod
     def validate_gpa(cls, v: float) -> float:

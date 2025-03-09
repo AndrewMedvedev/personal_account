@@ -3,7 +3,7 @@ import json
 from aiohttp import ClientSession
 
 from src.config import Settings
-from src.database import PredictFree, PredictModel
+from src.database.schemas import PredictFree, PredictModel
 
 
 class SendData:
@@ -165,3 +165,75 @@ class SendData:
             ) as data:
                 delete_data = await data.text()
                 return json.loads(delete_data)
+
+    async def get_token_user_vk(
+        self,
+        params: dict,
+    ) -> dict:
+        async with self.clientsession() as session:
+            async with session.post(
+                Settings.VK_TOKEN_URL,
+                json=params,
+                ssl=False,
+            ) as data:
+                user_data = await data.json()
+                return user_data
+
+    async def get_data_user_vk(
+        self,
+        params: dict,
+    ) -> dict:
+        async with self.clientsession() as session:
+            async with session.post(
+                Settings.VK_API_URL,
+                json=params,
+                ssl=False,
+            ) as data:
+                user_data = await data.json()
+                return user_data.get("user")
+
+    async def get_token_user_yandex(
+        self,
+        params: str,
+    ) -> dict:
+        async with self.clientsession() as session:
+            async with session.post(
+                url=Settings.YANDEX_TOKEN_URL,
+                data=params,
+                ssl=False,
+            ) as data:
+                user_data = await data.json()
+                return user_data
+
+    async def get_data_user_yandex(
+        self,
+        params: dict,
+    ) -> dict:
+        async with self.clientsession() as session:
+            async with session.get(
+                Settings.YANDEX_API_URL,
+                params=params,
+                ssl=False,
+            ) as data:
+                user_data = await data.json()
+                return user_data
+
+    async def registration_vk(self, params: dict):
+        async with self.clientsession() as session:
+            async with session.post(
+                Settings.REGISTRATION_VK,
+                json=params,
+                ssl=False,
+            ) as data:
+                vk = await data.json()
+                return vk
+
+    async def registration_yandex(self, params: dict):
+        async with self.clientsession() as session:
+            async with session.post(
+                Settings.REGISTRATION_YANDEX,
+                json=params,
+                ssl=False,
+            ) as data:
+                yandex = await data.json()
+                return yandex

@@ -15,13 +15,12 @@ class Visitors(VisitorBase):
         self,
         token_access: str,
         token_refresh: str,
-        response: Response,
         event_id: int = None,
     ) -> None:
         self.token_access = token_access
         self.token_refresh = token_refresh
         self.event_id = event_id
-        self.response = response
+        self.response = Response
         self.valid_tokens = ValidTokens
         self.send_data = SendData()
 
@@ -29,7 +28,6 @@ class Visitors(VisitorBase):
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
-            response=self.response,
         ).valid()
         add = await self.send_data.visitor_add(
             event_id=self.event_id,

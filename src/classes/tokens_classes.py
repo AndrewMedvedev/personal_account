@@ -12,11 +12,10 @@ class ValidTokens:
         self,
         token_access: str,
         token_refresh: str,
-        response: Response,
     ) -> None:
         self.token_access = token_access
         self.token_refresh = token_refresh
-        self.response = response
+        self.response = Response
         self.clientsession = ClientSession
         self.settings = Settings
 

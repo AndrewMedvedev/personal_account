@@ -13,12 +13,11 @@ class Answer(AnswerBase):
         message: str,
         token_access: str,
         token_refresh: str,
-        response: Response,
     ) -> None:
         self.message = message
         self.token_access = token_access
         self.token_refresh = token_refresh
-        self.response = response
+        self.response = Response
         self.valid_tokens = ValidTokens
         self.send_data = SendData()
 
@@ -26,7 +25,6 @@ class Answer(AnswerBase):
         check_tokens = await self.valid_tokens(
             token_access=self.token_access,
             token_refresh=self.token_refresh,
-            response=self.response,
         ).valid()
         data = await self.send_data.send_message_bot(self.message)
         if "access" in check_tokens:
