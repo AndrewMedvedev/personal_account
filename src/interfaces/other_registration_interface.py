@@ -6,16 +6,13 @@ from fastapi.responses import JSONResponse
 class OtherRegistrationBase(ABC):
 
     @abstractmethod
-    async def link(self) -> JSONResponse:
+    async def link() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_token(
-        self,
-        code_verifier: str,
-    ) -> JSONResponse:
+    async def get_token() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def registration(self) -> JSONResponse:
+    async def registration() -> JSONResponse:
         raise NotImplementedError

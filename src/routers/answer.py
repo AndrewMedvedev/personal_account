@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, Response, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Request
 
 from src.classes import Answer
+from src.database.schemas import CustomResponse
 
 router_answer = APIRouter(prefix="/api/v1/answer", tags=["answer"])
 
@@ -13,19 +13,11 @@ router_answer = APIRouter(prefix="/api/v1/answer", tags=["answer"])
 async def answer(
     message: str,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Answer(
-            message=message,
-            token_access=access,
-            token_refresh=refresh,
-            response=response,
-        ).get_answer()
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Answer().get_answer(
+        message=message,
+        token_access=token_access,
+        token_refresh=token_refresh,
+    )

@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Request, Response, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Request, Response
 
 from src.classes import Predict
-from src.database.schemas import PredictFree, PredictModel
+from src.database.schemas import CustomResponse, PredictFree, PredictModel
 
 router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
 
@@ -14,22 +13,14 @@ router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
 async def predict(
     model: PredictModel,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Predict(
-            token_access=access,
-            token_refresh=refresh,
-            model=model,
-            response=response,
-        ).predict()
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Predict().predict(
+        model=model,
+        token_access=token_access,
+        token_refresh=token_refresh,
+    )
 
 
 @router_predict.get(
@@ -39,21 +30,14 @@ async def predict(
 async def direction(
     direction_id: int,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Predict(
-            token_access=access,
-            token_refresh=refresh,
-            response=response,
-        ).get_direction(direction_id=direction_id)
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Predict().get_direction(
+        direction_id=direction_id,
+        token_access=token_access,
+        token_refresh=token_refresh,
+    )
 
 
 @router_predict.get(
@@ -63,32 +47,22 @@ async def direction(
 async def points(
     direction_id: int,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Predict(
-            token_access=access,
-            token_refresh=refresh,
-            response=response,
-        ).get_points(direction_id=direction_id)
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Predict().get_points(
+        direction_id=direction_id,
+        token_access=token_access,
+        token_refresh=token_refresh,
+    )
 
 
 @router_predict.post(
     "/free",
     response_model=None,
 )
-async def predict_free(model: PredictFree) -> float | JSONResponse:
-    try:
-        return await Predict().predict_free(model=model)
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+async def predict_free(
+    model: PredictFree,
+    response: Response,
+) -> CustomResponse:
+    return await Predict().predict_free(model=model)

@@ -5,24 +5,14 @@ from fastapi.responses import JSONResponse
 
 class ReUseBase(ABC):
 
-    @staticmethod
     @abstractmethod
-    async def link(setting: str, dictlink: dict, code_verifier: str) -> JSONResponse:
+    async def link() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def get_token(
-        self,
-        dictgetdata: dict,
-    ) -> JSONResponse:
+    async def get_token() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def registration(
-        self,
-        user_data: dict,
-        token_access: str,
-        token_refresh: str,
-        send,
-    ) -> JSONResponse:
+    async def registration() -> JSONResponse:
         raise NotImplementedError

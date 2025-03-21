@@ -1,17 +1,20 @@
 __all__ = (
+    "CustomResponse",
     "DictGetDataVK",
     "DictGetDataTokenVK",
     "DictLinkVK",
+    "RegistrationVK",
     "DictGetDataYandex",
     "DictGetDataTokenYandex",
     "DictLinkYandex",
+    "RegistrationYandex",
     "PredictFree",
     "PredictModel",
 )
 
-from src.database.schemas.predict_schemas import PredictFree, PredictModel
-from src.database.schemas.vk_schemas import (DictGetDataTokenVK, DictGetDataVK,
-                                             DictLinkVK)
-from src.database.schemas.yandex_schemas import (DictGetDataTokenYandex,
-                                                 DictGetDataYandex,
-                                                 DictLinkYandex)
+from .custom_response import CustomResponse
+from .predict_schemas import PredictFree, PredictModel
+from .vk_schemas import (DictGetDataTokenVK, DictGetDataVK, DictLinkVK,
+                         RegistrationVK)
+from .yandex_schemas import (DictGetDataTokenYandex, DictGetDataYandex,
+                             DictLinkYandex, RegistrationYandex)

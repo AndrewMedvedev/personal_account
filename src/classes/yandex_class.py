@@ -1,80 +1,58 @@
-import base64
-import hashlib
-import os
-
 from fastapi import Response
-from fastapi.responses import JSONResponse
 
-from src.classes.reuse_class import ReUse
-from src.classes.send_data_class import SendData
 from src.config import Settings
-from src.database.schemas import (DictGetDataTokenYandex, DictGetDataYandex,
-                                  DictLinkYandex)
+from src.database.schemas import (CustomResponse, DictGetDataTokenYandex,
+                                  DictGetDataYandex, DictLinkYandex)
 from src.interfaces import OtherRegistrationBase
+
+from .controls import create_codes
+from .reuse_class import ReUse
 
 
 class Yandex(OtherRegistrationBase):
 
-    def __init__(
-        self,
-        code: str = None,
-        access: str = None,
-        token_access: str = None,
-        token_refresh: str = None,
-    ) -> None:
-        self.code = code
-        self.access = access
-        self.token_access = token_access
-        self.token_refresh = token_refresh
-        self.send_data = SendData()
+    def __init__(self) -> None:
         self.settings = Settings
         self.response = Response
-        self.reuse = ReUse
+        self.reuse = ReUse()
 
     async def link(
         self,
-    ) -> JSONResponse:
-        code_verifier = (
-            base64.urlsafe_b64encode(os.urandom(128)).rstrip(b"=").decode("utf-8")
-        )
-        code_challenge = (
-            base64.urlsafe_b64encode(
-                hashlib.sha256(code_verifier.encode("utf-8")).digest()
-            )
-            .rstrip(b"=")
-            .decode("utf-8")
-        )
+    ) -> CustomResponse:
+        codes = await create_codes()
         return await self.reuse.link(
             setting=self.settings.YANDEX_AUTH_URL,
-            dictlink=DictLinkYandex(code_challenge=code_challenge).model_dump(),
-            code_verifier=code_verifier,
+            dictlink=DictLinkYandex(
+                code_challenge=codes.get("code_challenge")
+            ).model_dump(),
+            code_verifier=codes.get("code_verifier"),
         )
 
-    async def get_token(self, code_verifier: str) -> JSONResponse:
-        return await self.reuse(
-            func=self.send_data.get_token_user_yandex,
-        ).get_token(
+    async def get_token(
+        self,
+        code: str,
+        code_verifier: str,
+    ) -> CustomResponse:
+        return await self.reuse.get_token(
             dictgetdata=DictGetDataYandex(
-                code=self.code,
+                code=code,
                 code_verifier=code_verifier,
             ).model_dump(),
+            setting=self.settings.YANDEX_TOKEN_URL,
+            service="yandex",
         )
 
-    async def registration(self):
-        user = await self.send_data.get_data_user_yandex(
-            DictGetDataTokenYandex(oauth_token=self.access).model_dump()
-        )
-        print(user)
-        user_data = {
-            "first_name": user.get("first_name"),
-            "last_name": user.get("last_name"),
-            "id_yandex": user.get("id"),
-            "login": user.get("login"),
-            "email": user.get("default_email"),
-        }
-        return await self.reuse().registration(
-            user_data=user_data,
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-            send=self.send_data.registration_yandex,
+    async def registration(
+        self,
+        access: str,
+        token_access: str,
+        token_refresh: str,
+    ) -> CustomResponse:
+        return await self.reuse.registration(
+            token_access=token_access,
+            token_refresh=token_refresh,
+            dictgetdatatoken=DictGetDataTokenYandex(oauth_token=access).model_dump(),
+            setting=self.settings.YANDEX_API_URL,
+            setting_reg=self.settings.REGISTRATION_YANDEX,
+            service="yandex",
         )

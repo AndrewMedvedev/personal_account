@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Request
 
 from src.classes.vk_class import VK
+from src.database.schemas import CustomResponse
 
 router_vk = APIRouter(prefix="/api/v1/vk", tags=["vk"])
 
@@ -10,13 +10,8 @@ router_vk = APIRouter(prefix="/api/v1/vk", tags=["vk"])
     "/link",
     response_model=None,
 )
-async def vk_link() -> JSONResponse:
-    try:
-        return await VK().link()
-    except Exception as e:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST, content={"detail": str(e)}
-        )
+async def vk_link() -> CustomResponse:
+    return await VK().link()
 
 
 @router_vk.get(
@@ -27,16 +22,12 @@ async def vk_get_token(
     code: str,
     device_id: str,
     code_verifier: str,
-) -> JSONResponse:
-    try:
-        return await VK(
-            code=code,
-            device_id=device_id,
-        ).get_token(code_verifier=code_verifier)
-    except Exception as e:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST, content={"detail": str(e)}
-        )
+) -> CustomResponse:
+    return await VK().get_token(
+        code=code,
+        device_id=device_id,
+        code_verifier=code_verifier,
+    )
 
 
 @router_vk.post(
@@ -46,16 +37,11 @@ async def vk_get_token(
 async def vk_registration(
     access: str,
     request: Request,
-) -> JSONResponse:
-    try:
-        access_token = request.cookies.get("access")
-        refresh_token = request.cookies.get("refresh")
-        return await VK(
-            token_access=access_token,
-            token_refresh=refresh_token,
-            access=access,
-        ).registration()
-    except Exception as e:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST, content={"detail": str(e)}
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await VK().registration(
+        token_access=token_access,
+        token_refresh=token_refresh,
+        access=access,
+    )

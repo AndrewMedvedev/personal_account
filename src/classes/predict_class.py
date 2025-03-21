@@ -1,35 +1,35 @@
-from fastapi import Response
-from fastapi.responses import JSONResponse
+import logging
 
-from src.classes.send_data_class import SendData
+from fastapi import Response, status
+
+from src.classes.send_data_class import SendPredict
 from src.classes.tokens_classes import ValidTokens
-from src.database.schemas import PredictFree, PredictModel
+from src.database.schemas import CustomResponse, PredictFree, PredictModel
 from src.interfaces import PredictBase
+
+log = logging.getLogger(__name__)
 
 
 class Predict(PredictBase):
 
-    def __init__(
-        self,
-        token_access: str = None,
-        token_refresh: str = None,
-        model: PredictModel = None,
-    ) -> None:
-        self.token_access = token_access
-        self.token_refresh = token_refresh
-        self.model = model
+    def __init__(self) -> None:
+        self.valid_tokens = ValidTokens()
+        self.send_data = SendPredict()
         self.response = Response
-        self.valid_tokens = ValidTokens
-        self.send_data = SendData()
 
-    async def predict(self) -> JSONResponse:
-        check_tokens = await self.valid_tokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-        ).valid()
-        recomendate = await self.send_data.send_data_recomendate(self.model)
+    async def predict(
+        self,
+        model: PredictModel,
+        token_access: str,
+        token_refresh: str,
+    ) -> CustomResponse:
+        check_tokens = await self.valid_tokens.valid(
+            token_access=token_access,
+            token_refresh=token_refresh,
+        )
+        recomendate = await self.send_data.send_data_recomendate(model)
         classifier = await self.send_data.send_data_classifier_applicants(
-            data=self.model,
+            data=model,
             directions=recomendate,
         )
         if "access" in check_tokens:
@@ -40,26 +40,39 @@ class Predict(PredictBase):
                 httponly=True,
                 secure=True,
             )
-        return JSONResponse(
-            content={
-                "recomendate": recomendate,
-                "classifier": classifier,
-            }
+        result = {
+            "recomendate": recomendate,
+            "classifier": classifier,
+        }
+        return CustomResponse(
+            status_code=status.HTTP_200_OK,
+            body=result,
+            message="Выполненно",
+            name_endpoint="/predict",
         )
 
     async def predict_free(
         self,
         model: PredictFree,
-    ) -> float:
+    ) -> CustomResponse:
         classifier = await self.send_data.send_data_classifier_applicant(model)
-        return classifier.get("probability")
+        return CustomResponse(
+            status_code=status.HTTP_200_OK,
+            body=classifier,
+            message="Выполненно",
+            name_endpoint="/predict/free",
+        )
 
-    async def get_direction(self, direction_id: int) -> JSONResponse:
-        check_tokens = await self.valid_tokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-            response=self.response,
-        ).valid()
+    async def get_direction(
+        self,
+        direction_id: int,
+        token_access: str,
+        token_refresh: str,
+    ) -> CustomResponse:
+        check_tokens = await self.valid_tokens.valid(
+            token_access=token_access,
+            token_refresh=token_refresh,
+        )
         direction = await self.send_data.send_data_directions(direction_id)
         if "access" in check_tokens:
             self.response.set_cookie(
@@ -69,14 +82,23 @@ class Predict(PredictBase):
                 httponly=True,
                 secure=True,
             )
-        return JSONResponse(content=direction)
+        return CustomResponse(
+            status_code=status.HTTP_200_OK,
+            body=direction,
+            message="Выполненно",
+            name_endpoint="/direction/{direction_id}",
+        )
 
-    async def get_points(self, direction_id: int) -> JSONResponse:
-        check_tokens = await self.valid_tokens(
-            token_access=self.token_access,
-            token_refresh=self.token_refresh,
-            response=self.response,
-        ).valid()
+    async def get_points(
+        self,
+        direction_id: int,
+        token_access: str,
+        token_refresh: str,
+    ) -> CustomResponse:
+        check_tokens = await self.valid_tokens.valid(
+            token_access=token_access,
+            token_refresh=token_refresh,
+        )
         points = await self.send_data.send_data_points(direction_id)
         if "access" in check_tokens:
             self.response.set_cookie(
@@ -86,4 +108,9 @@ class Predict(PredictBase):
                 httponly=True,
                 secure=True,
             )
-        return JSONResponse(content=points)
+        return CustomResponse(
+            status_code=status.HTTP_200_OK,
+            body=points,
+            message="Выполненно",
+            name_endpoint="/points/{direction_id}",
+        )

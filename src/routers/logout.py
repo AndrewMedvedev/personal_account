@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, Response, status
+from fastapi import APIRouter, Response, status
+
+from src.database.schemas import CustomResponse
 
 router_logout = APIRouter(prefix="/logout", tags=["logout"])
 
@@ -7,7 +9,7 @@ router_logout = APIRouter(prefix="/logout", tags=["logout"])
     "/",
     response_model=None,
 )
-async def logout(response: Response) -> HTTPException:
+async def logout(response: Response) -> CustomResponse:
     response.delete_cookie(
         key="access",
         samesite=None,
@@ -20,4 +22,9 @@ async def logout(response: Response) -> HTTPException:
         httponly=False,
         secure=True,
     )
-    return HTTPException(status_code=status.HTTP_200_OK)
+    return CustomResponse(
+        status_code=status.HTTP_200_OK,
+        body=None,
+        message="Выполненно",
+        name_endpoint="/logout",
+    )

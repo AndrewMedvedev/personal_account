@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Request, Response, status
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse
 
 from src.classes import Visitors
+from src.database.schemas.custom_response import CustomResponse
 
 router_visitors = APIRouter(prefix="/api/v1/visitors", tags=["visitors"])
 
@@ -10,42 +11,26 @@ router_visitors = APIRouter(prefix="/api/v1/visitors", tags=["visitors"])
 async def add(
     event_id: int,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Visitors(
-            token_access=access,
-            token_refresh=refresh,
-            event_id=event_id,
-            response=response,
-        ).add()
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Visitors().add(
+        token_access=token_access,
+        token_refresh=token_refresh,
+        event_id=event_id,
+    )
 
 
 @router_visitors.get("/get")
 async def get(
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Visitors(
-            token_access=access,
-            token_refresh=refresh,
-            response=response,
-        ).get()
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Visitors().get(
+        token_access=token_access,
+        token_refresh=token_refresh,
+    )
 
 
 @router_visitors.get(
@@ -54,43 +39,21 @@ async def get(
 )
 async def make_qr(
     unique_string: str,
-    request: Request,
-    response: Response,
-) -> StreamingResponse | JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Visitors(
-            token_access=access,
-            token_refresh=refresh,
-            response=response,
-        ).make_qr(
-            unique_string=unique_string,
-        )
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> StreamingResponse:
+    return await Visitors().make_qr(
+        unique_string=unique_string,
+    )
 
 
 @router_visitors.delete("/delete/{event_id}")
 async def delete(
     event_id: int,
     request: Request,
-    response: Response,
-) -> JSONResponse:
-    try:
-        access = request.cookies.get("access")
-        refresh = request.cookies.get("refresh")
-        return await Visitors(
-            token_access=access,
-            token_refresh=refresh,
-            event_id=event_id,
-            response=response,
-        ).delete()
-    except Exception as e:
-        return JSONResponse(
-            content={"detail": str(e)},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
+) -> CustomResponse:
+    token_access = request.cookies.get("access")
+    token_refresh = request.cookies.get("refresh")
+    return await Visitors().delete(
+        token_access=token_access,
+        token_refresh=token_refresh,
+        event_id=event_id,
+    )

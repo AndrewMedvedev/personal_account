@@ -5,8 +5,6 @@ from pydantic import BaseModel, field_validator
 
 class PredictModel(BaseModel):
     gender: Literal["male", "female"]
-    foreign_citizenship: str
-    military_service: Literal["yes", "no"]
     gpa: float
     points: int
     bonus_points: int

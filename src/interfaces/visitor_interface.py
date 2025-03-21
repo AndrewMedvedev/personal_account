@@ -6,20 +6,17 @@ from fastapi.responses import JSONResponse, StreamingResponse
 class VisitorBase(ABC):
 
     @abstractmethod
-    async def add(self) -> JSONResponse:
+    async def add() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def get(self) -> JSONResponse:
+    async def get() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def delete(self) -> JSONResponse:
+    async def delete() -> JSONResponse:
         raise NotImplementedError
 
     @abstractmethod
-    async def make_qr(
-        self,
-        unique_string: str,
-    ) -> StreamingResponse:
+    async def make_qr() -> StreamingResponse:
         raise NotImplementedError

@@ -1,39 +1,29 @@
-import json
+import logging
 
 from aiohttp import ClientSession
-from fastapi import Response
 
 from src.config import Settings
+from src.errors import TokenError
+
+log = logging.getLogger(__name__)
 
 
 class ValidTokens:
 
-    def __init__(
-        self,
-        token_access: str,
-        token_refresh: str,
-    ) -> None:
-        self.token_access = token_access
-        self.token_refresh = token_refresh
-        self.response = Response
+    def __init__(self) -> None:
         self.clientsession = ClientSession
         self.settings = Settings
 
-    async def valid(self) -> dict | str:
-        send_access = await self.__send_access_token(self.token_access)
-        try:
-            if isinstance(send_access, dict):
-                return send_access
-            send_refresh = await self.__send_refresh_token(self.token_refresh)
-            self.response.delete_cookie(
-                key="access",
-                samesite="none",
-                httponly=True,
-                secure=True,
-            )
+    async def valid(
+        self,
+        token_access: str,
+        token_refresh: str,
+    ) -> dict:
+        send_access = await self.__send_access_token(token_access)
+        if isinstance(send_access, bool):
+            send_refresh = await self.__send_refresh_token(token_refresh)
             return send_refresh
-        except Exception as e:
-            return e
+        return send_access
 
     async def __send_refresh_token(
         self,
@@ -43,8 +33,14 @@ class ValidTokens:
             async with session.get(
                 url=f"{self.settings.VALIDATE_REFRESH}{token_refresh}",
             ) as response:
-                token = await response.text()
-                return json.loads(token)
+                token = await response.json()
+                log.warning(token)
+                if isinstance(token, bool):
+                    raise TokenError(
+                        name_func="__send_refresh_token",
+                        message="Токены не валидны",
+                    )
+                return token
 
     async def __send_access_token(
         self,
@@ -54,5 +50,6 @@ class ValidTokens:
             async with session.get(
                 url=f"{self.settings.VALIDATE_ACCESS}{token_access}",
             ) as response:
-                token = await response.text()
-                return json.loads(token)
+                token = await response.json()
+                log.warning(token)
+                return token
