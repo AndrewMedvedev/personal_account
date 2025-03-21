@@ -1,45 +1,29 @@
 from io import BytesIO
 
 import pyqrcode
-from fastapi import Response, status
+from fastapi import status
 from fastapi.responses import StreamingResponse
 
 from src.database.schemas import CustomResponse
 from src.interfaces import VisitorBase
 
 from .send_data_class import VisitorsSend
-from .tokens_classes import ValidTokens
 
 
 class Visitors(VisitorBase):
 
     def __init__(self) -> None:
-        self.response = Response
         self.send_data = VisitorsSend()
-        self.valid_tokens = ValidTokens()
 
     async def add(
         self,
-        token_access: str,
-        token_refresh: str,
+        user_id: int,
         event_id: int,
     ) -> CustomResponse:
-        check_tokens = await self.valid_tokens.valid(
-            token_access=token_access,
-            token_refresh=token_refresh,
-        )
         add = await self.send_data.visitor_add(
             event_id=event_id,
-            user_id=check_tokens.get("user_id"),
+            user_id=user_id,
         )
-        if "access" in check_tokens:
-            self.response.set_cookie(
-                key="access",
-                value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
-                secure=True,
-            )
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=add,
@@ -49,15 +33,10 @@ class Visitors(VisitorBase):
 
     async def get(
         self,
-        token_access: str,
-        token_refresh: str,
+        user_id: int,
     ) -> CustomResponse:
-        check_tokens = await self.valid_tokens.valid(
-            token_access=token_access,
-            token_refresh=token_refresh,
-        )
         get = await self.send_data.visitor_get(
-            user_id=check_tokens.get("user_id"),
+            user_id=user_id,
         )
         return CustomResponse(
             status_code=status.HTTP_200_OK,
@@ -68,17 +47,12 @@ class Visitors(VisitorBase):
 
     async def delete(
         self,
-        token_access: str,
-        token_refresh: str,
+        user_id: int,
         event_id: int,
     ) -> CustomResponse:
-        check_tokens = await self.valid_tokens.valid(
-            token_access=token_access,
-            token_refresh=token_refresh,
-        )
         delete = await self.send_data.visitor_delete(
             event_id=event_id,
-            user_id=check_tokens.get("user_id"),
+            user_id=user_id,
         )
         return CustomResponse(
             status_code=status.HTTP_200_OK,

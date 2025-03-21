@@ -13,12 +13,13 @@ async def token_error(
     return JSONResponse(
         content=(
             CustomResponse(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 body=str(exc),
                 message="Ошибка в выполнении",
                 name_endpoint="_",
             )
-        ).model_dump()
+        ).model_dump(),
+        status_code=status.HTTP_401_UNAUTHORIZED,
     )
 
 
@@ -29,10 +30,11 @@ async def send_error(
     return JSONResponse(
         content=(
             CustomResponse(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 body=str(exc),
                 message="Ошибка в выполнении",
                 name_endpoint="_",
             )
-        ).model_dump()
+        ).model_dump(),
+        status_code=status.HTTP_401_UNAUTHORIZED,
     )

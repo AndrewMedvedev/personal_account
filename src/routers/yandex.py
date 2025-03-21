@@ -36,10 +36,7 @@ async def yandex_registration(
     access: str,
     request: Request,
 ) -> CustomResponse:
-    token_access = request.cookies.get("access")
-    token_refresh = request.cookies.get("refresh")
     return await Yandex().registration(
-        token_access=token_access,
-        token_refresh=token_refresh,
+        user_id=request.state.user_id,
         access=access,
     )

@@ -47,12 +47,10 @@ class VK(OtherRegistrationBase):
     async def registration(
         self,
         access: str,
-        token_access: str,
-        token_refresh: str,
+        user_id: int,
     ) -> CustomResponse:
         return await self.reuse.registration(
-            token_access=token_access,
-            token_refresh=token_refresh,
+            user_id=user_id,
             dictgetdatatoken=DictGetDataTokenVK(access_token=access).model_dump(),
             setting=self.settings.VK_API_URL,
             setting_reg=self.settings.REGISTRATION_VK,

@@ -1,9 +1,8 @@
 import logging
 
-from fastapi import Response, status
+from fastapi import status
 
 from src.classes.send_data_class import Send
-from src.classes.tokens_classes import ValidTokens
 from src.database.schemas import (CustomResponse, RegistrationVK,
                                   RegistrationYandex)
 from src.interfaces import ReUseBase
@@ -15,8 +14,6 @@ class ReUse(ReUseBase):
 
     def __init__(self):
         self.send = Send()
-        self.valid_tokens = ValidTokens()
-        self.response = Response
 
     async def link(
         self, setting: str, dictlink: dict, code_verifier: str
@@ -62,25 +59,12 @@ class ReUse(ReUseBase):
 
     async def registration(
         self,
-        token_access: str,
-        token_refresh: str,
+        user_id: int,
         dictgetdatatoken: dict,
         setting: str,
         setting_reg: str,
         service: str,
     ) -> CustomResponse:
-        check_tokens = await self.valid_tokens.valid(
-            token_access=token_access,
-            token_refresh=token_refresh,
-        )
-        if "access" in check_tokens:
-            self.response.set_cookie(
-                key="access",
-                value=check_tokens.get("access"),
-                samesite="none",
-                httponly=True,
-                secure=True,
-            )
         match service:
             case "vk":
                 user = (
@@ -91,7 +75,7 @@ class ReUse(ReUseBase):
                 ).get("user")
                 log.info(user)
                 user_data = RegistrationVK(
-                    user_id=check_tokens.get("user_id"),
+                    user_id=user_id,
                     first_name=user.get("first_name"),
                     last_name=user.get("last_name"),
                     id_vk=int(user.get("user_id")),
@@ -115,7 +99,7 @@ class ReUse(ReUseBase):
                 )
                 log.info(user)
                 user_data = RegistrationYandex(
-                    user_id=check_tokens.get("user_id"),
+                    user_id=user_id,
                     first_name=user.get("first_name"),
                     last_name=user.get("last_name"),
                     id_yandex=user.get("id"),

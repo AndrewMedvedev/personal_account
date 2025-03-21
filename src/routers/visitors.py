@@ -12,11 +12,8 @@ async def add(
     event_id: int,
     request: Request,
 ) -> CustomResponse:
-    token_access = request.cookies.get("access")
-    token_refresh = request.cookies.get("refresh")
     return await Visitors().add(
-        token_access=token_access,
-        token_refresh=token_refresh,
+        user_id=request.state.user_id,
         event_id=event_id,
     )
 
@@ -25,11 +22,8 @@ async def add(
 async def get(
     request: Request,
 ) -> CustomResponse:
-    token_access = request.cookies.get("access")
-    token_refresh = request.cookies.get("refresh")
     return await Visitors().get(
-        token_access=token_access,
-        token_refresh=token_refresh,
+        user_id=request.state.user_id,
     )
 
 
@@ -50,10 +44,7 @@ async def delete(
     event_id: int,
     request: Request,
 ) -> CustomResponse:
-    token_access = request.cookies.get("access")
-    token_refresh = request.cookies.get("refresh")
     return await Visitors().delete(
-        token_access=token_access,
-        token_refresh=token_refresh,
+        user_id=request.state.user_id,
         event_id=event_id,
     )

@@ -14,10 +14,6 @@ async def answer(
     message: str,
     request: Request,
 ) -> CustomResponse:
-    token_access = request.cookies.get("access")
-    token_refresh = request.cookies.get("refresh")
     return await Answer().get_answer(
         message=message,
-        token_access=token_access,
-        token_refresh=token_refresh,
     )

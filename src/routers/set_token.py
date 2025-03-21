@@ -13,7 +13,7 @@ async def set_token(
     access: str,
     refresh: str,
     response: Response,
-) -> dict:
+) -> CustomResponse:
     response.set_cookie(
         key="access",
         value=access,
