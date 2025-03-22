@@ -4,7 +4,7 @@ from aiohttp import ClientSession, ContentTypeError
 
 from src.config import Settings
 from src.database.schemas import PredictFree, PredictModel
-from src.errors import SendError
+from src.errors import NotFoundError, SendError
 
 log = logging.getLogger(__name__)
 
@@ -56,6 +56,11 @@ class VisitorsSend:
                         raise SendError(
                             name_func="visitor_get",
                             message="Неверные данные",
+                        )
+                    if data_json == []:
+                        raise NotFoundError(
+                            name_func="visitor_get",
+                            message="Вы не зарегестрированны на мероприятия",
                         )
                     return data_json
                 except ContentTypeError:

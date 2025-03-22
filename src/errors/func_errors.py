@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 from src.database.schemas import CustomResponse
 
-from .errors import SendError, TokenError
+from .errors import NotFoundError, SendError, TokenError
 
 
 async def token_error(
@@ -37,4 +37,21 @@ async def send_error(
             )
         ).model_dump(),
         status_code=status.HTTP_401_UNAUTHORIZED,
+    )
+
+
+async def not_found_error(
+    request: Request,
+    exc: NotFoundError,
+) -> CustomResponse:
+    return JSONResponse(
+        content=(
+            CustomResponse(
+                status_code=status.HTTP_200_OK,
+                body=str(exc),
+                message="Функция отработала но ничего не получила",
+                name_endpoint="_",
+            )
+        ).model_dump(),
+        status_code=status.HTTP_200_OK,
     )
