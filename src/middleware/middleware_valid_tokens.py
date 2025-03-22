@@ -26,12 +26,19 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
         call_next: Callable,
     ):
         try:
+            if request.url.path in [
+                "/docs",
+                "/redoc",
+                "/openapi.json",
+            ]:
+                return await call_next(request)
+            if request.url.path.startswith("/set/token"):
+                return await call_next(request)
+            if request.url.path == "/logout/":
+                return await call_next(request)
             if request.url.path == "/api/v1/predict/free":
                 return await call_next(request)
-            if request.url.path == "/set/token/{access}/{refresh}":
-                return await call_next(request)
-            if request.url.path == "/logout":
-                return await call_next(request)
+
             log.info(call_next)
             token_access = request.cookies.get("access")
             token_refresh = request.cookies.get("refresh")

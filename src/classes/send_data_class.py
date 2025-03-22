@@ -212,9 +212,8 @@ class SendPredict:
         directions: list,
     ) -> dict:
         async with self.clientsession() as session:
-            correct_data = {"applicants": []}
-            array = [
-                correct_data["applicants"].append(
+            correct_data = {
+                "applicants": [
                     {
                         "year": data.year,
                         "gender": data.gender,
@@ -222,9 +221,9 @@ class SendPredict:
                         "points": data.points,
                         "direction": str(i.get("name")),
                     }
-                )
-                for i in directions
-            ]
+                    for i in directions
+                ]
+            }
 
             async with session.post(
                 url=self.settings.CLASSIFIER,
