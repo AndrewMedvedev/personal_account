@@ -52,7 +52,7 @@ class VisitorsSend:
                 try:
                     data_json = await data.json()
                     log.warning(data_json)
-                    if isinstance(data_json, dict) or data_json == []:
+                    if isinstance(data_json, dict):
                         raise SendError(
                             name_func="visitor_get",
                             message="Неверные данные",
