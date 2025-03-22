@@ -7,6 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.classes.tokens_classes import ValidTokens
 from src.database.schemas.custom_response import CustomResponse
+from src.errors import TokenError
 
 log = logging.getLogger(__name__)
 
@@ -42,6 +43,11 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
             log.info(call_next)
             token_access = request.cookies.get("access")
             token_refresh = request.cookies.get("refresh")
+            if token_access is None or token_refresh is None:
+                raise TokenError(
+                        name_func="dispatch",
+                        message="Токены не валидны",
+                    )
             check_tokens = await self.valid_tokens.valid(
                 token_access=token_access,
                 token_refresh=token_refresh,

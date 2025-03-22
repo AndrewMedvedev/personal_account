@@ -180,7 +180,7 @@ class SendPredict:
         self.settings = Settings
         self.clientsession = ClientSession
 
-    async def send_data_recomendate(
+    async def get_data_recomendate(
         self,
         data: PredictModel,
     ) -> dict:
@@ -206,7 +206,7 @@ class SendPredict:
                     )
                 return directions.get("directions")
 
-    async def send_data_classifier_applicants(
+    async def get_data_classifier_applicants(
         self,
         data: PredictModel,
         directions: list,
@@ -239,7 +239,7 @@ class SendPredict:
                     )
                 return data.get("probabilities")
 
-    async def send_data_classifier_applicant(
+    async def get_data_classifier_applicant(
         self,
         data: PredictFree,
     ) -> dict:
@@ -266,7 +266,7 @@ class SendPredict:
                     )
                 return rec.get("probability")
 
-    async def send_data_directions(
+    async def get_data_directions(
         self,
         direction_id: int,
     ) -> dict:
@@ -284,13 +284,13 @@ class SendPredict:
                     )
                 return direction.get("description")
 
-    async def send_data_points(
+    async def get_data_points(
         self,
         direction_id: int,
     ) -> dict:
         async with self.clientsession() as session:
             async with session.get(
-                url=f"{self.settings.DIRECTION_POINTS}{direction_id}",
+                url=f"{self.settings.POINTS}{direction_id}",
                 ssl=False,
             ) as data:
                 direction_points_data = await data.json()
@@ -301,3 +301,21 @@ class SendPredict:
                         message="Неверные данные",
                     )
                 return direction_points_data.get("history")
+
+    async def get_data_exams(
+        self,
+        direction_id: int,
+    ) -> dict:
+        async with self.clientsession() as session:
+            async with session.get(
+                url=f"{self.settings.EXAMS}{direction_id}",
+                ssl=False,
+            ) as data:
+                direction_points_data = await data.json()
+                log.warning(direction_points_data)
+                if "entrance_exams" not in direction_points_data:
+                    raise SendError(
+                        name_func="send_data_points",
+                        message="Неверные данные",
+                    )
+                return direction_points_data.get("entrance_exams")

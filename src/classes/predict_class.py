@@ -18,8 +18,8 @@ class Predict(PredictBase):
         self,
         model: PredictModel,
     ) -> CustomResponse:
-        recomendate = await self.send_data.send_data_recomendate(model)
-        classifier = await self.send_data.send_data_classifier_applicants(
+        recomendate = await self.send_data.get_data_recomendate(model)
+        classifier = await self.send_data.get_data_classifier_applicants(
             data=model,
             directions=recomendate,
         )
@@ -38,7 +38,7 @@ class Predict(PredictBase):
         self,
         model: PredictFree,
     ) -> CustomResponse:
-        classifier = await self.send_data.send_data_classifier_applicant(model)
+        classifier = await self.send_data.get_data_classifier_applicant(model)
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=classifier,
@@ -50,7 +50,7 @@ class Predict(PredictBase):
         self,
         direction_id: int,
     ) -> CustomResponse:
-        direction = await self.send_data.send_data_directions(direction_id)
+        direction = await self.send_data.get_data_directions(direction_id)
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=direction,
@@ -62,7 +62,19 @@ class Predict(PredictBase):
         self,
         direction_id: int,
     ) -> CustomResponse:
-        points = await self.send_data.send_data_points(direction_id)
+        points = await self.send_data.get_data_points(direction_id)
+        return CustomResponse(
+            status_code=status.HTTP_200_OK,
+            body=points,
+            message="Выполненно",
+            name_endpoint="/points/{direction_id}",
+        )
+
+    async def get_exams(
+        self,
+        direction_id: int,
+    ) -> CustomResponse:
+        points = await self.send_data.get_data_exams(direction_id)
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=points,

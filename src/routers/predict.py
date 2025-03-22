@@ -19,6 +19,16 @@ async def predict(
     )
 
 
+@router_predict.post(
+    "/free",
+    response_model=None,
+)
+async def predict_free(
+    model: PredictFree,
+) -> CustomResponse:
+    return await Predict().predict_free(model=model)
+
+
 @router_predict.get(
     "/direction/{direction_id}",
     response_model=None,
@@ -45,11 +55,14 @@ async def points(
     )
 
 
-@router_predict.post(
-    "/free",
+@router_predict.get(
+    "/exams/{direction_id}",
     response_model=None,
 )
-async def predict_free(
-    model: PredictFree,
+async def exams(
+    direction_id: int,
+    request: Request,
 ) -> CustomResponse:
-    return await Predict().predict_free(model=model)
+    return await Predict().get_exams(
+        direction_id=direction_id,
+    )
