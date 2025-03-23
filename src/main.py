@@ -8,12 +8,24 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 
 from src.classes.controls import config_logging
-from src.errors import (NotFoundError, SendError, TokenError, not_found_error,
-                        send_error, token_error)
+from src.errors import (
+    NotFoundError,
+    SendError,
+    TokenError,
+    not_found_error,
+    send_error,
+    token_error,
+)
 from src.middleware import MiddlewareValidTokens
-from src.routers import (router_answer, router_logout, router_predict,
-                         router_set_token, router_visitors, router_vk,
-                         router_yandex)
+from src.routers import (
+    router_answer,
+    router_logout,
+    router_predict,
+    router_set_token,
+    router_visitors,
+    router_vk,
+    router_yandex,
+)
 
 limiter = Limiter(key_func=get_remote_address, default_limits=["10/second"])
 
@@ -53,6 +65,7 @@ origins = [
     "http://localhost:3000",
     "https://register-666-ramzer.onrender.com",
     "https://frontend-project-production-6352.up.railway.app",
+    "https://online-service-for-applicants.onrender.com",
 ]
 
 app.add_middleware(
