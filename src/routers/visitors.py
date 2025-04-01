@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 
 from src.classes import Visitors
-from src.database.schemas.custom_response import CustomResponse
+from src.responses import CustomResponse
 
 router_visitors = APIRouter(prefix="/api/v1/visitors", tags=["visitors"])
 

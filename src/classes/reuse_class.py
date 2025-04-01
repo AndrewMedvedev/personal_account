@@ -3,9 +3,9 @@ import logging
 from fastapi import status
 
 from src.classes.send_data_class import Send
-from src.database.schemas import (CustomResponse, RegistrationVK,
-                                  RegistrationYandex)
+from src.database.schemas import RegistrationVK, RegistrationYandex
 from src.interfaces import ReUseBase
+from src.responses import CustomResponse
 
 log = logging.getLogger(__name__)
 
@@ -23,8 +23,6 @@ class ReUse(ReUseBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=result,
-            message="Выполненно",
-            name_endpoint="/link",
         )
 
     async def get_token(
@@ -42,8 +40,6 @@ class ReUse(ReUseBase):
                 return CustomResponse(
                     status_code=status.HTTP_200_OK,
                     body=all_data_tokens,
-                    message="Выполненно",
-                    name_endpoint="/get/token/",
                 )
             case "yandex":
                 all_data_tokens = await self.send.post_data_send(
@@ -53,8 +49,6 @@ class ReUse(ReUseBase):
                 return CustomResponse(
                     status_code=status.HTTP_200_OK,
                     body=all_data_tokens,
-                    message="Выполненно",
-                    name_endpoint="/get/token/",
                 )
 
     async def registration(
@@ -87,10 +81,8 @@ class ReUse(ReUseBase):
                 )
                 log.info(registration)
                 return CustomResponse(
-                    status_code=status.HTTP_200_OK,
+                    status_code=status.HTTP_201_CREATED,
                     body=registration,
-                    message="Выполненно",
-                    name_endpoint="/registration/",
                 )
             case "yandex":
                 user = await self.send.get_params_send(
@@ -112,8 +104,6 @@ class ReUse(ReUseBase):
                 )
                 log.info(registration)
                 return CustomResponse(
-                    status_code=status.HTTP_200_OK,
+                    status_code=status.HTTP_201_CREATED,
                     body=registration,
-                    message="Выполненно",
-                    name_endpoint="/registration/",
                 )

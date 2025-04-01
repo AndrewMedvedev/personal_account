@@ -4,8 +4,8 @@ import pyqrcode
 from fastapi import status
 from fastapi.responses import StreamingResponse
 
-from src.database.schemas import CustomResponse
 from src.interfaces import VisitorBase
+from src.responses import CustomResponse
 
 from .send_data_class import VisitorsSend
 
@@ -25,10 +25,8 @@ class Visitors(VisitorBase):
             user_id=user_id,
         )
         return CustomResponse(
-            status_code=status.HTTP_200_OK,
+            status_code=status.HTTP_201_CREATED,
             body=add,
-            message="Выполненно",
-            name_endpoint="/api/v1/visitors/add/{event_id}",
         )
 
     async def get(
@@ -41,8 +39,6 @@ class Visitors(VisitorBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=get,
-            message="Выполненно",
-            name_endpoint="/api/v1/visitors/get",
         )
 
     async def delete(
@@ -55,10 +51,8 @@ class Visitors(VisitorBase):
             user_id=user_id,
         )
         return CustomResponse(
-            status_code=status.HTTP_200_OK,
+            status_code=status.HTTP_204_NO_CONTENT,
             body=delete,
-            message="Выполненно",
-            name_endpoint="/api/v1/visitors/delete/{event_id}",
         )
 
     async def make_qr(

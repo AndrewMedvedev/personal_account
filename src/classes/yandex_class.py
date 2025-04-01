@@ -1,7 +1,11 @@
 from src.config import Settings
-from src.database.schemas import (CustomResponse, DictGetDataTokenYandex,
-                                  DictGetDataYandex, DictLinkYandex)
+from src.database.schemas import (
+    DictGetDataTokenYandex,
+    DictGetDataYandex,
+    DictLinkYandex,
+)
 from src.interfaces import OtherRegistrationBase
+from src.responses import CustomResponse
 
 from .controls import create_codes
 from .reuse_class import ReUse

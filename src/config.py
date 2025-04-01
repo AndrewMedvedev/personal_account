@@ -21,6 +21,8 @@ class Settings:
     VISITORS_DELETE: str = config["VISITORS_DELETE"]
     VISITORS_GET: str = config["VISITORS_GET"]
 
+    EVENTS_GET: str = config["EVENTS_GET"]
+
     VK_APP_ID: int = config["VK_APP_ID"]
     VK_APP_SECRET: str = config["VK_APP_SECRET"]
     VK_REDIRECT_URI: str = config["VK_REDIRECT_URI"]

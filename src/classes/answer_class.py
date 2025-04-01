@@ -1,8 +1,8 @@
 from fastapi import status
 
 from src.config import Settings
-from src.database.schemas import CustomResponse
 from src.interfaces import AnswerBase
+from src.responses import CustomResponse
 
 from .send_data_class import Send
 
@@ -25,6 +25,4 @@ class Answer(AnswerBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=data,
-            message="Выполненно",
-            name_endpoint="/api/v1/answer/{message}",
         )

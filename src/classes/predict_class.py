@@ -3,8 +3,9 @@ import logging
 from fastapi import status
 
 from src.classes.send_data_class import SendPredict
-from src.database.schemas import CustomResponse, PredictFree, PredictModel
+from src.database.schemas import PredictFree, PredictModel
 from src.interfaces import PredictBase
+from src.responses import CustomResponse
 
 log = logging.getLogger(__name__)
 
@@ -30,8 +31,6 @@ class Predict(PredictBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=result,
-            message="Выполненно",
-            name_endpoint="/predict",
         )
 
     async def predict_free(
@@ -42,8 +41,6 @@ class Predict(PredictBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=classifier,
-            message="Выполненно",
-            name_endpoint="/predict/free",
         )
 
     async def get_direction(
@@ -54,8 +51,6 @@ class Predict(PredictBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=direction,
-            message="Выполненно",
-            name_endpoint="/direction/{direction_id}",
         )
 
     async def get_points(
@@ -66,8 +61,6 @@ class Predict(PredictBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=points,
-            message="Выполненно",
-            name_endpoint="/points/{direction_id}",
         )
 
     async def get_exams(
@@ -78,6 +71,4 @@ class Predict(PredictBase):
         return CustomResponse(
             status_code=status.HTTP_200_OK,
             body=points,
-            message="Выполненно",
-            name_endpoint="/points/{direction_id}",
         )

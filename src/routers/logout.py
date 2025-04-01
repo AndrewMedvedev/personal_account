@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, status
 
-from src.database.schemas import CustomResponse
+from src.responses import CustomResponse
 
 router_logout = APIRouter(prefix="/logout", tags=["logout"])
 
@@ -23,8 +23,6 @@ async def logout(response: Response) -> CustomResponse:
         secure=True,
     )
     return CustomResponse(
-        status_code=status.HTTP_200_OK,
+        status_code=status.HTTP_204_NO_CONTENT,
         body=None,
-        message="Выполненно",
-        name_endpoint="/logout",
     )

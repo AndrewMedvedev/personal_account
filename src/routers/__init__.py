@@ -1,5 +1,6 @@
 __all__ = (
     "router_answer",
+    "router_events",
     "router_set_token",
     "router_logout",
     "router_predict",
@@ -9,6 +10,7 @@ __all__ = (
 )
 
 from .answer import router_answer
+from .events import router_events
 from .logout import router_logout
 from .predict import router_predict
 from .set_token import router_set_token

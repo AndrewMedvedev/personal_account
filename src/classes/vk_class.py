@@ -1,9 +1,9 @@
 from fastapi import Response
 
 from src.config import Settings
-from src.database.schemas import (CustomResponse, DictGetDataTokenVK,
-                                  DictGetDataVK, DictLinkVK)
+from src.database.schemas import DictGetDataTokenVK, DictGetDataVK, DictLinkVK
 from src.interfaces import OtherRegistrationBase
+from src.responses import CustomResponse
 
 from .controls import create_codes
 from .reuse_class import ReUse

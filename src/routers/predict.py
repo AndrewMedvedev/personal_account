@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Request
 
 from src.classes import Predict
-from src.database.schemas import CustomResponse, PredictFree, PredictModel
+from src.database.schemas import PredictFree, PredictModel
+from src.responses import CustomResponse
 
 router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
 

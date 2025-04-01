@@ -33,7 +33,7 @@ class VisitorsSend:
                             name_func="visitor_add",
                             message="Неверные данные",
                         )
-                    return data_json
+                    return data_json.get("body")
                 except ContentTypeError:
                     raise SendError(
                         name_func="visitor_add",
@@ -52,7 +52,7 @@ class VisitorsSend:
                 try:
                     data_json = await data.json()
                     log.warning(data_json)
-                    if isinstance(data_json, dict):
+                    if type(data_json) != dict:
                         raise SendError(
                             name_func="visitor_get",
                             message="Неверные данные",
@@ -62,8 +62,8 @@ class VisitorsSend:
                             name_func="visitor_get",
                             message="Вы не зарегестрированны на мероприятия",
                         )
-                    return data_json
-                except ContentTypeError:
+                    return data_json.get("body")
+                except Exception:
                     raise SendError(
                         name_func="visitor_get",
                         message="Неверные данные",
@@ -87,7 +87,7 @@ class VisitorsSend:
                             name_func="visitor_delete",
                             message="Неверные данные",
                         )
-                    return data_json
+                    return data_json.get("body")
                 except ContentTypeError:
                     raise SendError(
                         name_func="visitor_delete",

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 
 from src.classes import Answer
-from src.database.schemas import CustomResponse
+from src.responses import CustomResponse
 
 router_answer = APIRouter(prefix="/api/v1/answer", tags=["answer"])
 

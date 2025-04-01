@@ -19,6 +19,7 @@ from src.errors import (
 from src.middleware import MiddlewareValidTokens
 from src.routers import (
     router_answer,
+    router_events,
     router_logout,
     router_predict,
     router_set_token,
@@ -42,6 +43,8 @@ app.include_router(router_vk)
 app.include_router(router_yandex)
 
 app.include_router(router_predict)
+
+app.include_router(router_events)
 
 app.include_router(router_visitors)
 

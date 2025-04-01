@@ -1,10 +1,9 @@
-import typing
+from typing import Any
 
 from pydantic import BaseModel
 
 
 class CustomResponse(BaseModel):
     status_code: int
-    body: typing.Any
-    message: str
-    name_endpoint: str
+    status: str = "success"
+    body: Any

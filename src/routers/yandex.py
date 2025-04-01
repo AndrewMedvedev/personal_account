@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 
 from src.classes.yandex_class import Yandex
-from src.database.schemas import CustomResponse
+from src.responses import CustomResponse
 
 router_yandex = APIRouter(prefix="/api/v1/yandex", tags=["yandex"])
 

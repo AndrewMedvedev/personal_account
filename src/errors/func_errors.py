@@ -1,7 +1,6 @@
 from fastapi import Request, status
-from fastapi.responses import JSONResponse
 
-from src.database.schemas import CustomResponse
+from src.responses import CustomBadResponse
 
 from .errors import NotFoundError, SendError, TokenError
 
@@ -9,49 +8,31 @@ from .errors import NotFoundError, SendError, TokenError
 async def token_error(
     request: Request,
     exc: TokenError,
-) -> CustomResponse:
-    return JSONResponse(
-        content=(
-            CustomResponse(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                body=str(exc),
-                message="Ошибка в выполнении",
-                name_endpoint="_",
-            )
-        ).model_dump(),
+) -> CustomBadResponse:
+    return CustomBadResponse(
         status_code=status.HTTP_401_UNAUTHORIZED,
+        message="Ошибка токенов",
+        detail=str(exc),
     )
 
 
 async def send_error(
     request: Request,
     exc: SendError,
-) -> CustomResponse:
-    return JSONResponse(
-        content=(
-            CustomResponse(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                body=str(exc),
-                message="Ошибка в выполнении",
-                name_endpoint="_",
-            )
-        ).model_dump(),
-        status_code=status.HTTP_401_UNAUTHORIZED,
+) -> CustomBadResponse:
+    return CustomBadResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        message="Ошибка отправки",
+        detail=str(exc),
     )
 
 
 async def not_found_error(
     request: Request,
     exc: NotFoundError,
-) -> CustomResponse:
-    return JSONResponse(
-        content=(
-            CustomResponse(
-                status_code=status.HTTP_200_OK,
-                body=str(exc),
-                message="Функция отработала но ничего не получила",
-                name_endpoint="_",
-            )
-        ).model_dump(),
-        status_code=status.HTTP_200_OK,
+) -> CustomBadResponse:
+    return CustomBadResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        message="Элемент не найден",
+        detail=str(exc),
     )
