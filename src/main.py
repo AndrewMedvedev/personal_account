@@ -20,6 +20,7 @@ from src.middleware import MiddlewareValidTokens
 from src.routers import (
     router_answer,
     router_events,
+    router_news,
     router_logout,
     router_predict,
     router_set_token,
@@ -45,6 +46,8 @@ app.include_router(router_yandex)
 app.include_router(router_predict)
 
 app.include_router(router_events)
+
+app.include_router(router_news)
 
 app.include_router(router_visitors)
 

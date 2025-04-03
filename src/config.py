@@ -23,6 +23,8 @@ class Settings:
 
     EVENTS_GET: str = config["EVENTS_GET"]
 
+    NEWS_GET: str = config["NEWS_GET"]
+
     VK_APP_ID: int = config["VK_APP_ID"]
     VK_APP_SECRET: str = config["VK_APP_SECRET"]
     VK_REDIRECT_URI: str = config["VK_REDIRECT_URI"]

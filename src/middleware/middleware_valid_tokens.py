@@ -21,6 +21,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
         "/logout/",
         "/api/v1/predict/free",
         "/api/v1/events/get",
+        "/api/v1/news/get",
     ]
 
     def __init__(self, app, dispatch=None) -> None:
