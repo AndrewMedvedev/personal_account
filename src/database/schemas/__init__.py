@@ -13,10 +13,7 @@ __all__ = (
 
 
 from .predict_schemas import PredictFree, PredictModel
-from .vk_schemas import DictGetDataTokenVK, DictGetDataVK, DictLinkVK, RegistrationVK
-from .yandex_schemas import (
-    DictGetDataTokenYandex,
-    DictGetDataYandex,
-    DictLinkYandex,
-    RegistrationYandex,
-)
+from .vk_schemas import (DictGetDataTokenVK, DictGetDataVK, DictLinkVK,
+                         RegistrationVK)
+from .yandex_schemas import (DictGetDataTokenYandex, DictGetDataYandex,
+                             DictLinkYandex, RegistrationYandex)

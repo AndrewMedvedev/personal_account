@@ -12,8 +12,8 @@ __all__ = (
 
 from .answer import router_answer
 from .events import router_events
-from .news import router_news
 from .logout import router_logout
+from .news import router_news
 from .predict import router_predict
 from .set_token import router_set_token
 from .visitors import router_visitors

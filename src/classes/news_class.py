@@ -1,10 +1,10 @@
 from fastapi import status
 
 from src.config import Settings
+from src.interfaces import NewsBase
 from src.responses import CustomResponse
 
 from .send_data_class import Send
-from src.interfaces import NewsBase
 
 
 class News(NewsBase):
