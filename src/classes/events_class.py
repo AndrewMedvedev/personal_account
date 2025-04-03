@@ -15,14 +15,13 @@ class Events(EventsBase):
 
     async def get_events(
         self,
-        is_paginated: bool,
         page: int,
         limit: int,
     ):
         result = (
             await self.send.get_params_send(
                 params={
-                    "is_paginated": str(is_paginated).lower(),
+                    "is_paginated": "true",
                     "page": page,
                     "limit": limit,
                 },
