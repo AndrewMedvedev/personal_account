@@ -1,10 +1,10 @@
 __all__ = (
-    "TokenError",
-    "SendError",
     "NotFoundError",
-    "token_error",
-    "send_error",
+    "SendError",
+    "TokenError",
     "not_found_error",
+    "send_error",
+    "token_error",
 )
 
 from .errors import NotFoundError, SendError, TokenError

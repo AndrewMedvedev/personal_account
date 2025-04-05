@@ -8,7 +8,6 @@ from .send_data_class import Send
 
 
 class Events(EventsBase):
-
     def __init__(self):
         self.send = Send()
         self.settings = Settings

@@ -8,7 +8,6 @@ from .send_data_class import Send
 
 
 class Answer(AnswerBase):
-
     def __init__(self) -> None:
         self.settings = Settings
         self.send_data = Send()

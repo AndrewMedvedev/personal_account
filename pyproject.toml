@@ -15,11 +15,9 @@ pydantic-settings = "^2.6.1"
 asyncpg = "^0.30.0"
 pyvalid = "^1.0.4"
 aiohttp = {extras = ["speedups"], version = "^3.11.9"}
-slowapi = "^0.1.9"
 python-jose = "^3.3.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 phonenumbers = "^8.13.52"
-isort = "^6.0.0"
 ruff = "^0.9.7"
 pypng = "^0.20220715.0"
 pyqrcode = "^1.2.1"

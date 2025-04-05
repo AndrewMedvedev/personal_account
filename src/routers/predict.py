@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 
 from src.classes import Predict
 from src.database.schemas import PredictFree, PredictModel
@@ -13,7 +13,6 @@ router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
 )
 async def predict(
     model: PredictModel,
-    request: Request,
 ) -> CustomResponse:
     return await Predict().predict(
         model=model,
@@ -36,7 +35,6 @@ async def predict_free(
 )
 async def direction(
     direction_id: int,
-    request: Request,
 ) -> CustomResponse:
     return await Predict().get_direction(
         direction_id=direction_id,
@@ -49,7 +47,6 @@ async def direction(
 )
 async def points(
     direction_id: int,
-    request: Request,
 ) -> CustomResponse:
     return await Predict().get_points(
         direction_id=direction_id,
@@ -62,7 +59,6 @@ async def points(
 )
 async def exams(
     direction_id: int,
-    request: Request,
 ) -> CustomResponse:
     return await Predict().get_exams(
         direction_id=direction_id,

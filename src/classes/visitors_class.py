@@ -11,7 +11,6 @@ from .send_data_class import VisitorsSend
 
 
 class Visitors(VisitorBase):
-
     def __init__(self) -> None:
         self.send_data = VisitorsSend()
 
@@ -60,9 +59,7 @@ class Visitors(VisitorBase):
         unique_string: str,
     ) -> StreamingResponse:
         buffer = BytesIO()
-        qr = pyqrcode.create(
-            f"https://events-fastapi.onrender.com/api/v1/visitors/verify/{unique_string}"
-        )
+        qr = pyqrcode.create(f"https://events-fastapi.onrender.com/api/v1/visitors/verify/{unique_string}")
         qr.png(buffer, scale=6)
         buffer.seek(0)
         headers = {

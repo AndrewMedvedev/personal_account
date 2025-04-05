@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 
 
 class PredictBase(ABC):
-
     @abstractmethod
     async def predict() -> JSONResponse:
         raise NotImplementedError

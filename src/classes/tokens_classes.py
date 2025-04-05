@@ -9,7 +9,6 @@ log = logging.getLogger(__name__)
 
 
 class ValidTokens:
-
     def __init__(self) -> None:
         self.clientsession = ClientSession
         self.settings = Settings

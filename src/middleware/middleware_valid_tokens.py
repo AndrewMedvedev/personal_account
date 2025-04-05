@@ -1,6 +1,7 @@
+from typing import Callable
+
 import logging
 from datetime import datetime, timedelta
-from typing import Callable
 
 from fastapi import Request, status
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -13,7 +14,6 @@ log = logging.getLogger(__name__)
 
 
 class MiddlewareValidTokens(BaseHTTPMiddleware):
-
     SKIP_PATH = [
         "/docs",
         "/redoc",

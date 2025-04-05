@@ -11,12 +11,15 @@ log = logging.getLogger(__name__)
 
 
 class ReUse(ReUseBase):
-
     def __init__(self):
         self.send = Send()
 
+    @classmethod
     async def link(
-        self, setting: str, dictlink: dict, code_verifier: str
+        self,
+        setting: str,
+        dictlink: dict,
+        code_verifier: str,
     ) -> CustomResponse:
         url = f"{setting}?{'&'.join([f'{k}={v}' for k, v in dictlink.items()])}"
         result = {"url": url, "code_verifier": code_verifier}

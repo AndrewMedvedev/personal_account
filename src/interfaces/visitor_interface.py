@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse, StreamingResponse
 
 
 class VisitorBase(ABC):
-
     @abstractmethod
     async def add() -> JSONResponse:
         raise NotImplementedError

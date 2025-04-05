@@ -1,11 +1,11 @@
 __all__ = (
     "AnswerBase",
-    "PredictBase",
-    "VisitorBase",
     "EventsBase",
     "NewsBase",
     "OtherRegistrationBase",
+    "PredictBase",
     "ReUseBase",
+    "VisitorBase",
 )
 
 from .answer_interface import AnswerBase

@@ -16,7 +16,6 @@ async def set_token(
     refresh: str,
     response: Response,
 ) -> CustomResponse:
-
     expires_access = timedelta(hours=2) + datetime.now()
     expires_refresh = timedelta(hours=5) + datetime.now()
     response.set_cookie(

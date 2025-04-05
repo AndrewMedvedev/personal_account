@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 
 
 class ReUseBase(ABC):
-
     @abstractmethod
     async def link() -> JSONResponse:
         raise NotImplementedError

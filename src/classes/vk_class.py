@@ -10,7 +10,6 @@ from .reuse_class import ReUse
 
 
 class VK(OtherRegistrationBase):
-
     def __init__(self) -> None:
         self.settings = Settings
         self.response = Response
@@ -22,9 +21,7 @@ class VK(OtherRegistrationBase):
         codes = await create_codes()
         return await self.reuse.link(
             setting=self.settings.VK_AUTH_URL,
-            dictlink=DictLinkVK(
-                code_challenge=codes.get("code_challenge")
-            ).model_dump(),
+            dictlink=DictLinkVK(code_challenge=codes.get("code_challenge")).model_dump(),
             code_verifier=codes.get("code_verifier"),
         )
 

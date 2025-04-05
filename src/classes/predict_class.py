@@ -11,7 +11,6 @@ log = logging.getLogger(__name__)
 
 
 class Predict(PredictBase):
-
     def __init__(self) -> None:
         self.send_data = SendPredict()
 

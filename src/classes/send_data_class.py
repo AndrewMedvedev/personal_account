@@ -10,7 +10,6 @@ log = logging.getLogger(__name__)
 
 
 class VisitorsSend:
-
     def __init__(self):
         self.settings = Settings
         self.clientsession = ClientSession
@@ -96,7 +95,6 @@ class VisitorsSend:
 
 
 class Send:
-
     def __init__(self):
         self.clientsession = ClientSession
 
@@ -180,7 +178,6 @@ class Send:
 
 
 class SendPredict:
-
     def __init__(self):
         self.settings = Settings
         self.clientsession = ClientSession

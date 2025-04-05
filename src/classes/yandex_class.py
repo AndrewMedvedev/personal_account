@@ -1,6 +1,9 @@
 from src.config import Settings
-from src.database.schemas import (DictGetDataTokenYandex, DictGetDataYandex,
-                                  DictLinkYandex)
+from src.database.schemas import (
+    DictGetDataTokenYandex,
+    DictGetDataYandex,
+    DictLinkYandex,
+)
 from src.interfaces import OtherRegistrationBase
 from src.responses import CustomResponse
 
@@ -9,7 +12,6 @@ from .reuse_class import ReUse
 
 
 class Yandex(OtherRegistrationBase):
-
     def __init__(self) -> None:
         self.settings = Settings
         self.reuse = ReUse()
@@ -20,9 +22,7 @@ class Yandex(OtherRegistrationBase):
         codes = await create_codes()
         return await self.reuse.link(
             setting=self.settings.YANDEX_AUTH_URL,
-            dictlink=DictLinkYandex(
-                code_challenge=codes.get("code_challenge")
-            ).model_dump(),
+            dictlink=DictLinkYandex(code_challenge=codes.get("code_challenge")).model_dump(),
             code_verifier=codes.get("code_verifier"),
         )
 

@@ -1,5 +1,4 @@
 class TokenError(Exception):
-
     def __init__(self, name_func: str, message: str) -> None:
         self.name_func = name_func
         self.message = message
@@ -12,7 +11,6 @@ class TokenError(Exception):
 
 
 class SendError(Exception):
-
     def __init__(self, name_func: str, message: str) -> None:
         self.name_func = name_func
         self.message = message
@@ -25,7 +23,6 @@ class SendError(Exception):
 
 
 class NotFoundError(Exception):
-
     def __init__(self, name_func: str, message: str) -> None:
         self.name_func = name_func
         self.message = message

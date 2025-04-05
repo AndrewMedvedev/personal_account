@@ -1,10 +1,10 @@
 __all__ = (
     "router_answer",
     "router_events",
-    "router_news",
-    "router_set_token",
     "router_logout",
+    "router_news",
     "router_predict",
+    "router_set_token",
     "router_visitors",
     "router_vk",
     "router_yandex",

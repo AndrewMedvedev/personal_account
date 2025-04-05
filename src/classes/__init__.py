@@ -1,12 +1,11 @@
 __all__ = (
-    "Answer",
-    "Predict",
-    "SendData",
-    "Visitors",
     "VK",
-    "Yandex",
+    "Answer",
     "Events",
     "News",
+    "Predict",
+    "Visitors",
+    "Yandex",
 )
 
 from .answer_class import Answer
