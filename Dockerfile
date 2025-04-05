@@ -1,6 +1,6 @@
 FROM python:3.12
 
-WORKDIR /personal_account
+WORKDIR /personal-account-service
 
 COPY requirements.txt .
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8888"]

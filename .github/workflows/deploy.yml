@@ -12,28 +12,88 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-        ALL: >
-            ALGORITHM = ${{ secrets.ALGORITHM }}
-            SECRET_KEY = ${{ secrets.SECRET_KEY }}
-            RECOMENDATE = ${{ secrets.RECOMENDATE }}
-            CLASSIFIER = ${{ secrets.CLASSIFIER }}
-            CLASSIFIER_FREE = ${{ secrets.CLASSIFIER_FREE }}
-            VALIDATE_ACCESS = ${{ secrets.VALIDATE_ACCESS }}
-            VALIDATE_REFRESH = ${{ secrets.VALIDATE_REFRESH }}
-            RAG_GigaChat_API = ${{ secrets.RAG_GigaChat_API }}
+
+        RECOMENDATE_VARS: >
+            RECOMENDATE=${{ secrets.RECOMENDATE }}
+            DIRECTION=${{ secrets.DIRECTION }}
+            POINTS=${{ secrets.POINTS }}
+            EXAMS=${{ secrets.EXAMS }}
+            CLASSIFIER=${{ secrets.CLASSIFIER }}
+            CLASSIFIER_FREE=${{ secrets.CLASSIFIER_FREE }}
+
+        VALIDATE_TOKENS_VARS: >
+            VALIDATE_ACCESS=${{ secrets.VALIDATE_ACCESS }}
+            VALIDATE_REFRESH=${{ secrets.VALIDATE_REFRESH }}
+
+        RAG_VARS: >
+            RAG_GigaChat_API=${{ secrets.RAG_GigaChat_API }}
+
+        VISITORS_VARS: >
+            VISITORS_ADD=${{ secrets.VISITORS_ADD }}
+            VISITORS_DELETE=${{ secrets.VISITORS_DELETE }}
+            VISITORS_GET=${{ secrets.VISITORS_GET }}
+
+        EVENTS_AND_NEWS_VARS: >
+            EVENTS_GET=${{ secrets.EVENTS_GET }}
+            NEWS_GET=${{ secrets.NEWS_GET }}
+
+        VK_VARS: >
+            VK_APP_ID=${{ secrets.VK_APP_ID }}
+            VK_APP_SECRET=${{ secrets.VK_APP_SECRET }}
+            VK_REDIRECT_URI=${{ secrets.VK_REDIRECT_URI }}
+            VK_AUTH_URL=${{ secrets.VK_AUTH_URL }}
+            VK_TOKEN_URL=${{ secrets.VK_TOKEN_URL }}
+            VK_API_URL=${{ secrets.VK_API_URL }}
+            STATE_VK=${{ secrets.STATE_VK }}
+            CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
+
+        YANDEX_VARS: >
+            YANDEX_APP_ID=${{ secrets.YANDEX_APP_ID }}
+            YANDEX_APP_SECRET=${{ secrets.YANDEX_APP_SECRET }}
+            YANDEX_REDIRECT_URI=${{ secrets.YANDEX_REDIRECT_URI }}
+            YANDEX_AUTH_URL=${{ secrets.YANDEX_AUTH_URL }}
+            YANDEX_TOKEN_URL=${{ secrets.YANDEX_TOKEN_URL }}
+            YANDEX_API_URL=${{ secrets.YANDEX_API_URL }}
+            STATE_YANDEX=${{ secrets.STATE_YANDEX }}
+            YANDEX_SCOPE=${{ secrets.YANDEX_SCOPE }}
+
+        REGISTRATION_VARS: >
+            REGISTRATION_VK=${{ secrets.REGISTRATION_VK }}
+            REGISTRATION_YANDEX=${{ secrets.REGISTRATION_YANDEX }}
 
     steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+      - 
+        name: Check repo
+        uses: actions/checkout@v4
 
-        - name: Create .env file
-          run: |
-            echo "$ALL" >> .env
+      - 
+        name: Create .env file
+        run: |
+          echo "$RECOMENDATE_VARS" >> .env
+          echo "$VALIDATE_TOKENS_VARS" >> .env
+          echo "$RAG_VARS" >> .env
+          echo "$VISITORS_VARS" >> .env
+          echo "$EVENTS_AND_NEWS_VARS" >> .env
+          echo "$VK_VARS" >> .env
+          echo "$YANDEX_VARS" >> .env
+          echo "$REGISTRATION_VARS" >> .env
+
+      - 
+        name: Login in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_LOGIN}}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - 
+        name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO_NAME }}:latest
+
+
         
-        - name: Set environment variables
-          run: |
-             echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
-            
-        - name: Build images
-          run: |
-            docker build -t personal_account .
+
+    
