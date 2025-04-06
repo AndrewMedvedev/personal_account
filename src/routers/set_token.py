@@ -21,22 +21,22 @@ async def set_token(
     response.set_cookie(
         key="access",
         value=access,
-        expires=expires_access.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        # expires=expires_access.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         max_age=7200,
         samesite="lax",
         httponly=True,
         secure=True,
-        domain="https://online-service-for-applicants.onrender.com",
+        domain=None,
     )
     response.set_cookie(
         key="refresh",
         value=refresh,
-        expires=expires_refresh.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+        # expires=expires_refresh.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         max_age=18000,
         samesite="lax",
         httponly=True,
         secure=True,
-        domain="https://online-service-for-applicants.onrender.com",
+        domain=None,
     )
     return CustomResponse(
         status_code=status.HTTP_200_OK,
