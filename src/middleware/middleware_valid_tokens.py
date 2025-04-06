@@ -62,7 +62,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
                     value=check_tokens.get("access"),
                     expires=expires_access.strftime("%a, %d %b %Y %H:%M:%S GMT"),
                     max_age=7200,
-                    samesite="none",
+                    samesite="strict",
                     httponly=True,
                     secure=True,
                 )

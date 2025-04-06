@@ -23,7 +23,7 @@ async def set_token(
         value=access,
         expires=expires_access.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         max_age=7200,
-        samesite="none",
+        samesite="strict",
         httponly=True,
         secure=True,
     )
@@ -32,7 +32,7 @@ async def set_token(
         value=refresh,
         expires=expires_refresh.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         max_age=18000,
-        samesite="none",
+        samesite="strict",
         httponly=True,
         secure=True,
     )
