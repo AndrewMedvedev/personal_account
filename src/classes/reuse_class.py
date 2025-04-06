@@ -85,7 +85,7 @@ class ReUse(ReUseBase):
                 log.info(registration)
                 return CustomResponse(
                     status_code=status.HTTP_201_CREATED,
-                    body=registration,
+                    body=registration.get("body"),
                 )
             case "yandex":
                 user = await self.send.get_params_send(
@@ -101,6 +101,7 @@ class ReUse(ReUseBase):
                     login=user.get("login"),
                     email=user.get("default_email"),
                 ).model_dump()
+                log.info(user_data)
                 registration = await self.send.post_json_send(
                     params=user_data,
                     setting=setting_reg,
@@ -108,5 +109,5 @@ class ReUse(ReUseBase):
                 log.info(registration)
                 return CustomResponse(
                     status_code=status.HTTP_201_CREATED,
-                    body=registration,
+                    body=registration.get("body"),
                 )
