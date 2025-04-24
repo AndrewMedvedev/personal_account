@@ -1,28 +1,18 @@
 from typing import Callable
 
-import logging
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
-from fastapi import Request, status
+from fastapi import Request
+from jose import JWTError
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from src.classes.tokens_classes import ValidTokens
-from src.errors import TokenError
-from src.responses import CustomBadResponse
-
-log = logging.getLogger(__name__)
+from .constants import SKIP_PATHS
+from .exeptions import UnauthorizedHTTPError
+from .jwt import ValidTokens
 
 
 class MiddlewareValidTokens(BaseHTTPMiddleware):
-    SKIP_PATH = [
-        "/docs",
-        "/redoc",
-        "/openapi.json",
-        "/logout/",
-        "/api/v1/predict/free",
-        "/api/v1/events/get",
-        "/api/v1/news/get",
-    ]
+    SKIP_PATH: list[str] = SKIP_PATHS
 
     def __init__(self, app, dispatch=None) -> None:
         self.valid_tokens = ValidTokens()
@@ -41,14 +31,10 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
                 return await call_next(request)
             if request.url.path in self.SKIP_PATH:
                 return await call_next(request)
-            log.info(call_next)
             token_access = request.cookies.get("access")
             token_refresh = request.cookies.get("refresh")
             if token_access is None or token_refresh is None:
-                raise TokenError(
-                    name_func="dispatch",
-                    message="Токены не валидны",
-                )
+                raise UnauthorizedHTTPError
             check_tokens = await self.valid_tokens.valid(
                 token_access=token_access,
                 token_refresh=token_refresh,
@@ -56,7 +42,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
             request.state.user_id = check_tokens.get("user_id")
             response = await call_next(request)
             if "access" in check_tokens:
-                expires_access = timedelta(hours=2) + datetime.now()
+                expires_access = timedelta(hours=2) + datetime.now(tz=UTC)
                 response.set_cookie(
                     key="access",
                     value=check_tokens.get("access"),
@@ -65,10 +51,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
                     httponly=True,
                     secure=True,
                 )
+        except JWTError:
+            raise UnauthorizedHTTPError from None
+        else:
             return response
-        except Exception as e:
-            return CustomBadResponse(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                message="Токены не валидны",
-                detail=str(e),
-            )

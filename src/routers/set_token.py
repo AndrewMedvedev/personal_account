@@ -1,23 +1,14 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Response
 
-from src.responses import CustomResponse
-
-router_set_token = APIRouter(prefix="/set/token", tags=["set_token"])
+set_token = APIRouter(prefix="/set/token", tags=["set_token"])
 
 
-@router_set_token.get(
-    "/{access}/{refresh}",
-    response_model=None,
-)
-async def set_token(
-    access: str,
-    refresh: str,
-    response: Response,
-) -> CustomResponse:
-    expires_access = timedelta(hours=2) + datetime.now()
-    expires_refresh = timedelta(hours=5) + datetime.now()
+@set_token.get("/{access}/{refresh}")
+async def set_tokens(access: str, refresh: str, response: Response) -> Response:
+    expires_access = timedelta(hours=2) + datetime.now(tz=UTC)
+    expires_refresh = timedelta(hours=5) + datetime.now(tz=UTC)
     response.set_cookie(
         key="access",
         value=access,
@@ -34,7 +25,4 @@ async def set_token(
         httponly=True,
         secure=True,
     )
-    return CustomResponse(
-        status_code=status.HTTP_200_OK,
-        body=None,
-    )
+    return {"message": "success"}

@@ -1,18 +1,14 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 
-from src.classes import Answer
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import AnswerControl
 
-router_answer = APIRouter(prefix="/api/v1/answer", tags=["answer"])
+answer = APIRouter(prefix=f"{PATH_ENDPOINT}answer", tags=["answer"])
 
 
-@router_answer.get(
-    "/{message}",
-    response_model=None,
-)
-async def answer(
-    message: str,
-) -> CustomResponse:
-    return await Answer().get_answer(
-        message=message,
+@answer.get("/{message}")
+async def answer_(message: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK, content=await AnswerControl().answer(message=message)
     )

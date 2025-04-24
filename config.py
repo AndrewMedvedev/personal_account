@@ -45,6 +45,3 @@ class Settings:
 
     REGISTRATION_VK: str = config["REGISTRATION_VK"]
     REGISTRATION_YANDEX: str = config["REGISTRATION_YANDEX"]
-
-
-settings = Settings()

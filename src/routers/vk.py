@@ -1,44 +1,28 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response, status
+from fastapi.responses import JSONResponse
 
-from src.classes.vk_class import VK
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import VKControl
 
-router_vk = APIRouter(prefix="/api/v1/vk", tags=["vk"])
-
-
-@router_vk.get(
-    "/link",
-    response_model=None,
-)
-async def vk_link() -> CustomResponse:
-    return await VK().link()
+vk = APIRouter(prefix=f"{PATH_ENDPOINT}vk", tags=["vk"])
 
 
-@router_vk.get(
-    "/get/token/{code}/{device_id}/{code_verifier}",
-    response_model=None,
-)
-async def vk_get_token(
-    code: str,
-    device_id: str,
-    code_verifier: str,
-) -> CustomResponse:
-    return await VK().get_token(
-        code=code,
-        device_id=device_id,
-        code_verifier=code_verifier,
+@vk.get("/link")
+async def vk_link() -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_200_OK, content=await VKControl().link())
+
+
+@vk.get("/get/token/{code}/{device_id}/{code_verifier}")
+async def vk_get_token(code: str, device_id: str, code_verifier: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await VKControl().get_token(
+            code=code, device_id=device_id, code_verifier=code_verifier
+        ),
     )
 
 
-@router_vk.post(
-    "/registration/{access}",
-    response_model=None,
-)
-async def vk_registration(
-    access: str,
-    request: Request,
-) -> CustomResponse:
-    return await VK().registration(
-        user_id=request.state.user_id,
-        access=access,
-    )
+@vk.post("/registration/{access}")
+async def vk_registration(access: str, request: Request) -> Response:
+    await VKControl().registration(user_id=request.state.user_id, access=access)
+    return Response(status_code=status.HTTP_201_CREATED)

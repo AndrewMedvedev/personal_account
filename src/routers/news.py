@@ -1,17 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 
-from src.classes import News
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import NewsControl
 
-router_news = APIRouter(prefix="/api/v1/news", tags=["news"])
+news = APIRouter(prefix=f"{PATH_ENDPOINT}news", tags=["news"])
 
 
-@router_news.get("/get")
-async def get(
-    page: int = 1,
-    limit: int = 10,
-) -> CustomResponse:
-    return await News().get_news(
-        page=page,
-        limit=limit,
+@news.get("/get")
+async def get(page: int = 1, limit: int = 10) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await NewsControl().get_news(page=page, limit=limit),
     )

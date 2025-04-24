@@ -1,42 +1,29 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Response, status
+from fastapi.responses import JSONResponse
 
-from src.classes.yandex_class import Yandex
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import YandexControl
 
-router_yandex = APIRouter(prefix="/api/v1/yandex", tags=["yandex"])
-
-
-@router_yandex.get(
-    "/link",
-    response_model=None,
-)
-async def yandex_link() -> CustomResponse:
-    return await Yandex().link()
+yandex = APIRouter(prefix=f"{PATH_ENDPOINT}yandex", tags=["yandex"])
 
 
-@router_yandex.get(
-    "/get/token/{code}/{code_verifier}",
-    response_model=None,
-)
-async def yandex_get_token(
-    code: str,
-    code_verifier: str,
-) -> CustomResponse:
-    return await Yandex().get_token(
-        code_verifier=code_verifier,
-        code=code,
+@yandex.get("/link")
+async def yandex_link() -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_200_OK, content=await YandexControl().link())
+
+
+@yandex.get("/get/token/{code}/{code_verifier}")
+async def yandex_get_token(code: str, code_verifier: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await YandexControl().get_token(code_verifier=code_verifier, code=code),
     )
 
 
-@router_yandex.post(
-    "/registration/{access}",
-    response_model=None,
-)
-async def yandex_registration(
-    access: str,
-    request: Request,
-) -> CustomResponse:
-    return await Yandex().registration(
+@yandex.post("/registration/{access}")
+async def yandex_registration(access: str, request: Request) -> Response:
+    await YandexControl().registration(
         user_id=request.state.user_id,
         access=access,
     )
+    return Response(status_code=status.HTTP_201_CREATED)

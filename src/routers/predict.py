@@ -1,65 +1,46 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 
-from src.classes import Predict
-from src.database.schemas import PredictFree, PredictModel
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import PredictControl
+from ..schemas import PredictFreeSchema, PredictSchema
 
-router_predict = APIRouter(prefix="/api/v1/predict", tags=["predict"])
+predicts = APIRouter(prefix=f"{PATH_ENDPOINT}predict", tags=["predict"])
 
 
-@router_predict.post(
-    "/",
-    response_model=None,
-)
-async def predict(
-    model: PredictModel,
-) -> CustomResponse:
-    return await Predict().predict(
-        model=model,
+@predicts.post("/")
+async def predict(model: PredictSchema) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK, content=await PredictControl().predict(model=model)
     )
 
 
-@router_predict.post(
-    "/free",
-    response_model=None,
-)
-async def predict_free(
-    model: PredictFree,
-) -> CustomResponse:
-    return await Predict().predict_free(model=model)
-
-
-@router_predict.get(
-    "/direction/{direction_id}",
-    response_model=None,
-)
-async def direction(
-    direction_id: int,
-) -> CustomResponse:
-    return await Predict().get_direction(
-        direction_id=direction_id,
+@predicts.post("/free")
+async def predict_free(model: PredictFreeSchema) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK, content=await PredictControl().predict_free(model=model)
     )
 
 
-@router_predict.get(
-    "/points/{direction_id}",
-    response_model=None,
-)
-async def points(
-    direction_id: int,
-) -> CustomResponse:
-    return await Predict().get_points(
-        direction_id=direction_id,
+@predicts.get("/direction/{direction_id}")
+async def direction(direction_id: int) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await PredictControl().get_direction(direction_id=direction_id),
     )
 
 
-@router_predict.get(
-    "/exams/{direction_id}",
-    response_model=None,
-)
-async def exams(
-    direction_id: int,
-) -> CustomResponse:
-    return await Predict().get_exams(
-        direction_id=direction_id,
+@predicts.get("/points/{direction_id}")
+async def points(direction_id: int) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await PredictControl().get_points(direction_id=direction_id),
+    )
+
+
+@predicts.get("/exams/{direction_id}")
+async def exams(direction_id: int) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await PredictControl().get_exams(direction_id=direction_id),
     )

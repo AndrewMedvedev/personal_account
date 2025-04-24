@@ -1,5 +1,9 @@
-line-length = 300
+line-length = 99
 preview = true
+exclude = [
+    "migration",
+    "alembic.ini",
+]
 
 [lint]
 select = [
@@ -12,7 +16,6 @@ select = [
     "UP",
     "YTT",
     "ASYNC",
-    "TRIO",
     "S",
     "BLE",
     "B",
@@ -21,7 +24,6 @@ select = [
     "C4",
     "DTZ",
     "T10",
-    "DJ",
     "EXE",
     "ISC",
     "ICN",
@@ -40,7 +42,6 @@ select = [
     "TID",
     "INT",
     "ARG",
-    "PTH",
     "TD",
     "FIX",
     "ERA",
@@ -57,6 +58,16 @@ select = [
     "RUF",
 ]
 ignore = [
+    "RET503",
+    "TRY301",
+    "B903",
+    "S105",
+    "S101",
+    "B008",
+    "TRY201",
+    "PLW3201",
+    "N805",
+    "PTH",
     "COM812",
     "ISC001",
     "TRY003",

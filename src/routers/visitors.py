@@ -1,50 +1,32 @@
-from fastapi import APIRouter, Request
-from fastapi.responses import StreamingResponse
+from fastapi import APIRouter, Request, Response, status
+from fastapi.responses import JSONResponse, StreamingResponse
 
-from src.classes import Visitors
-from src.responses import CustomResponse
+from ..constants import PATH_ENDPOINT
+from ..controllers import VisitorControl
 
-router_visitors = APIRouter(prefix="/api/v1/visitors", tags=["visitors"])
+visitors = APIRouter(prefix=f"{PATH_ENDPOINT}visitors", tags=["visitors"])
 
 
-@router_visitors.post("/add/{event_id}")
-async def add(
-    event_id: int,
-    request: Request,
-) -> CustomResponse:
-    return await Visitors().add(
-        user_id=request.state.user_id,
-        event_id=event_id,
+@visitors.post("/add/{event_id}")
+async def add(event_id: int, request: Request) -> Response:
+    await VisitorControl().create_user(user_id=request.state.user_id, event_id=event_id)
+    return Response(status_code=status.HTTP_201_CREATED)
+
+
+@visitors.get("/get")
+async def get(request: Request) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content=await VisitorControl().get_user_events(user_id=request.state.user_id),
     )
 
 
-@router_visitors.get("/get")
-async def get(
-    request: Request,
-) -> CustomResponse:
-    return await Visitors().get(
-        user_id=request.state.user_id,
-    )
+@visitors.get("/make/qr/{unique_string}")
+async def make_qr(unique_string: str) -> StreamingResponse:
+    return await VisitorControl().make_qr(unique_string=unique_string)
 
 
-@router_visitors.get(
-    "/make/qr/{unique_string}",
-    response_model=None,
-)
-async def make_qr(
-    unique_string: str,
-) -> StreamingResponse:
-    return await Visitors().make_qr(
-        unique_string=unique_string,
-    )
-
-
-@router_visitors.delete("/delete/{event_id}")
-async def delete(
-    event_id: int,
-    request: Request,
-) -> CustomResponse:
-    return await Visitors().delete(
-        user_id=request.state.user_id,
-        event_id=event_id,
-    )
+@visitors.delete("/delete/{event_id}")
+async def delete(event_id: int, request: Request) -> Response:
+    await VisitorControl().delete_user(user_id=request.state.user_id, event_id=event_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
