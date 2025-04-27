@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from config import Settings
 
 from ..rest import RegistrationApi, VKApi
@@ -33,10 +35,12 @@ class VKControl:
         ).model_dump()
         return await self.vk_api.get_token(params=params)
 
-    async def registration(self, access: str, user_id: int) -> None:
-        user = (await self.vk_api.get_data(
-            params=DictGetDataTokenVKSchema(access_token=access).model_dump()
-        ))["user"]
+    async def registration(self, access: str, user_id: UUID) -> None:
+        user = (
+            await self.vk_api.get_data(
+                params=DictGetDataTokenVKSchema(access_token=access).model_dump()
+            )
+        )["user"]
         data = RegistrationVKSchema(
             user_id=user_id,
             first_name=user.get("first_name"),

@@ -45,3 +45,12 @@ class Settings:
 
     REGISTRATION_VK: str = config["REGISTRATION_VK"]
     REGISTRATION_YANDEX: str = config["REGISTRATION_YANDEX"]
+
+    # RABBIT_USER: str = config["RABBIT_USER"]
+    # RABBIT_PASSWORD: str = config["RABBIT_PASSWORD"]
+    # RABBIT_HOST: str = config["RABBIT_HOST"]
+    # RABBIT_PORT: int = config["RABBIT_PORT"]
+
+
+# def get_rabbit_url() -> str:
+#     return f"amqp://{Settings.RABBIT_USER}:{Settings.RABBIT_PASSWORD}@{Settings.RABBIT_HOST}:{Settings.RABBIT_PORT}"

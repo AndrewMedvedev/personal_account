@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from aiohttp import ClientSession
 
 from config import Settings
@@ -188,7 +190,7 @@ class VisitorApi(BaseApi):
     async def visitor_create(
         self,
         event_id: int,
-        user_id: int,
+        user_id: UUID,
     ) -> dict:
         async with (
             self.clientsession() as session,
@@ -201,7 +203,7 @@ class VisitorApi(BaseApi):
 
     async def visitor_get(
         self,
-        user_id: int,
+        user_id: UUID,
     ) -> dict:
         async with (
             self.clientsession() as session,
@@ -215,7 +217,7 @@ class VisitorApi(BaseApi):
     async def visitor_delete(
         self,
         event_id: int,
-        user_id: int,
+        user_id: UUID,
     ) -> dict:
         async with (
             self.clientsession() as session,

@@ -21,6 +21,7 @@ phonenumbers = "^8.13.52"
 ruff = "^0.9.7"
 pypng = "^0.20220715.0"
 pyqrcode = "^1.2.1"
+faststream = {extras = ["rabbit"], version = "^0.5.39"}
 
 
 [build-system]

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from config import Settings
 
 from ..rest import RegistrationApi, YandexApi
@@ -38,7 +40,7 @@ class YandexControl:
         ).model_dump()
         return await self.yandex_api.get_token(params=params)
 
-    async def registration(self, access: str, user_id: int) -> None:
+    async def registration(self, access: str, user_id: UUID) -> None:
         user = await self.yandex_api.get_data(
             params=DictGetDataTokenYandexSchema(oauth_token=access).model_dump()
         )

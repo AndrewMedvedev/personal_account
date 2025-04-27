@@ -1,5 +1,7 @@
 from typing import Literal
 
+from uuid import UUID
+
 from pydantic import BaseModel, field_validator
 
 from config import Settings
@@ -86,20 +88,30 @@ class PredictFreeSchema(BaseModel):
 
 
 class RegistrationVKSchema(BaseModel):
-    user_id: int
+    user_id: UUID
     first_name: str
     last_name: str
     id_vk: int
     email: str
 
+    @field_validator("user_id")
+    @classmethod
+    def valid_user_id(cls, v: UUID) -> str:
+        return str(v)
+
 
 class RegistrationYandexSchema(BaseModel):
-    user_id: int
+    user_id: UUID
     first_name: str
     last_name: str
     id_yandex: str
     login: str
     email: str
+
+    @field_validator("user_id")
+    @classmethod
+    def valid_user_id(cls, v: UUID) -> str:
+        return str(v)
 
 
 class DictLinkVKSchema(BaseModel):
@@ -145,3 +157,17 @@ class DictGetDataYandexSchema(BaseModel):
 class DictGetDataTokenYandexSchema(BaseModel):
     oauth_token: str
     format: Literal["json"] = "json"
+
+
+class BaseMessage(BaseModel):
+    chat_id: str
+    role: Literal["user", "assistant"]
+    text: str
+
+
+class UserMessage(BaseMessage):
+    role: str = "user"
+
+
+class AssistantMessage(BaseMessage):
+    role: str = "assistant"
