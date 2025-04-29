@@ -13,8 +13,7 @@ class Settings:
     EXAMS: str = config["EXAMS"]
     CLASSIFIER: str = config["CLASSIFIER"]
     CLASSIFIER_FREE: str = config["CLASSIFIER_FREE"]
-    VALIDATE_ACCESS: str = config["VALIDATE_ACCESS"]
-    VALIDATE_REFRESH: str = config["VALIDATE_REFRESH"]
+    VALIDATE_TOKENS: str = config["VALIDATE_TOKENS"]
     RAG_GigaChat_API: str = config["RAG_GigaChat_API"]
 
     VISITORS_ADD: str = config["VISITORS_ADD"]
@@ -46,11 +45,14 @@ class Settings:
     REGISTRATION_VK: str = config["REGISTRATION_VK"]
     REGISTRATION_YANDEX: str = config["REGISTRATION_YANDEX"]
 
-    # RABBIT_USER: str = config["RABBIT_USER"]
-    # RABBIT_PASSWORD: str = config["RABBIT_PASSWORD"]
-    # RABBIT_HOST: str = config["RABBIT_HOST"]
-    # RABBIT_PORT: int = config["RABBIT_PORT"]
+    RABBIT_USER: str = config["RABBIT_USER"]
+    RABBIT_PASSWORD: str = config["RABBIT_PASSWORD"]
+    RABBIT_HOST: str = config["RABBIT_HOST"]
+    RABBIT_PORT: int = config["RABBIT_PORT"]
 
 
-# def get_rabbit_url() -> str:
-#     return f"amqp://{Settings.RABBIT_USER}:{Settings.RABBIT_PASSWORD}@{Settings.RABBIT_HOST}:{Settings.RABBIT_PORT}"
+settings = Settings()
+
+
+def get_rabbit_url() -> str:
+    return f"amqp://{Settings.RABBIT_USER}:{Settings.RABBIT_PASSWORD}@{Settings.RABBIT_HOST}:{Settings.RABBIT_PORT}"

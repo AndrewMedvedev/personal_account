@@ -2,7 +2,7 @@ from uuid import UUID
 
 from aiohttp import ClientSession
 
-from config import Settings
+from config import settings
 
 from .schemas import PredictSchema
 from .utils import valid_answer
@@ -10,7 +10,7 @@ from .utils import valid_answer
 
 class BaseApi:
     def __init__(self):
-        self.settings = Settings
+        self.settings = settings
         self.clientsession = ClientSession
 
 
@@ -18,14 +18,14 @@ class RegistrationApi(BaseApi):
     async def registration_vk(self, params: dict) -> None:
         async with (
             self.clientsession() as session,
-            session.post(url=Settings.REGISTRATION_VK, json=params, ssl=False) as data,
+            session.post(url=self.settings.REGISTRATION_VK, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
     async def registration_yandex(self, params: dict) -> None:
         async with (
             self.clientsession() as session,
-            session.post(url=Settings.REGISTRATION_YANDEX, json=params, ssl=False) as data,
+            session.post(url=self.settings.REGISTRATION_YANDEX, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
@@ -34,14 +34,14 @@ class VKApi(BaseApi):
     async def get_token(self, params: dict) -> dict:
         async with (
             self.clientsession() as session,
-            session.post(url=Settings.VK_TOKEN_URL, json=params, ssl=False) as data,
+            session.post(url=self.settings.VK_TOKEN_URL, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
     async def get_data(self, params: dict) -> dict:
         async with (
             self.clientsession() as session,
-            session.post(url=Settings.VK_API_URL, json=params, ssl=False) as data,
+            session.post(url=self.settings.VK_API_URL, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
@@ -50,14 +50,14 @@ class YandexApi(BaseApi):
     async def get_token(self, params: dict) -> dict:
         async with (
             self.clientsession() as session,
-            session.post(url=Settings.YANDEX_TOKEN_URL, data=params, ssl=False) as data,
+            session.post(url=self.settings.YANDEX_TOKEN_URL, data=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
     async def get_data(self, params: dict) -> dict:
         async with (
             self.clientsession() as session,
-            session.get(url=Settings.YANDEX_API_URL, params=params, ssl=False) as data,
+            session.get(url=self.settings.YANDEX_API_URL, params=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 

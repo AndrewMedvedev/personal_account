@@ -12,7 +12,17 @@ from src.exeptions import (
     JSONError,
 )
 from src.middleware import MiddlewareValidTokens
-from src.routers import answer, events, logout, news, predicts, set_token, visitors, vk, yandex
+from src.routers import (
+    answer,
+    events,
+    logout,
+    news,
+    predicts,
+    set_token,
+    visitors,
+    vk,
+    yandex,
+)
 
 app = FastAPI(title="Personal account service")
 
