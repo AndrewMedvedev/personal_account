@@ -5,7 +5,30 @@ import hashlib
 import logging
 import os
 
+from fastapi import WebSocket
+
 from .exeptions import BadRequestHTTPError, ExistsHTTPError, NoPlacesHTTPError, NotFoundHTTPError
+
+
+class ConnectionManager:
+    def __init__(self) -> None:
+        self.connections: dict[str, WebSocket] = {}
+
+    async def connect(self, websocket: WebSocket, chat_id: str) -> None:
+        await websocket.accept()
+        if chat_id not in self.connections:
+            self.connections[chat_id] = websocket
+        self.connections[chat_id]
+
+    def disconnect(self, chat_id: str) -> None:
+        if chat_id in self.connections:
+            del self.connections[chat_id]
+
+    async def send(self, message: str, chat_id: str) -> None:
+        await self.connections[chat_id].send_text(message)
+
+
+connection_manager = ConnectionManager()
 
 
 def create_codes() -> dict:

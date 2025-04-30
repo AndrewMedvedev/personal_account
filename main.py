@@ -11,6 +11,7 @@ from src.exeptions import (
     InternalHTTPError,
     JSONError,
 )
+from src.lifespan import lifespan
 from src.middleware import MiddlewareValidTokens
 from src.routers import (
     answer,
@@ -21,10 +22,11 @@ from src.routers import (
     set_token,
     visitors,
     vk,
+    wb,
     yandex,
 )
 
-app = FastAPI(title="Personal account service")
+app = FastAPI(title="Personal account service", lifespan=lifespan)
 
 
 @app.exception_handler(Exception)
@@ -62,7 +64,7 @@ origins: list[str] = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,6 +84,7 @@ def include_routers(app: FastAPI):
     app.include_router(vk)
     app.include_router(yandex)
     app.include_router(answer)
+    app.include_router(wb)
 
 
 include_routers(app)

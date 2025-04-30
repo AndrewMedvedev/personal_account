@@ -7,10 +7,12 @@ __all__ = (
     "set_token",
     "visitors",
     "vk",
+    "wb",
     "yandex",
 )
 
 from .answer import answer
+from .chat import wb
 from .events import events
 from .logout import logout
 from .news import news
