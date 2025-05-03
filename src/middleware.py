@@ -42,7 +42,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
                 response.set_cookie(
                     key="access",
                     value=check_tokens.get("access"),
-                    samesite="strict",
+                    samesite="lax",
                     httponly=True,
                     secure=True,
                     max_age=7200,

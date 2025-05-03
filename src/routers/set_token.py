@@ -8,7 +8,7 @@ async def set_tokens(access: str, refresh: str, response: Response) -> Response:
     response.set_cookie(
         key="access",
         value=access,
-        samesite="strict",
+        samesite="lax",
         httponly=True,
         secure=True,
         max_age=7200,
@@ -16,7 +16,7 @@ async def set_tokens(access: str, refresh: str, response: Response) -> Response:
     response.set_cookie(
         key="refresh",
         value=refresh,
-        samesite="strict",
+        samesite="lax",
         httponly=True,
         secure=True,
         max_age=18000,
