@@ -11,7 +11,6 @@ wb = APIRouter(prefix=f"{PATH_ENDPOINT}websocket", tags=["websocket"])
 @wb.websocket("/{chat_id}")
 async def chat(websocket: WebSocket, chat_id: str) -> None:
     await connection_manager.connect(websocket=websocket, chat_id=chat_id)
-    await broker.connect()
     try:
         while True:
             message = await websocket.receive_json()
