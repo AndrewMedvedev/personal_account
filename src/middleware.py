@@ -24,7 +24,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
         call_next: Callable,
     ):
         try:
-            if request.method == "OPTIONS" or request.url.path in self.SKIP_PATHS:
+            if request.method == "OPTIONS" or request.url.path in self.SKIP_PATH:
                 return await call_next(request)
             if request.url.path.startswith("/set/token"):
                 return await call_next(request)
