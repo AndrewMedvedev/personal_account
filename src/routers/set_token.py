@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Response
+from fastapi.responses import RedirectResponse
 
 set_token = APIRouter(prefix="/set/token", tags=["set_token"])
 
@@ -21,4 +22,4 @@ async def set_tokens(access: str, refresh: str, response: Response) -> Response:
         secure=True,
         max_age=18000,
     )
-    return {"message": "success"}
+    return RedirectResponse(url="https://online-service-for-applicants.onrender.com/profile")

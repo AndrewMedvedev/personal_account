@@ -3,7 +3,16 @@ from dotenv import dotenv_values, find_dotenv
 env_path = find_dotenv()
 
 
-config = dotenv_values(env_path)
+def load_config() -> dict:
+    env_path = find_dotenv(".env")
+
+    if not env_path:
+        env_path = find_dotenv(".test.env")
+
+    return dotenv_values(env_path)
+
+
+config = load_config()
 
 
 class Settings:
@@ -55,4 +64,4 @@ settings = Settings()
 
 
 def get_rabbit_url() -> str:
-    return f"amqp://{Settings.RABBIT_USER}:{Settings.RABBIT_PASSWORD}@{Settings.RABBIT_HOST}:{Settings.RABBIT_PORT}"
+    return f"amqp://{settings.RABBIT_USER}:{settings.RABBIT_PASSWORD}@{settings.RABBIT_HOST}:{settings.RABBIT_PORT}"
