@@ -16,10 +16,8 @@ from src.middleware import MiddlewareValidTokens
 from src.routers import (
     answer,
     events,
-    logout,
     news,
     predicts,
-    set_token,
     visitors,
     vk,
     wb,
@@ -75,8 +73,6 @@ app.add_middleware(MiddlewareValidTokens)
 
 
 def include_routers(app: FastAPI):
-    app.include_router(set_token)
-    app.include_router(logout)
     app.include_router(events)
     app.include_router(news)
     app.include_router(visitors)

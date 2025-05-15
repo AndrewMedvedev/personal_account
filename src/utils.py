@@ -52,7 +52,7 @@ def config_logging(level=logging.INFO):
     )
 
 
-async def valid_answer(response: Any) -> dict:
+async def valid_answer(response: Any) -> None:
     status = response.status
     match status:
         case 200:

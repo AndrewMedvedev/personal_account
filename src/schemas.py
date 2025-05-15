@@ -166,8 +166,8 @@ class BaseMessage(BaseModel):
 
 
 class UserMessage(BaseMessage):
-    role: str = "user"
+    role: Literal["user", "assistant"] = "user"
 
 
 class AssistantMessage(BaseMessage):
-    role: str = "assistant"
+    role: Literal["user", "assistant"] = "assistant"

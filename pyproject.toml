@@ -23,8 +23,19 @@ pypng = "^0.20220715.0"
 pyqrcode = "^1.2.1"
 faststream = {extras = ["rabbit"], version = "^0.5.39"}
 websocket = "^0.2.1"
+mypy = "^1.15.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+# -- MyPy --
+[tool.mypy]
+ignore_missing_imports = true
+exclude = [
+    "__samples__",
+    ".venv"
+]
+
+
