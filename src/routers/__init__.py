@@ -5,12 +5,13 @@ __all__ = (
     "predicts",
     "visitors",
     "vk",
-    "wb",
+    # "wb",
     "yandex",
 )
 
 from .answer import answer
-from .chat import wb
+
+# from .chat import wb
 from .events import events
 from .news import news
 from .predict import predicts
