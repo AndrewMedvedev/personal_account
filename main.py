@@ -11,7 +11,8 @@ from src.exeptions import (
     InternalHTTPError,
     JSONError,
 )
-from src.lifespan import lifespan
+
+# from src.lifespan import lifespan
 from src.middleware import MiddlewareValidTokens
 from src.routers import (
     answer,
@@ -24,7 +25,7 @@ from src.routers import (
     yandex,
 )
 
-app = FastAPI(title="Personal account service", lifespan=lifespan)
+app = FastAPI(title="Personal account service")
 
 
 @app.exception_handler(Exception)
