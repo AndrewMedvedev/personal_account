@@ -21,7 +21,7 @@ from src.routers import (
     predicts,
     visitors,
     vk,
-    wb,
+    # wb,
     yandex,
 )
 
@@ -81,7 +81,7 @@ def include_routers(app: FastAPI):
     app.include_router(vk)
     app.include_router(yandex)
     app.include_router(answer)
-    app.include_router(wb)
+    # app.include_router(wb)
 
 
 include_routers(app)
