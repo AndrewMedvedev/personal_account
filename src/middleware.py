@@ -37,7 +37,7 @@ class MiddlewareValidTokens(BaseHTTPMiddleware):
             request.state.user_id = check_tokens["user_id"]
             response = await call_next(request)
             response.headers["X-Refresh-Token"] = token_refresh
-            response.headers["X-Access-Token"] = token_refresh
+            response.headers["X-Access-Token"] = token_access
             if "access" in check_tokens:
                 response.headers["X-Access-Token"] = check_tokens["access"]
         except JWTError:
