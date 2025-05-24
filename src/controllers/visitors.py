@@ -23,9 +23,7 @@ class VisitorControl:
     @staticmethod
     async def make_qr(unique_string: str) -> StreamingResponse:
         buffer = BytesIO()
-        qr = pyqrcode.create(
-            f"https://events-zisi.onrender.com/api/v1/visitors/verify/{unique_string}"
-        )
+        qr = pyqrcode.create(unique_string)
         qr.png(buffer, scale=6)
         buffer.seek(0)
         headers = {
