@@ -25,6 +25,7 @@ faststream = {extras = ["rabbit"], version = "^0.5.39"}
 websocket = "^0.2.1"
 mypy = "^1.15.0"
 redis = {extras = ["asyncio"], version = "^6.1.0"}
+autopep8 = "^2.3.2"
 
 
 [build-system]
@@ -39,4 +40,9 @@ exclude = [
     ".venv"
 ]
 
-
+# -- Autopep8 --
+[tool.autopep8]
+exclude = "__samples__, .venv, src/migration"
+max-line-length = 99
+aggressive = 1
+select = "E,W"  
