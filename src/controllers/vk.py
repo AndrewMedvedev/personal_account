@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from config import Settings
+from config import settings
 
 from ..rest import RegistrationApi, VKApi
 from ..schemas import (
@@ -9,36 +9,38 @@ from ..schemas import (
     DictLinkVKSchema,
     RegistrationVKSchema,
 )
-from ..utils import create_codes
+from ..utils import RedisOtherAuth, create_codes
 
 
 class VKControl:
     def __init__(self):
         self.vk_api = VKApi()
+        self.redis = RedisOtherAuth()
         self.registration_api = RegistrationApi()
 
-    @staticmethod
-    async def link() -> dict:
+    async def link(self) -> str:
         codes = create_codes()
-        dict_link = DictLinkVKSchema(code_challenge=codes["code_challenge"]).model_dump().items()
-        url = f"{Settings.VK_AUTH_URL}?{'&'.join([f'{k}={v}' for k, v in dict_link])}"
-        return {
-            "link": url,
-            "code_verifier": codes["code_verifier"],
-        }
+        await self.redis.add_code(schema=codes)
+        dict_link = (
+            DictLinkVKSchema(state=codes.state, code_challenge=codes.code_challenge)
+            .model_dump()
+            .items()
+        )
+        return f"{settings.VK_AUTH_URL}?{'&'.join([f'{k}={v}' for k, v in dict_link])}"
 
-    async def get_token(self, code: str, device_id: str, code_verifier: str) -> dict:
+    async def get_token(self, code: str, device_id: str, state: str) -> str:
+        data_state = await self.redis.get_code(key=state)
         params = DictGetDataVKSchema(
-            code=code,
-            device_id=device_id,
-            code_verifier=code_verifier,
+            code=code, device_id=device_id, code_verifier=data_state, state=state
         ).model_dump()
-        return await self.vk_api.get_token(params=params)
+        result = await self.vk_api.get_token(params=params)
+        return result["access_token"]
 
-    async def registration(self, access: str, user_id: UUID) -> None:
+    async def registration(self, code: str, device_id: str, state: str, user_id: UUID) -> None:
+        token = await self.get_token(code=code, device_id=device_id, state=state)
         user = (
             await self.vk_api.get_data(
-                params=DictGetDataTokenVKSchema(access_token=access).model_dump()
+                params=DictGetDataTokenVKSchema(access_token=token).model_dump()
             )
         )["user"]
         data = RegistrationVKSchema(

@@ -16,6 +16,10 @@ config = load_config()
 
 
 class Settings:
+    REDIS_HOST: str = config["REDIS_HOST"]
+    REDIS_PORT: str = config["REDIS_PORT"]
+    REDIS_PASSWORD: str = config["REDIS_PASSWORD"]
+
     RECOMENDATE: str = config["RECOMENDATE"]
     DIRECTION: str = config["DIRECTION"]
     POINTS: str = config["POINTS"]

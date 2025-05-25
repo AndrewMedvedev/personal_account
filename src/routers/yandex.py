@@ -12,18 +12,11 @@ async def yandex_link() -> JSONResponse:
     return JSONResponse(status_code=status.HTTP_200_OK, content=await YandexControl().link())
 
 
-@yandex.get("/get/token/{code}/{code_verifier}")
-async def yandex_get_token(code: str, code_verifier: str) -> JSONResponse:
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content=await YandexControl().get_token(code_verifier=code_verifier, code=code),
-    )
-
-
-@yandex.post("/registration/{access}")
-async def yandex_registration(access: str, request: Request) -> Response:
+@yandex.post("/registration/{code}/{state}")
+async def yandex_registration(code: str, state: str, request: Request) -> Response:
     await YandexControl().registration(
         user_id=request.state.user_id,
-        access=access,
+        code=code,
+        state=state,
     )
     return Response(status_code=status.HTTP_201_CREATED)

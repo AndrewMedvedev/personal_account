@@ -4,10 +4,33 @@ import base64
 import hashlib
 import logging
 import os
+from uuid import uuid4
 
 from fastapi import WebSocket
+from redis.asyncio import Redis
+
+from config import settings
 
 from .exeptions import BadRequestHTTPError, ExistsHTTPError, NoPlacesHTTPError, NotFoundHTTPError
+from .schemas import Codes
+
+
+class RedisOtherAuth:
+    def __init__(self):
+        self.session = Redis(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD,
+            decode_responses=True,
+        )
+
+    async def add_code(self, schema: Codes) -> None:
+        await self.session.setex(name=schema.state, value=schema.code_verifier, time=120)
+
+    async def get_code(self, key: str) -> str:
+        result = await self.session.get(key)
+        await self.session.delete(key)
+        return result
 
 
 class ConnectionManager:
@@ -31,17 +54,18 @@ class ConnectionManager:
 connection_manager = ConnectionManager()
 
 
-def create_codes() -> dict:
+def create_codes() -> Codes:
     code_verifier = base64.urlsafe_b64encode(os.urandom(64)).rstrip(b"=").decode("utf-8")
     code_challenge = (
         base64.urlsafe_b64encode(hashlib.sha256(code_verifier.encode("utf-8")).digest())
         .rstrip(b"=")
         .decode("utf-8")
     )
-    return {
-        "code_verifier": code_verifier,
-        "code_challenge": code_challenge,
-    }
+    return Codes(
+        state=str(f"{uuid4()}{uuid4()}"),
+        code_verifier=code_verifier,
+        code_challenge=code_challenge,
+    )
 
 
 def config_logging(level=logging.INFO):

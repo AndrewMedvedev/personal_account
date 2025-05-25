@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, field_validator
 
-from config import Settings
+from config import settings
 
 from .constants import MAX_BONUS_POINTS, MAX_EXAMS_POINTS, MAX_GPA, MIN_GPA
 
@@ -100,6 +100,12 @@ class RegistrationVKSchema(BaseModel):
         return str(v)
 
 
+class Codes(BaseModel):
+    state: str
+    code_verifier: str
+    code_challenge: str
+
+
 class RegistrationYandexSchema(BaseModel):
     user_id: UUID
     first_name: str
@@ -116,10 +122,10 @@ class RegistrationYandexSchema(BaseModel):
 
 class DictLinkVKSchema(BaseModel):
     response_type: Literal["code"] = "code"
-    client_id: int = Settings.VK_APP_ID
+    client_id: int = settings.VK_APP_ID
     scope: Literal["email"] = "email"
-    redirect_uri: str = Settings.VK_REDIRECT_URI
-    state: str = Settings.STATE_VK
+    redirect_uri: str = settings.VK_REDIRECT_URI
+    state: str = settings.STATE_VK
     code_challenge: str
     code_challenge_method: str = "s256"
 
@@ -128,20 +134,21 @@ class DictGetDataVKSchema(BaseModel):
     grant_type: Literal["authorization_code"] = "authorization_code"
     code: str
     code_verifier: str
-    client_id: int = Settings.VK_APP_ID
+    client_id: int = settings.VK_APP_ID
     device_id: str
-    redirect_uri: str = Settings.VK_REDIRECT_URI
-    state: str = Settings.STATE_VK
+    redirect_uri: str = settings.VK_REDIRECT_URI
+    state: str = settings.STATE_VK
 
 
 class DictGetDataTokenVKSchema(BaseModel):
     access_token: str
-    client_id: int = Settings.VK_APP_ID
+    client_id: int = settings.VK_APP_ID
 
 
 class DictLinkYandexSchema(BaseModel):
     response_type: Literal["code"] = "code"
-    client_id: str = Settings.YANDEX_APP_ID
+    client_id: str = settings.YANDEX_APP_ID
+    state: str
     code_challenge: str
     code_challenge_method: str = "S256"
 
@@ -149,8 +156,8 @@ class DictLinkYandexSchema(BaseModel):
 class DictGetDataYandexSchema(BaseModel):
     grant_type: Literal["authorization_code"] = "authorization_code"
     code: str
-    client_id: str = Settings.YANDEX_APP_ID
-    client_secret: str = Settings.YANDEX_APP_SECRET
+    client_id: str = settings.YANDEX_APP_ID
+    client_secret: str = settings.YANDEX_APP_SECRET
     code_verifier: str
 
 
