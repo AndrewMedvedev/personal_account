@@ -1,8 +1,9 @@
+from ..baseclasses import BaseControl
 from ..rest import PredictApi
 from ..schemas import PredictFreeSchema, PredictSchema
 
 
-class PredictControl:
+class PredictControl(BaseControl):
     def __init__(self):
         self.predict_api = PredictApi()
 
@@ -10,9 +11,11 @@ class PredictControl:
         recomendate = await self.predict_api.get_data_recomendate(
             data=model.to_dict_get_data_recomendate()
         )
+        self.logger.warning(recomendate)
         classifier = await self.predict_api.get_data_classifier_applicants(
             data=model, directions=recomendate
         )
+        self.logger.warning(classifier)
         return {
             "recomendate": recomendate,
             "classifier": classifier,

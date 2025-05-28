@@ -4,77 +4,77 @@ from aiohttp import ClientSession
 
 from config import settings
 
+from .baseclasses import BaseAPI
 from .schemas import PredictSchema
 from .utils import valid_answer
 
 
-class BaseApi:
-    def __init__(self):
-        self.settings = settings
-        self.clientsession = ClientSession
-
-
-class RegistrationApi(BaseApi):
-    async def registration_vk(self, params: dict) -> None:
+class RegistrationApi:
+    async def registration_vk(params: dict) -> None:
         async with (
-            self.clientsession() as session,
-            session.post(url=self.settings.REGISTRATION_VK, json=params, ssl=False) as data,
+            ClientSession() as session,
+            session.post(url=settings.REGISTRATION_VK, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
-    async def registration_yandex(self, params: dict) -> None:
+    async def registration_yandex(params: dict) -> None:
         async with (
-            self.clientsession() as session,
-            session.post(url=self.settings.REGISTRATION_YANDEX, json=params, ssl=False) as data,
+            ClientSession() as session,
+            session.post(url=settings.REGISTRATION_YANDEX, json=params, ssl=False) as data,
         ):
             return await valid_answer(response=data)
 
 
-class VKApi(BaseApi):
+class VKApi(BaseAPI):
     async def get_token(self, params: dict) -> dict:
         async with (
-            self.clientsession() as session,
-            session.post(url=self.settings.VK_TOKEN_URL, json=params, ssl=False) as data,
+            ClientSession() as session,
+            session.post(url=settings.VK_TOKEN_URL, json=params, ssl=False) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(response=data)
 
     async def get_data(self, params: dict) -> dict:
         async with (
-            self.clientsession() as session,
-            session.post(url=self.settings.VK_API_URL, json=params, ssl=False) as data,
+            ClientSession() as session,
+            session.post(url=settings.VK_API_URL, json=params, ssl=False) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(response=data)
 
 
-class YandexApi(BaseApi):
+class YandexApi(BaseAPI):
     async def get_token(self, params: dict) -> dict:
         async with (
-            self.clientsession() as session,
-            session.post(url=self.settings.YANDEX_TOKEN_URL, data=params, ssl=False) as data,
+            ClientSession() as session,
+            session.post(url=settings.YANDEX_TOKEN_URL, data=params, ssl=False) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(response=data)
 
     async def get_data(self, params: dict) -> dict:
         async with (
-            self.clientsession() as session,
-            session.get(url=self.settings.YANDEX_API_URL, params=params, ssl=False) as data,
+            ClientSession() as session,
+            session.get(url=settings.YANDEX_API_URL, params=params, ssl=False) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(response=data)
 
 
-class PredictApi(BaseApi):
+class PredictApi(BaseAPI):
     async def get_data_recomendate(
         self,
         data: dict,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.post(
-                self.settings.RECOMENDATE,
+                settings.RECOMENDATE,
                 json=data,
                 ssl=False,
             ) as resp,
         ):
+            self.logger.warning(resp)
             return (await valid_answer(resp))["directions"]
 
     async def get_data_classifier_applicants(
@@ -89,13 +89,14 @@ class PredictApi(BaseApi):
             ]
         }
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.post(
-                url=self.settings.CLASSIFIER,
+                url=settings.CLASSIFIER,
                 json=correct_data,
                 ssl=False,
             ) as resp,
         ):
+            self.logger.warning(resp)
             return (await valid_answer(resp))["probabilities"]
 
     async def get_data_classifier_applicant(
@@ -103,13 +104,14 @@ class PredictApi(BaseApi):
         data: dict,
     ) -> float:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.post(
-                url=f"{self.settings.CLASSIFIER_FREE}",
+                url=settings.CLASSIFIER_FREE,
                 json=data,
                 ssl=False,
             ) as resp,
         ):
+            self.logger.warning(resp)
             return (await valid_answer(resp))["probability"]
 
     async def get_data_directions(
@@ -117,12 +119,13 @@ class PredictApi(BaseApi):
         direction_id: int,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=f"{self.settings.DIRECTION}{direction_id}",
+                url=f"{settings.DIRECTION}{direction_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return (await valid_answer(data))["description"]
 
     async def get_data_points(
@@ -130,12 +133,13 @@ class PredictApi(BaseApi):
         direction_id: int,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=f"{self.settings.POINTS}{direction_id}",
+                url=f"{settings.POINTS}{direction_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return (await valid_answer(data))["history"]
 
     async def get_data_exams(
@@ -143,21 +147,22 @@ class PredictApi(BaseApi):
         direction_id: int,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=f"{self.settings.EXAMS}{direction_id}",
+                url=f"{settings.EXAMS}{direction_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return (await valid_answer(data))["entrance_exams"]
 
 
-class EventApi(BaseApi):
+class EventApi(BaseAPI):
     async def get_events(self, page: int, limit: int) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=self.settings.EVENTS_GET,
+                url=settings.EVENTS_GET,
                 params={
                     "is_paginated": "true",
                     "page": page,
@@ -166,15 +171,16 @@ class EventApi(BaseApi):
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)
 
 
-class NewsApi(BaseApi):
+class NewsApi(BaseAPI):
     async def get_news(self, page: int, limit: int) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=self.settings.NEWS_GET,
+                url=settings.NEWS_GET,
                 params={
                     "is_paginated": "true",
                     "page": page,
@@ -183,22 +189,24 @@ class NewsApi(BaseApi):
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)
 
 
-class VisitorApi(BaseApi):
+class VisitorApi(BaseAPI):
     async def visitor_create(
         self,
         event_id: int,
         user_id: UUID,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.post(
-                url=f"{self.settings.VISITORS_ADD}{event_id}/{user_id}",
+                url=f"{settings.VISITORS_ADD}{event_id}/{user_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)
 
     async def visitor_get(
@@ -206,12 +214,13 @@ class VisitorApi(BaseApi):
         user_id: UUID,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.get(
-                url=f"{self.settings.VISITORS_GET}{user_id}",
+                url=f"{settings.VISITORS_GET}{user_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)
 
     async def visitor_delete(
@@ -220,23 +229,25 @@ class VisitorApi(BaseApi):
         user_id: UUID,
     ) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.delete(
-                url=f"{self.settings.VISITORS_DELETE}{event_id}/{user_id}",
+                url=f"{settings.VISITORS_DELETE}{event_id}/{user_id}",
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)
 
 
-class AnswerApi(BaseApi):
+class AnswerApi(BaseAPI):
     async def get_anwer(self, message: str) -> dict:
         async with (
-            self.clientsession() as session,
+            ClientSession() as session,
             session.post(
-                url=self.settings.RAG_GigaChat_API,
+                url=settings.RAG_GigaChat_API,
                 json={"question": message},
                 ssl=False,
             ) as data,
         ):
+            self.logger.warning(data)
             return await valid_answer(data)

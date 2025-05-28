@@ -2,6 +2,7 @@ from uuid import UUID
 
 from config import settings
 
+from ..baseclasses import BaseControl
 from ..rest import RegistrationApi, VKApi
 from ..schemas import (
     DictGetDataTokenVKSchema,
@@ -12,7 +13,7 @@ from ..schemas import (
 from ..utils import RedisOtherAuth, create_codes
 
 
-class VKControl:
+class VKControl(BaseControl):
     def __init__(self):
         self.vk_api = VKApi()
         self.redis = RedisOtherAuth()
@@ -26,7 +27,9 @@ class VKControl:
             .model_dump()
             .items()
         )
-        return f"{settings.VK_AUTH_URL}?{'&'.join([f'{k}={v}' for k, v in dict_link])}"
+        url = f"{settings.VK_AUTH_URL}?{'&'.join([f'{k}={v}' for k, v in dict_link])}"
+        self.logger.warning(url)
+        return url
 
     async def get_token(self, code: str, device_id: str, state: str) -> str:
         data_state = await self.redis.get_code(key=state)
@@ -34,15 +37,18 @@ class VKControl:
             code=code, device_id=device_id, code_verifier=data_state, state=state
         ).model_dump()
         result = await self.vk_api.get_token(params=params)
+        self.logger.warning(result)
         return result["access_token"]
 
     async def registration(self, code: str, device_id: str, state: str, user_id: UUID) -> None:
         token = await self.get_token(code=code, device_id=device_id, state=state)
+        self.logger.warning(token)
         user = (
             await self.vk_api.get_data(
                 params=DictGetDataTokenVKSchema(access_token=token).model_dump()
             )
         )["user"]
+        self.logger.warning(user)
         data = RegistrationVKSchema(
             user_id=user_id,
             first_name=user.get("first_name"),
